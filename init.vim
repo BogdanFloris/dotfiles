@@ -31,6 +31,23 @@ Plug 'morhetz/gruvbox'
 call plug#end()
 
 "*****************************************************************************
+"" Coc extensions
+"*****************************************************************************"
+let g:coc_global_extensions = [
+    \'coc-clang-format-style-options',
+    \'coc-clangd',
+    \'coc-cmake',
+    \'coc-dot-complete',
+    \'coc-eslint',
+    \'coc-git',
+    \'coc-go',
+    \'coc-json',
+    \'coc-tslint',
+    \'coc-tslint-plugin',
+    \'coc-tsserver',
+\]
+
+"*****************************************************************************
 "" Basic Setup
 "*****************************************************************************"
 "" Encoding
@@ -509,6 +526,9 @@ xmap <silent> <C-s> <Plug>(coc-range-select)
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
 
+" Format on save
+autocmd BufWritePost * :silent call CocAction('format')
+
 " Add `:Fold` command to fold current buffer.
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
@@ -537,6 +557,9 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+" Golang
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
 "*****************************************************************************
 "" Convenience variables
