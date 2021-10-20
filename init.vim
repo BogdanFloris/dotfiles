@@ -6,8 +6,8 @@ call plug#begin()
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
-Plug 'scrooloose/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTree']}
-Plug 'scrooloose/nerdtree-git-plugin', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTree']}
+Plug 'preservim/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTree']}
+Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTree']}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'ryanoasis/vim-devicons'
@@ -17,14 +17,9 @@ Plug 'vim-scripts/CSApprox'
 Plug 'majutsushi/tagbar'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-if isdirectory('/usr/local/opt/fzf')
-  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-else
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  Plug 'junegunn/fzf.vim'
-endif
 
 Plug 'morhetz/gruvbox'
 
@@ -37,14 +32,21 @@ let g:coc_global_extensions = [
     \'coc-clang-format-style-options',
     \'coc-clangd',
     \'coc-cmake',
+    \'coc-css',
     \'coc-dot-complete',
     \'coc-eslint',
     \'coc-git',
     \'coc-go',
+    \'coc-html',
     \'coc-json',
-    \'coc-tslint',
-    \'coc-tslint-plugin',
+    \'coc-markdownlint',
+    \'coc-pyright',
+    \'coc-rust-analyzer',
+    \'coc-sh',
+    \'coc-sql',
+    \'coc-tailwindcss',
     \'coc-tsserver',
+    \'coc-vimlsp',
 \]
 
 "*****************************************************************************
@@ -192,6 +194,8 @@ cnoreabbrev Q q
 cnoreabbrev Qall qall
 
 "" NERDTree configuration
+" Start NERDTree and leave the cursor in it.
+autocmd VimEnter * NERDTree
 let g:NERDTreeChDirMode=2
 let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
 let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
@@ -205,20 +209,9 @@ autocmd FileType nerdtree setlocal relativenumber
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
-
-" NERDTree Git plugin.
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 " terminal emulation
 nnoremap <silent> <leader>sh :terminal<CR>
