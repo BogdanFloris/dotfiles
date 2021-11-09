@@ -44,7 +44,6 @@ let g:coc_global_extensions = [
     \'coc-rust-analyzer',
     \'coc-sh',
     \'coc-sql',
-    \'coc-tailwindcss',
     \'coc-tsserver',
     \'coc-vimlsp',
 \]
