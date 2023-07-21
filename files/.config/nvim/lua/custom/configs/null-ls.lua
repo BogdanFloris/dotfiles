@@ -4,6 +4,7 @@ local formatting = null_ls.builtins.formatting
 local lint = null_ls.builtins.diagnostics
 
 local sources = {
+  -- Prettier
   formatting.prettier.with {
     filetypes = {
       "html",
@@ -17,11 +18,22 @@ local sources = {
       "markdown",
     },
   },
+
+  -- Lua
   formatting.stylua.with { filetypes = { "lua" } },
+
+  -- Shell
   lint.shellcheck,
+
+  -- Go
   formatting.gofmt,
   formatting.goimports,
   formatting.golines,
+
+  -- Python
+  lint.mypy,
+  lint.ruff,
+  formatting.black,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
