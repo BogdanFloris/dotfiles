@@ -19,6 +19,7 @@ cask "font-meslo-lg-nerd-font"
 # Tools
 brew "stow"
 brew "tree"
+brew "bat"
 brew "curl"
 brew "wget"
 brew "jq"
