@@ -17,6 +17,8 @@ cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
 
 # Tools
+brew "stow"
+brew "tree"
 brew "curl"
 brew "wget"
 brew "jq"
