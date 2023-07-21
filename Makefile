@@ -3,7 +3,7 @@ DOTFILES=${HOME}/.dotfiles
 all: brew bat
 
 install:
-	git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+	./scripts/pull-nvchad.sh
 	stow --restow --ignore ".DS_Store" --target="$(HOME)" --dir="$(DOTFILES)" files
 
 brew:
