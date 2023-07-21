@@ -33,7 +33,7 @@ brew "awscli"
 
 # Terminal
 cask "kitty"
-brew install zsh
+brew "zsh"
 
 # Editor
 brew "vim"
