@@ -48,6 +48,12 @@ local plugins = {
         "prettier",
         "stylua",
         "rust-analyzer",
+        "autopep8",
+        "clang-format",
+        "eslint-lsp",
+        "typescript-language-server",
+        "tailwindcss-language-server",
+        "json-lsp",
       },
     },
   },
@@ -55,7 +61,7 @@ local plugins = {
   -- copilot
   {
     "zbirenbaum/copilot.lua",
-    -- cmd = "Copilot",
+    cmd = "Copilot",
     event = "InsertEnter",
     opts = overrides.copilot,
     -- config = function()

@@ -4,9 +4,20 @@ local formatting = null_ls.builtins.formatting
 local lint = null_ls.builtins.diagnostics
 
 local sources = {
-  formatting.prettier,
-  formatting.stylua,
-
+  formatting.prettier.with {
+    filetypes = {
+      "html",
+      "css",
+      "json",
+      "yaml",
+      "typescript",
+      "typescriptreact",
+      "javascript",
+      "javascriptreact",
+      "markdown",
+    },
+  },
+  formatting.stylua.with { filetypes = { "lua" } },
   lint.shellcheck,
 }
 
