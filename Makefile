@@ -7,7 +7,7 @@ install:
 	stow --restow --ignore ".DS_Store" --target="$(HOME)" --dir="$(DOTFILES)" files
 
 brew:
-	brew bundle --file="$(DOTFILES)/extra/homebrew/Brewfile"
+	brew bundle --file="$(DOTFILES)/Brewfile"
 
 bat:
 	bat cache --build
