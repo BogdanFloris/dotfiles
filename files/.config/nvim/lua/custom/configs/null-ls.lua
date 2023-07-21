@@ -19,6 +19,9 @@ local sources = {
   },
   formatting.stylua.with { filetypes = { "lua" } },
   lint.shellcheck,
+  formatting.gofmt,
+  formatting.goimports,
+  formatting.golines,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})

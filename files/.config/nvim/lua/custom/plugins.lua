@@ -55,6 +55,9 @@ local plugins = {
         "typescript-language-server",
         "tailwindcss-language-server",
         "json-lsp",
+        "gopls",
+        "golines",
+        "goimports",
       },
     },
   },
@@ -107,6 +110,16 @@ local plugins = {
     config = function(_, opts)
       ---@diagnostic disable-next-line: different-requires
       require("rust-tools").setup(opts)
+    end,
+  },
+  {
+    "olexsmir/gopher.nvim",
+    ft = "go",
+    config = function(_, opts)
+      require("gopher").setup(opts)
+    end,
+    build = function()
+      vim.cmd [[silent! GoInstallDeps]]
     end,
   },
 }
