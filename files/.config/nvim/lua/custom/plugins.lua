@@ -45,8 +45,9 @@ local plugins = {
       ensure_installed = {
         "lua-language-server",
         "html-lsp",
+        "djlint",
         "css-lsp",
-        "prettier",
+        "prettierd",
         "stylua",
         "rust-analyzer",
         "clang-format",

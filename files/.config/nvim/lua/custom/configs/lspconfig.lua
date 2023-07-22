@@ -3,7 +3,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 
 ---@diagnostic disable-next-line: different-requires
 local lspconfig = require "lspconfig"
-local servers = { "html", "tsserver", "jsonls", "eslint", "tailwindcss", "cssls" }
+local servers = { "tsserver", "jsonls", "eslint", "tailwindcss", "cssls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -11,6 +11,13 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
+
+-- html
+lspconfig.html.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "html", "htmldjango", "django", "jinja.html" },
+}
 
 -- rust-analyzer specific
 lspconfig.rust_analyzer.setup {

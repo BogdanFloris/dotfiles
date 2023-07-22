@@ -5,17 +5,20 @@ local lint = null_ls.builtins.diagnostics
 
 local sources = {
   -- Prettier
-  formatting.prettier.with {
+  formatting.prettierd.with {
     filetypes = {
       "html",
       "css",
+      "scss",
       "json",
+      "jsonc",
       "yaml",
       "typescript",
       "typescriptreact",
       "javascript",
       "javascriptreact",
       "markdown",
+      "graphql",
     },
   },
 
@@ -34,6 +37,12 @@ local sources = {
   lint.mypy,
   lint.ruff,
   formatting.black,
+
+  -- HTML templates
+  lint.djlint,
+  formatting.djlint.with {
+    filetypes = { "django", "jinja.html", "htmldjango" },
+  },
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
