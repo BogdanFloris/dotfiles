@@ -41,7 +41,7 @@ local sources = {
   -- HTML templates
   lint.djlint,
   formatting.djlint.with {
-    filetypes = { "django", "jinja.html", "htmldjango" },
+    filetypes = { "html", "django", "jinja.html", "htmldjango" },
   },
 }
 
