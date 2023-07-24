@@ -48,6 +48,7 @@ local plugins = {
         "djlint",
         "css-lsp",
         "prettier",
+        "eslint_d",
         "stylua",
         "rust-analyzer",
         "clang-format",
