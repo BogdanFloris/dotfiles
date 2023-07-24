@@ -118,6 +118,7 @@ alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias lg=lazygit
 alias ld=lazydocker
+alias chrome-no-sec="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir="/tmp/james_bonds_browser" --disable-web-security"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
