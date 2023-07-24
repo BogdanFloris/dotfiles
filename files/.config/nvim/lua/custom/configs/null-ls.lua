@@ -27,6 +27,9 @@ local sources = {
     },
   },
 
+  -- Typescript
+  require "typescript.extensions.null-ls.code-actions",
+
   -- Lua
   formatting.stylua.with { filetypes = { "lua" } },
 

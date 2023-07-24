@@ -128,6 +128,18 @@ local plugins = {
       vim.cmd [[silent! GoInstallDeps]]
     end,
   },
+  {
+    "jose-elias-alvarez/typescript.nvim",
+    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    dependencies = "neovim/nvim-lspconfig",
+    opts = function()
+      return require "custom.configs.typescript"
+    end,
+    config = function(_, opts)
+      ---@diagnostic disable-next-line: different-requires
+      require("typescript").setup(opts)
+    end,
+  },
 }
 
 return plugins
