@@ -47,7 +47,7 @@ local plugins = {
         "html-lsp",
         "djlint",
         "css-lsp",
-        "prettierd",
+        "prettier",
         "stylua",
         "rust-analyzer",
         "clang-format",

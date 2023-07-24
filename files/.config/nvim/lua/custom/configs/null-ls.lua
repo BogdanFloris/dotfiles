@@ -5,7 +5,7 @@ local lint = null_ls.builtins.diagnostics
 
 local sources = {
   -- Prettier
-  formatting.prettierd.with {
+  formatting.prettier.with {
     filetypes = {
       "html",
       "css",
