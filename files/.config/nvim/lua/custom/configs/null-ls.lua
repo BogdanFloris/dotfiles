@@ -27,6 +27,9 @@ local sources = {
     },
   },
 
+  -- Rust
+  formatting.rustfmt,
+
   -- Typescript
   require "typescript.extensions.null-ls.code-actions",
 
