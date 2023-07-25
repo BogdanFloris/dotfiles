@@ -5,6 +5,7 @@ local plugins = {
   -- nvim-treesitter
   {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = { "nvim-treesitter/nvim-treesitter-context", opts = { after = "nvim-treesitter" } },
     opts = {
       ensure_installed = {
         "html",
