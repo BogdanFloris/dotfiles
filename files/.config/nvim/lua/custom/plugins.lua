@@ -65,6 +65,7 @@ local plugins = {
         "mypy",
         "black",
         "shellcheck",
+        "bash-language-server",
       },
     },
   },
