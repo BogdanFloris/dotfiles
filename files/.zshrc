@@ -88,7 +88,6 @@ plugins=(
   colorize
   colored-man-pages
   extract ssh-agent
-  tmux
   cp
   zsh-autosuggestions
   zsh-syntax-highlighting
