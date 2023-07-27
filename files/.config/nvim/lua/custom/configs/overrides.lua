@@ -8,6 +8,9 @@ M.copilot = {
   panel = {
     enable = false,
   },
+  filetypes = {
+    markdown = true,
+  },
 }
 
 return M
