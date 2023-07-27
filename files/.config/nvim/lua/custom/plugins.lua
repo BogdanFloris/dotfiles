@@ -20,6 +20,7 @@ local plugins = {
         "gomod",
         "gosum",
         "c",
+        "terraform",
       },
     },
   },
