@@ -27,6 +27,9 @@ local sources = {
     },
   },
 
+  -- SQL
+  formatting.sql_formatter,
+
   -- Rust
   formatting.rustfmt,
 
