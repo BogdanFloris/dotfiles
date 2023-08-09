@@ -1,14 +1,6 @@
 local overrides = require "custom.configs.overrides"
 
 local plugins = {
-
-  -- vim-kitty-navigator
-  {
-    "knubie/vim-kitty-navigator",
-    lazy = false,
-    build = "cp ./*.py ~/.config/kitty/",
-  },
-
   -- nvim-treesitter
   {
     "nvim-treesitter/nvim-treesitter",
