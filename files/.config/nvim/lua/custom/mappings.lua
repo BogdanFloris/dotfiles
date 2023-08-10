@@ -17,6 +17,8 @@ M.abc = {
     ["gi"] = { "<cmd> Telescope lsp_implementations <CR>", "Telescope LSP implementations" },
     ["gd"] = { "<cmd> Telescope lsp_definitions <CR>", "Telescope LSP definitions" },
     ["<C-q>"] = { "<cmd> q <CR>", "Quit" },
+    ["<leader>co"] = { "<cmd>TypescriptOrganizeImports<CR>", "Typescript Organize Imports" },
+    ["<leader>cR"] = { "<cmd>TypescriptRenameFile<CR>", "Typescript Rename File" },
   },
 }
 

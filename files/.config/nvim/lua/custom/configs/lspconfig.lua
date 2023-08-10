@@ -3,7 +3,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 
 ---@diagnostic disable-next-line: different-requires
 local lspconfig = require "lspconfig"
-local servers = { "tsserver", "jsonls", "eslint", "tailwindcss", "cssls", "bashls", "sqlls" }
+local servers = { "jsonls", "tailwindcss", "cssls", "bashls", "sqlls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -11,6 +11,29 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
+
+-- typescript specific
+lspconfig.tsserver.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+-- eslint specific
+lspconfig.eslint.setup {
+  on_attach = function(client, bufnr)
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      command = "EslintFixAll",
+    })
+    -- call the old on_attach
+    on_attach(client, bufnr)
+  end,
+  capabilities = capabilities,
+  settings = {
+    -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
+    workingDirectory = { mode = "auto" },
+  },
+}
 
 -- html
 lspconfig.html.setup {
