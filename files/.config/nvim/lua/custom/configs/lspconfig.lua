@@ -29,6 +29,13 @@ lspconfig.eslint.setup {
     on_attach(client, bufnr)
   end,
   capabilities = capabilities,
+  root_dir = function(filename, bufnr)
+    if string.find(filename, "node_modules/") then
+      vim.diagnostic.disable(0)
+      return nil
+    end
+    return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename, bufnr)
+  end,
   settings = {
     -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
     workingDirectory = { mode = "auto" },
