@@ -60,6 +60,9 @@ local sources = {
 
   -- C/C++
   formatting.clang_format,
+
+  -- Zig
+  formatting.zigfmt,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})

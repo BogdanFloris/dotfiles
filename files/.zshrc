@@ -133,6 +133,9 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 # Poetry
 export PATH="$HOME/.poetry/bin:$PATH"
 
+# Zig
+export PATH="$HOME/zig:$PATH"
+
 # Yarn
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
