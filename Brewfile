@@ -30,6 +30,7 @@ brew "lima"
 brew "ripgrep"
 brew "telnet"
 brew "awscli"
+brew "parallel"
 
 # Terminal
 cask "kitty"
