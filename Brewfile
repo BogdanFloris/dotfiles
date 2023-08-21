@@ -50,6 +50,9 @@ brew "golang-migrate"
 # Rust
 brew "rustup"
 
+# Zig
+brew install zig
+
 # Java
 brew "openjdk"
 brew "kotlin"
