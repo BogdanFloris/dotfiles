@@ -57,6 +57,9 @@ local sources = {
   formatting.djlint.with {
     filetypes = { "html", "django", "jinja.html", "htmldjango" },
   },
+
+  -- C/C++
+  formatting.clang_format,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
