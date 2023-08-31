@@ -33,6 +33,7 @@ brew "awscli"
 brew "parallel"
 brew "httpie"
 brew "flyctl"
+brew "orbstack"
 
 # Terminal
 cask "kitty"
