@@ -68,7 +68,7 @@ local plugins = {
         "golines",
         "goimports",
         "pyright",
-        "ruff-lsp",
+        "ruff",
         "mypy",
         "black",
         "shellcheck",
