@@ -32,6 +32,7 @@ brew "telnet"
 brew "awscli"
 brew "parallel"
 brew "httpie"
+brew "flyctl"
 
 # Terminal
 cask "kitty"
