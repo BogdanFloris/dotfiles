@@ -103,3 +103,9 @@ lspconfig.zls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
+
+-- Docker specific
+lspconfig.dockerls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}

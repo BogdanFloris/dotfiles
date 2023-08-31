@@ -76,6 +76,7 @@ local plugins = {
         "sqlls",
         "sql-formatter",
         "zls",
+        "dockerfile-language-server",
       },
     },
   },
