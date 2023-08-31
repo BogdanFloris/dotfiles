@@ -25,6 +25,7 @@ local plugins = {
         "terraform",
         "sql",
         "zig",
+        "python",
       },
     },
   },
