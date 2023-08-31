@@ -31,6 +31,7 @@ brew "ripgrep"
 brew "telnet"
 brew "awscli"
 brew "parallel"
+brew "httpie"
 
 # Terminal
 cask "kitty"
