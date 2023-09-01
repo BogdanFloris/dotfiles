@@ -157,6 +157,13 @@ local plugins = {
     "m4xshen/hardtime.nvim",
     dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     opts = {},
+    lazy = false,
+  },
+  {
+    "VonHeikemen/fine-cmdline.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    opts = {},
+    lazy = false,
   },
 }
 
