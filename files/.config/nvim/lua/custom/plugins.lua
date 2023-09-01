@@ -165,7 +165,8 @@ local plugins = {
     opts = {},
     lazy = false,
   },
-  "tpope/vim-dadbod",
+  { "tpope/vim-dadbod", lazy = false },
+  { "kristijanhusak/vim-dadbod-ui", lazy = false },
 }
 
 return plugins
