@@ -165,6 +165,7 @@ local plugins = {
     opts = {},
     lazy = false,
   },
+  "tpope/vim-dadbod",
 }
 
 return plugins
