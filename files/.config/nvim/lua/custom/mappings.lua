@@ -12,7 +12,7 @@ M.disabled = {
 
 M.abc = {
   n = {
-    ["<leader>n"] = { "<cmd> FineCmdline <CR>", "FineCmdline" },
+    ["<leader>:"] = { "<cmd> FineCmdline <CR>", "FineCmdline" },
     ["<leader>cc"] = { "<cmd> Telescope <CR>", "Telescope" },
     ["gr"] = { "<cmd> Telescope lsp_references <CR>", "Telescope LSP references" },
     ["gi"] = { "<cmd> Telescope lsp_implementations <CR>", "Telescope LSP implementations" },
