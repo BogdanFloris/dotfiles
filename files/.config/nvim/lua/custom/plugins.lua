@@ -122,6 +122,11 @@ local plugins = {
       },
     },
   },
+  -- dressing.nvim
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+  },
   {
     "rust-lang/rust.vim",
     ft = "rust",
