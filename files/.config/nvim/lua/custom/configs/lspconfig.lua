@@ -3,7 +3,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 
 ---@diagnostic disable-next-line: different-requires
 local lspconfig = require "lspconfig"
-local servers = { "jsonls", "tailwindcss", "cssls", "bashls", "sqlls" }
+local servers = { "jsonls", "tailwindcss", "cssls", "bashls", "sqlls", "solargraph" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {

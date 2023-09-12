@@ -63,6 +63,10 @@ local sources = {
 
   -- Zig
   formatting.zigfmt,
+
+  -- Ruby
+  lint.rubocop,
+  formatting.rubocop,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
