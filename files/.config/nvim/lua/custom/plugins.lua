@@ -176,12 +176,6 @@ local plugins = {
     opts = {},
     lazy = false,
   },
-  {
-    "VonHeikemen/fine-cmdline.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
-    opts = {},
-    lazy = false,
-  },
   { "tpope/vim-dadbod", lazy = false },
   { "kristijanhusak/vim-dadbod-ui", lazy = false },
   {
