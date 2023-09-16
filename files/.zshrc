@@ -146,3 +146,11 @@ eval "$(rbenv init - zsh)"
 # Environment variables
 export DC_USER_ID=10650927
 export DC_DCT="eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL3d3dy5kYXRhY2FtcC5jb20iLCJqdGkiOiIxMDY1MDkyNy04MGE3NTQyMDhiNjc5ZDJhYjcyNjI2NWRkNDEzMTYzOTdjMTVlYzE3OTI3ZjljNDI1MzdiZTY0NTg4ZGIiLCJ1c2VyX2lkIjoxMDY1MDkyNywiZXhwIjoxNzAwMTIzMjkwfQ.lK7PUv2ax3LCSbEZW_-SJ4XpfSJmAKk5SDeajHa6xj6maw27L6EEpC7oi4qh26Xai09bPjohKtzvPynh7RbAL87hd9AgE6WAF3_RHDswOGAahTQXrJUjCV7CL-K9gSF2m7DrV4pgH-39hjlA5aui-SepbTYJzNws_fQihaJYUxzw4suYj5GlRcmuoFqnQmQ34jsHRU2QtVLFXp1GNJmxX_x-fff99pfWIsHEXyFB_Q2KrHcU6-MvLSIWD0mVfSn78hk4ktPno4pJTys2Zt46yjjWFPiXKFPoYcbex-SrZawfWGi1HfZoz94uHhVBna2qEMY7bTMMwsisyL9VONUdFQ"
+
+# pnpm
+export PNPM_HOME="/Users/bogdanfloris/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
