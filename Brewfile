@@ -34,6 +34,7 @@ brew "parallel"
 brew "httpie"
 brew "flyctl"
 brew "orbstack"
+brew "iproute2mac"
 
 # Terminal
 cask "kitty"
