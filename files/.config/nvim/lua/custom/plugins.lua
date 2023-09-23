@@ -40,6 +40,7 @@ local plugins = {
         "org",
         "regex",
         "ruby",
+        "wgsl",
       },
       textobjects = {
         select = {
@@ -137,6 +138,7 @@ local plugins = {
         "dockerfile-language-server",
         "solargraph",
         "rubocop",
+        "wgsl-analyzer",
       },
     },
   },

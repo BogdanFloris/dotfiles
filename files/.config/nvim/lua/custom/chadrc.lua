@@ -8,6 +8,13 @@ M.plugins = "custom.plugins"
 
 M.mappings = require "custom.mappings"
 
+-- Add other filetypes
+vim.filetype.add {
+  extension = {
+    wgsl = "wgsl",
+  },
+}
+
 au("QuitPre", {
   callback = function()
     local tree_wins = {}
