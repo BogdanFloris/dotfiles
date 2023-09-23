@@ -36,6 +36,7 @@ brew "flyctl"
 brew "orbstack"
 brew "iproute2mac"
 brew "qemu"
+brew "graphviz"
 
 # Terminal
 cask "kitty"
