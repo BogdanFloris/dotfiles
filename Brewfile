@@ -37,6 +37,7 @@ brew "orbstack"
 brew "iproute2mac"
 brew "qemu"
 brew "graphviz"
+brew "gnuplot"
 
 # Terminal
 cask "kitty"
