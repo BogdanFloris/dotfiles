@@ -122,7 +122,7 @@ alias ohmyzsh="mate ~/.oh-my-zsh"
 alias lg=lazygit
 alias ld=lazydocker
 alias cat=bat
-alias maelstorm="~/maelstrom/maelstrom"
+alias maelstrom="~/maelstrom/maelstrom"
 alias chrome-no-sec="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir="/tmp/james_bonds_browser" --disable-web-security"
 
 # NVM
