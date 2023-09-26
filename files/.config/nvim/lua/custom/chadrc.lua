@@ -15,15 +15,6 @@ vim.filetype.add {
   },
 }
 
-local cmd = vim.api.nvim_create_user_command
-cmd("ToggleTabline", function()
-  if vim.opt.showtabline._value == 0 then
-    vim.opt.showtabline = 2
-  else
-    vim.opt.showtabline = 0
-  end
-end, {})
-
 au("QuitPre", {
   callback = function()
     local tree_wins = {}

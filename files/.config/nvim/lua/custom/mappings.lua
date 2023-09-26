@@ -12,7 +12,6 @@ M.disabled = {
 
 M.abc = {
   n = {
-    ["<leader>tb"] = { "<cmd> ToggleTabline <CR>", "Toggle Tabufline" },
     ["<leader>cc"] = { "<cmd> Telescope <CR>", "Telescope" },
     ["gr"] = { "<cmd> Telescope lsp_references <CR>", "Telescope LSP references" },
     ["gi"] = { "<cmd> Telescope lsp_implementations <CR>", "Telescope LSP implementations" },
