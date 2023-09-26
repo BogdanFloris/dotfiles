@@ -2,7 +2,7 @@
 local M = {}
 local au = vim.api.nvim_create_autocmd
 
-M.ui = { theme = "gruvbox" }
+M.ui = { theme = "gruvbox", tabufline = { enabled = false } }
 
 M.plugins = "custom.plugins"
 
