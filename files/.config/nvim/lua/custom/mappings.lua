@@ -30,6 +30,7 @@ M.typescript = {
 M.general = {
   n = {
     ["<C-q>"] = { "<cmd> q <CR>", "Quit" },
+    ["<leader>x"] = { "<cmd> bd <CR>", "Close buffer" },
   },
 }
 
