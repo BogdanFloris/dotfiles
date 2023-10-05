@@ -246,6 +246,13 @@ local plugins = {
       -- add any custom options here
     },
   },
+  {
+    "karb94/neoscroll.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("neoscroll").setup {}
+    end,
+  },
 }
 
 return plugins
