@@ -38,6 +38,8 @@ brew "iproute2mac"
 brew "qemu"
 brew "graphviz"
 brew "gnuplot"
+brew "maturin"
+brew "pyenv"
 
 # Terminal
 cask "kitty"
@@ -59,7 +61,7 @@ brew "golang-migrate"
 brew "rustup"
 
 # Zig
-brew install zig
+brew "zig"
 
 # Java
 brew "openjdk"
