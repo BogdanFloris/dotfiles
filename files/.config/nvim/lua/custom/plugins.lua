@@ -253,6 +253,10 @@ local plugins = {
       require("neoscroll").setup {}
     end,
   },
+  {
+    "christoomey/vim-tmux-navigator",
+    event = "VeryLazy",
+  },
 }
 
 return plugins

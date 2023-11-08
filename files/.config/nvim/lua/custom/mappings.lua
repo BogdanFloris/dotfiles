@@ -8,6 +8,7 @@ M.disabled = {
   n = {
     ["<A-h>"] = "",
     ["<leader>v"] = "",
+    ["<C-s>"] = "",
   },
 }
 
@@ -31,6 +32,7 @@ M.general = {
   n = {
     ["<C-q>"] = { "<cmd> q <CR>", "Quit" },
     ["<leader>x"] = { "<cmd> bd <CR>", "Close buffer" },
+    ["<leader>s"] = { "<cmd> w <CR>", "Save file" },
   },
 }
 
