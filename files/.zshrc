@@ -74,5 +74,10 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
 # Initialize Starship
 eval "$(starship init zsh)"
