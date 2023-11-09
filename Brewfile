@@ -40,6 +40,9 @@ brew "graphviz"
 brew "gnuplot"
 brew "maturin"
 brew "pyenv"
+brew "fzf"
+brew "reattach-to-user-namespace"
+brew "starship"
 
 # Terminal
 cask "kitty"
