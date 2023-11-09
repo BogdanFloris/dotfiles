@@ -53,16 +53,20 @@ style = "bright-black"
 
 [nodejs]
 format = "[$version]($style) "
-style = "bright-black"
+style = "bright-green"
 
 [rust]
 format = "[$version]($style) "
-style = "bright-black"
+style = "bright-red"
 
 [golang]
 format = "[$version]($style) "
-style = "bright-black"
+style = "bright-blue"
 
 [zig]
 format = "[$version]($style) "
-style = "bright-black"
+style = "bright-yellow"
+
+# [aws]
+# format = "[$profile:$region]($style) "
+# style = "bright-black"
