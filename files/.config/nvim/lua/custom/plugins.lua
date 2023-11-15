@@ -257,6 +257,19 @@ local plugins = {
     "christoomey/vim-tmux-navigator",
     event = "VeryLazy",
   },
+  {
+    "michaelrommel/nvim-silicon",
+    lazy = true,
+    cmd = "Silicon",
+    config = function()
+      require("silicon").setup {
+        font = "Hack Nerd Font=20",
+        theme = "gruvbox-dark",
+        pad_horiz = 0,
+        pad_vert = 0,
+      }
+    end,
+  },
 }
 
 return plugins

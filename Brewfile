@@ -43,6 +43,7 @@ brew "pyenv"
 brew "fzf"
 brew "reattach-to-user-namespace"
 brew "starship"
+brew "silicon"
 
 # Terminal
 cask "kitty"
