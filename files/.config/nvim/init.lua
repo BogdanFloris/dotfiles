@@ -28,8 +28,15 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  -- NOTE: This is where your plugins related to LSP can be installed.
-  --  The configuration is done below. Search for lspconfig to find it below.
+  {
+    -- Gruvbox Theme
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
+
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -63,6 +70,22 @@ require('lazy').setup({
     },
   },
 
+  {
+    -- Autopair
+    'windwp/nvim-autopairs',
+    opts = {
+      fast_wrap = {},
+      disable_filetype = { 'TelescopePrompt', 'vim' },
+    },
+    config = function(_, opts)
+      require('nvim-autopairs').setup(opts)
+
+      -- setup cmp for autopairs
+      local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+      require('cmp').event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
+  },
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
   {
@@ -78,7 +101,8 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+        vim.keymap.set('n', '<leader>rh', require('gitsigns').reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
 
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
@@ -105,18 +129,9 @@ require('lazy').setup({
   },
 
   {
-    -- Gruvbox Theme
-    'ellisonleao/gruvbox.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'gruvbox'
-    end,
-  },
-
-  {
     -- Vim Tmux Navigator
     'christoomey/vim-tmux-navigator',
-    event = "VeryLazy",
+    event = 'VeryLazy',
   },
 
   {
@@ -175,24 +190,45 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
-  --       These are some example plugins that I've included in the kickstart repository.
-  --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
+  {
+    -- Auto-install missing linters and formatters
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'williamboman/mason.nvim', 'williamboman/mason-lspconfig.nvim' },
+    config = function()
+      local tools = {}
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+      -- Get the formatters from conform and add them to the tools to install
+      local formatters_by_ft = require('plugins.formatter').opts.formatters_by_ft
+      local formatters = vim.tbl_flatten(vim.tbl_values(formatters_by_ft))
+      vim.list_extend(tools, formatters)
+
+      -- TODO: Get the linters from nvim-lint and add them to the tools to install
+      local linters = {}
+      vim.list_extend(tools, linters)
+
+      -- Make the unique
+      table.sort(tools)
+      tools = vim.fn.uniq(tools)
+
+      -- Install them
+      require('mason-tool-installer').setup {
+        ensure_installed = tools,
+        run_on_start = false,
+      }
+
+      vim.defer_fn(vim.cmd.MasonToolsInstall, 500)
+    end,
+  },
+
+  require 'plugins.autoformat',
+  require 'plugins.formatter',
+  require 'plugins.harpoon',
+  -- require 'plugins.debug',
 }, {})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
--- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -236,6 +272,8 @@ vim.o.termguicolors = true
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set('n', '<C-q>', '<cmd> q <CR>', { desc = 'Close all and quit' })
+vim.keymap.set('n', '<C-x>', '<cmd> bd <CR>', { desc = 'Close buffer' })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -282,17 +320,17 @@ local function find_git_root()
   local current_dir
   local cwd = vim.fn.getcwd()
   -- If the buffer is not associated with a file, return nil
-  if current_file == "" then
+  if current_file == '' then
     current_dir = cwd
   else
     -- Extract the directory from the current file's path
-    current_dir = vim.fn.fnamemodify(current_file, ":h")
+    current_dir = vim.fn.fnamemodify(current_file, ':h')
   end
 
   -- Find the Git root directory from the current file's path
-  local git_root = vim.fn.systemlist("git -C " .. vim.fn.escape(current_dir, " ") .. " rev-parse --show-toplevel")[1]
+  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir, ' ') .. ' rev-parse --show-toplevel')[1]
   if vim.v.shell_error ~= 0 then
-    print("Not a git repository. Searching on current working directory")
+    print 'Not a git repository. Searching on current working directory'
     return cwd
   end
   return git_root
@@ -302,9 +340,9 @@ end
 local function live_grep_git_root()
   local git_root = find_git_root()
   if git_root then
-    require('telescope.builtin').live_grep({
-      search_dirs = {git_root},
-    })
+    require('telescope.builtin').live_grep {
+      search_dirs = { git_root },
+    }
   end
 end
 
@@ -336,7 +374,41 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = {
+      'c',
+      'cpp',
+      'cmake',
+      'make',
+      'terraform',
+      'sql',
+      'zig',
+      'python',
+      'markdown',
+      'dockerfile',
+      'gitignore',
+      'java',
+      'kotlin',
+      'jq',
+      'regex',
+      'ruby',
+      'wgsl',
+      'go',
+      'gomod',
+      'gosum',
+      'lua',
+      'python',
+      'rust',
+      'tsx',
+      'javascript',
+      'typescript',
+      'vimdoc',
+      'vim',
+      'bash',
+      'html',
+      'css',
+      'scss',
+      'json',
+    },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -402,10 +474,6 @@ end, 0)
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
@@ -449,7 +517,8 @@ require('which-key').register {
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
+  ['<leader>p'] = { name = 'More git', _ = 'which_key_ignore' },
+  -- ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
@@ -473,7 +542,8 @@ local servers = {
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  -- tsserver = {},
+  -- TODO: implement
+  tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
   lua_ls = {
@@ -523,7 +593,7 @@ cmp.setup {
     end,
   },
   completion = {
-    completeopt = 'menu,menuone,noinsert'
+    completeopt = 'menu,menuone,noinsert',
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -559,6 +629,3 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
