@@ -228,6 +228,7 @@ require('lazy').setup({
     end,
   },
 
+  require 'plugins.copilot',
   require 'plugins.autoformat',
   require 'plugins.formatter',
   require 'plugins.linter',
@@ -650,6 +651,9 @@ cmp.setup {
   },
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'copilot' },
     { name = 'luasnip' },
+    { name = 'buffer' },
+    { name = 'path' },
   },
 }
