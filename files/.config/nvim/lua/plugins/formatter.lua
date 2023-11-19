@@ -21,10 +21,10 @@ return {
     -- Define your formatters
     formatters_by_ft = {
       lua = { 'stylua' },
-      javascript = { { 'prettierd', 'prettier' } },
-      typescript = { { 'prettierd', 'prettier' } },
-      javascriptreact = { { 'prettierd', 'prettier' } },
-      typescriptreact = { { 'prettierd', 'prettier' } },
+      javascript = { 'eslint_d', { 'prettierd', 'prettier' } },
+      typescript = { 'eslint_d', { 'prettierd', 'prettier' } },
+      javascriptreact = { 'eslint_d', { 'prettierd', 'prettier' } },
+      typescriptreact = { 'eslint_d', { 'prettierd', 'prettier' } },
       css = { { 'prettierd', 'prettier' } },
       html = { { 'prettierd', 'prettier' } },
       json = { { 'prettierd', 'prettier' } },
