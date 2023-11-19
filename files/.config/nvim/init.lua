@@ -1,3 +1,6 @@
+-- init.lua
+-- @BogdanFloris
+--
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -83,6 +86,16 @@ require('lazy').setup({
       -- setup cmp for autopairs
       local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
       require('cmp').event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
+  },
+
+  {
+    -- Nvim Surround
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup {}
     end,
   },
 
