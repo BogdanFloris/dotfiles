@@ -1,14 +1,15 @@
--- conform.lua
+-- formatter.lua
 --
 -- Configures formatting using confirm.nvim
 
 return {
   'stevearc/conform.nvim',
-  event = { 'BufWritePre' },
+  lazy = true,
+  event = { 'BufReadPre', 'BufNewFile' },
   cmd = 'ConformInfo',
   keys = {
     {
-      '<leader>f',
+      '<leader>cf',
       function()
         require('conform').format { async = true, lsp_fallback = true }
       end,
@@ -24,6 +25,13 @@ return {
       typescript = { { 'prettierd', 'prettier' } },
       javascriptreact = { { 'prettierd', 'prettier' } },
       typescriptreact = { { 'prettierd', 'prettier' } },
+      css = { { 'prettierd', 'prettier' } },
+      html = { { 'prettierd', 'prettier' } },
+      json = { { 'prettierd', 'prettier' } },
+      yaml = { { 'prettierd', 'prettier' } },
+      markdown = { { 'prettierd', 'prettier' } },
+      graphql = { { 'prettierd', 'prettier' } },
+      sh = { 'shfmt' },
       -- python = { "isort", "black" },
     },
     -- Set up format-on-save

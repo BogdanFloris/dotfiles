@@ -87,7 +87,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -203,8 +203,9 @@ require('lazy').setup({
       local formatters = vim.tbl_flatten(vim.tbl_values(formatters_by_ft))
       vim.list_extend(tools, formatters)
 
-      -- TODO: Get the linters from nvim-lint and add them to the tools to install
-      local linters = {}
+      -- Get the linters from nvim-lint and add them to the tools to install
+      local linters_by_ft = require('plugins.linter').opts.linters_by_ft
+      local linters = vim.tbl_flatten(vim.tbl_values(linters_by_ft))
       vim.list_extend(tools, linters)
 
       -- Make the unique
@@ -223,6 +224,7 @@ require('lazy').setup({
 
   require 'plugins.autoformat',
   require 'plugins.formatter',
+  require 'plugins.linter',
   require 'plugins.harpoon',
   -- require 'plugins.debug',
 }, {})
@@ -473,7 +475,7 @@ end, 0)
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(server, bufnr)
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
@@ -510,6 +512,23 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  -- Typescript specific commands
+  if server.name == 'tsserver' then
+    -- Organize imports
+    local function organize_imports()
+      local params = {
+        command = '_typescript.organizeImports',
+        arguments = { vim.api.nvim_buf_get_name(0) },
+      }
+      vim.lsp.buf.execute_command(params)
+    end
+
+    vim.api.nvim_buf_create_user_command(bufnr, 'OrganizeImports', function(_)
+      organize_imports()
+    end, { desc = 'Organize Typescript Imports' })
+    nmap('<leader>co', organize_imports, '[C]ode [O]rganize Imports')
+  end
 end
 
 -- document existing key chains
@@ -542,9 +561,8 @@ local servers = {
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  -- TODO: implement
   tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  html = { filetypes = { 'html', 'htmldjango' } },
 
   lua_ls = {
     Lua = {
