@@ -191,6 +191,12 @@ require('lazy').setup({
   },
 
   {
+    -- dressing.nvim
+    'stevearc/dressing.nvim',
+    event = 'VeryLazy',
+  },
+
+  {
     -- Auto-install missing linters and formatters
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     event = 'VeryLazy',
