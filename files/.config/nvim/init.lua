@@ -626,6 +626,7 @@ local servers = {
   pyright = {},
   ruff_lsp = {},
   tsserver = {},
+  eslint = {},
   html = { filetypes = { 'html', 'htmldjango' } },
 
   lua_ls = {
