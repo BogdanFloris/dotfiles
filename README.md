@@ -7,7 +7,7 @@ macOS environment managed using git and stow.
 These dotfiles contain configurations for the following things:
 
 - Homebrew packages and casks
-- Neovim custom config on top of NvChad
+- Neovim custom config
 - Kitty terminal config
 - Zshrc profile
 - Window managemenet config using yabai and skhd
