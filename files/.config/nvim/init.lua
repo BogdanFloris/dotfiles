@@ -234,6 +234,17 @@ require('lazy').setup({
       local linters = vim.tbl_flatten(vim.tbl_values(linters_by_ft))
       vim.list_extend(tools, linters)
 
+      -- Others
+      local others = { 'ruff' }
+      vim.list_extend(tools, others)
+
+      -- Excluded tools that are defined in formatters and linters but have a different name
+      -- e.g. ruff is the name of the tool, but ruff_format and ruff_fix are defined in formatters and linters
+      local excluded = { 'ruff_format', 'ruff_fix' }
+      tools = vim.tbl_filter(function(tool)
+        return not vim.tbl_contains(excluded, tool)
+      end, tools)
+
       -- Make the unique
       table.sort(tools)
       tools = vim.fn.uniq(tools)
@@ -563,6 +574,24 @@ local on_attach = function(server, bufnr)
     end, { desc = 'Organize Imports' })
     nmap('<leader>co', organize_imports, '[C]ode [O]rganize Imports')
   end
+
+  -- Python specific commands
+  if server.name == 'ruff_lsp' then
+    -- Organize imports
+    local function organize_imports()
+      vim.lsp.buf.code_action {
+        apply = true,
+        context = {
+          only = { 'source.organizeImports' },
+          diagnostics = {},
+        },
+      }
+    end
+    vim.api.nvim_buf_create_user_command(bufnr, 'OrganizeImports', function(_)
+      organize_imports()
+    end, { desc = 'Organize Imports' })
+    nmap('<leader>co', organize_imports, '[C]ode [O]rganize Imports')
+  end
 end
 
 -- document existing key chains
@@ -593,8 +622,9 @@ require('mason-lspconfig').setup()
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
   -- rust_analyzer = {},
+  pyright = {},
+  ruff_lsp = {},
   tsserver = {},
   html = { filetypes = { 'html', 'htmldjango' } },
 

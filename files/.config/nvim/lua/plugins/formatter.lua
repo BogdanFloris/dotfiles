@@ -32,7 +32,7 @@ return {
       markdown = { { 'prettierd', 'prettier' } },
       graphql = { { 'prettierd', 'prettier' } },
       sh = { 'shfmt' },
-      -- python = { "isort", "black" },
+      python = { 'ruff_fix', 'ruff_format' },
     },
     -- Set up format-on-save
     format_on_save = { timeout_ms = 500, lsp_fallback = true },
