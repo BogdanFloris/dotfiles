@@ -560,7 +560,7 @@ local on_attach = function(server, bufnr)
 
     vim.api.nvim_buf_create_user_command(bufnr, 'OrganizeImports', function(_)
       organize_imports()
-    end, { desc = 'Organize Typescript Imports' })
+    end, { desc = 'Organize Imports' })
     nmap('<leader>co', organize_imports, '[C]ode [O]rganize Imports')
   end
 end
