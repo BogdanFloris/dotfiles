@@ -274,6 +274,7 @@ require('lazy').setup({
   require 'plugins.formatter',
   require 'plugins.linter',
   require 'plugins.harpoon',
+  require 'plugins.rust-tools',
   -- require 'plugins.debug',
 }, {})
 
@@ -633,7 +634,7 @@ require('mason-lspconfig').setup()
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- rust_analyzer = {},
+  rust_analyzer = {},
   pyright = {},
   ruff_lsp = {},
   tsserver = {},
@@ -670,6 +671,17 @@ mason_lspconfig.setup_handlers {
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
+    }
+  end,
+  -- rust_analyzer needs to be setup through rust-tools.nvim
+  ['rust_analyzer'] = function()
+    local settings = require('plugins.rust-tools').opts.server.settings
+    require('rust-tools').setup {
+      server = {
+        on_attach = on_attach,
+        settings = settings,
+      },
+      capabilities = capabilities,
     }
   end,
 }
