@@ -685,12 +685,20 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+local lspconfig = require 'lspconfig'
 -- HTMX specifc lspconfig
 -- TODO: remove when this is added to mason-lspconfig
-require('lspconfig').htmx.setup {
+lspconfig.htmx.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   filetypes = { 'html', 'htmldjango' },
+}
+
+-- Zls needs to be installed manually because Mason installes only the release version (0.11)
+lspconfig.zls.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { 'zig' },
 }
 
 -- [[ Configure nvim-cmp ]]
