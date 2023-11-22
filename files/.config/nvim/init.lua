@@ -23,6 +23,17 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.filetype.add {
+  extension = {
+    gotmpl = 'gotmpl',
+  },
+  filename = {},
+  pattern = {
+    ['*.Dockerfile.*'] = 'dockerfile',
+    ['*/templates/**/*.html'] = 'htmldjango',
+  },
+}
+
 require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -260,7 +271,6 @@ require('lazy').setup({
   },
 
   require 'plugins.copilot',
-  require 'plugins.autoformat',
   require 'plugins.formatter',
   require 'plugins.linter',
   require 'plugins.harpoon',
@@ -452,6 +462,7 @@ vim.defer_fn(function()
       'vim',
       'bash',
       'html',
+      'htmldjango',
       'css',
       'scss',
       'json',
@@ -627,6 +638,7 @@ local servers = {
   ruff_lsp = {},
   tsserver = {},
   eslint = {},
+  tailwindcss = {},
   html = { filetypes = { 'html', 'htmldjango' } },
 
   lua_ls = {
@@ -660,6 +672,14 @@ mason_lspconfig.setup_handlers {
       filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
+}
+
+-- HTMX specifc lspconfig
+-- TODO: remove when this is added to mason-lspconfig
+require('lspconfig').htmx.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { 'html', 'htmldjango' },
 }
 
 -- [[ Configure nvim-cmp ]]

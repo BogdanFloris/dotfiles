@@ -27,6 +27,7 @@ return {
       typescriptreact = { 'eslint_d', { 'prettierd', 'prettier' } },
       css = { { 'prettierd', 'prettier' } },
       html = { { 'prettierd', 'prettier' } },
+      htmldjango = { 'djlint' },
       json = { { 'prettierd', 'prettier' } },
       yaml = { { 'prettierd', 'prettier' } },
       markdown = { { 'prettierd', 'prettier' } },

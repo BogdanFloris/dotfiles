@@ -15,6 +15,7 @@ return {
       typescriptreact = { 'eslint_d' },
       json = { 'jsonlint' },
       markdown = { 'vale' },
+      htmldjango = { 'djlint' },
     },
   },
   config = function()
