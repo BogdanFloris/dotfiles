@@ -444,7 +444,7 @@ vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = {
-      'comments',
+      'comment',
       'c',
       'cpp',
       'cmake',
