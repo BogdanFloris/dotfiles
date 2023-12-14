@@ -1,0 +1,11 @@
+font-family = Hack Nerd Font Mono
+font-size = 16
+
+theme = GruvboxDark
+title = Ghostty
+
+window-decoration = true
+window-padding-x = 8
+window-padding-y = 8
+
+macos-option-as-alt = true
