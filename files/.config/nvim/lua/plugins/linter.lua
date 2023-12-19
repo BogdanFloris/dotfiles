@@ -17,6 +17,7 @@ return {
       markdown = { 'vale' },
       dockerfile = { 'hadolint' },
       htmldjango = { 'djlint' },
+      sql = { 'sqlfluff' },
     },
   },
   config = function()

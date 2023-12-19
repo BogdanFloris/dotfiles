@@ -34,6 +34,7 @@ return {
       graphql = { { 'prettierd', 'prettier' } },
       sh = { 'shfmt' },
       python = { 'ruff_fix', 'ruff_format' },
+      sql = { 'sql_formatter' },
     },
     -- Set up format-on-save
     format_on_save = { timeout_ms = 500, lsp_fallback = true },
@@ -41,6 +42,9 @@ return {
     formatters = {
       shfmt = {
         prepend_args = { '-i', '2' },
+      },
+      sql_formatter = {
+        args = { '-l', 'postgresql' },
       },
     },
   },

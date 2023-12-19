@@ -265,7 +265,7 @@ require('lazy').setup({
 
       -- Excluded tools that are defined in formatters and linters but have a different name
       -- e.g. ruff is the name of the tool, but ruff_format and ruff_fix are defined in formatters and linters
-      local excluded = { 'ruff_format', 'ruff_fix' }
+      local excluded = { 'ruff_format', 'ruff_fix', 'sql_formatter' }
       tools = vim.tbl_filter(function(tool)
         return not vim.tbl_contains(excluded, tool)
       end, tools)
@@ -655,6 +655,7 @@ local servers = {
   eslint = {},
   tailwindcss = {},
   html = { filetypes = { 'html', 'htmldjango' } },
+  sqlls = { filetypes = { 'sql', 'psql' } },
 
   lua_ls = {
     Lua = {
