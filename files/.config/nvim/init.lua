@@ -276,7 +276,7 @@ require('lazy').setup({
 
       -- Excluded tools that are defined in formatters and linters but have a different name
       -- e.g. ruff is the name of the tool, but ruff_format and ruff_fix are defined in formatters and linters
-      local excluded = { 'ruff_format', 'ruff_fix', 'sql_formatter' }
+      local excluded = { 'ruff_format', 'ruff_fix', 'goimports_reviser', 'sql_formatter' }
       tools = vim.tbl_filter(function(tool)
         return not vim.tbl_contains(excluded, tool)
       end, tools)
@@ -300,6 +300,7 @@ require('lazy').setup({
   require 'plugins.linter',
   require 'plugins.harpoon',
   require 'plugins.rust-tools',
+  require 'plugins.gopher',
   -- require 'plugins.debug',
 }, {})
 
@@ -339,6 +340,11 @@ vim.o.timeoutlen = 300
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
+
+-- Tabs
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
@@ -477,6 +483,10 @@ vim.defer_fn(function()
       'markdown',
       'dockerfile',
       'gitignore',
+      'go',
+      'gomod',
+      'gowork',
+      'gosum',
       'java',
       'kotlin',
       'jq',
@@ -656,6 +666,7 @@ require('which-key').register {
 -- before setting up the servers.
 require('mason').setup()
 require('mason-lspconfig').setup()
+local util = require 'lspconfig/util'
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -667,7 +678,42 @@ require('mason-lspconfig').setup()
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {
+    filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+    gopls = {
+      gofumpt = true,
+      codelenses = {
+        gc_details = false,
+        generate = true,
+        regenerate_cgo = true,
+        run_govulncheck = true,
+        test = true,
+        tidy = true,
+        upgrade_dependency = true,
+        vendor = true,
+      },
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
+      completeUnimported = true,
+      usePlaceholders = true,
+      staticcheck = true,
+      semanticTokens = true,
+      analyses = {
+        fieldalignment = true,
+        nilness = true,
+        unusedparams = true,
+        unusedwrite = true,
+        useany = true,
+      },
+    },
+  },
   rust_analyzer = {},
   pyright = {},
   ruff_lsp = {},

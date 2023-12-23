@@ -34,6 +34,7 @@ return {
       graphql = { { 'prettierd', 'prettier' } },
       sh = { 'shfmt' },
       python = { 'ruff_fix', 'ruff_format' },
+      go = { 'gofumpt', 'goimports', 'golines' },
       sql = { 'sql_formatter' },
     },
     -- Set up format-on-save
