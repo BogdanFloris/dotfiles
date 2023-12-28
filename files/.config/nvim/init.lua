@@ -120,7 +120,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -252,56 +252,11 @@ require('lazy').setup({
     event = 'VeryLazy',
   },
 
-  {
-    -- Auto-install missing linters and formatters
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    event = 'VeryLazy',
-    dependencies = { 'williamboman/mason.nvim', 'williamboman/mason-lspconfig.nvim' },
-    config = function()
-      local tools = {}
-
-      -- Get the formatters from conform and add them to the tools to install
-      local formatters_by_ft = require('plugins.formatter').opts.formatters_by_ft
-      local formatters = vim.tbl_flatten(vim.tbl_values(formatters_by_ft))
-      vim.list_extend(tools, formatters)
-
-      -- Get the linters from nvim-lint and add them to the tools to install
-      local linters_by_ft = require('plugins.linter').opts.linters_by_ft
-      local linters = vim.tbl_flatten(vim.tbl_values(linters_by_ft))
-      vim.list_extend(tools, linters)
-
-      -- Others
-      local others = { 'ruff' }
-      vim.list_extend(tools, others)
-
-      -- Excluded tools that are defined in formatters and linters but have a different name
-      -- e.g. ruff is the name of the tool, but ruff_format and ruff_fix are defined in formatters and linters
-      local excluded = { 'ruff_format', 'ruff_fix', 'goimports_reviser', 'sql_formatter' }
-      tools = vim.tbl_filter(function(tool)
-        return not vim.tbl_contains(excluded, tool)
-      end, tools)
-
-      -- Make the unique
-      table.sort(tools)
-      tools = vim.fn.uniq(tools)
-
-      -- Install them
-      require('mason-tool-installer').setup {
-        ensure_installed = tools,
-        run_on_start = false,
-      }
-
-      vim.defer_fn(vim.cmd.MasonToolsInstall, 500)
-    end,
-  },
-
   require 'plugins.copilot',
-  require 'plugins.formatter',
-  require 'plugins.linter',
+  require 'plugins.none_ls',
   require 'plugins.harpoon',
   require 'plugins.rust-tools',
   require 'plugins.gopher',
-  -- require 'plugins.debug',
 }, {})
 
 -- [[ Setting options ]]
@@ -368,8 +323,10 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Persistence keymaps
-vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]], { desc = 'Restore session for cwd' })
-vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = 'Restore the last session' })
+vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]],
+  { desc = 'Restore session for cwd' })
+vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]],
+  { desc = 'Restore the last session' })
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
 
 -- Todo keymaps
@@ -664,7 +621,28 @@ require('which-key').register {
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
-require('mason').setup()
+require('mason').setup {
+  -- Install the linters and formatters from null-ls
+  ensure_installed = {
+    'stylua',
+    'prettierd',
+    'eslint_d',
+    'djlint',
+    'rustywind',
+    'ruff',
+    'shfmt',
+    'gofumpt',
+    'goimports',
+    'golines',
+    'sql_formatter',
+    'rustfmt',
+    'shellcheck',
+    'vale',
+    'jsonlint',
+    'hadolint',
+    'sqlfluff',
+  },
+}
 require('mason-lspconfig').setup()
 local util = require 'lspconfig/util'
 
