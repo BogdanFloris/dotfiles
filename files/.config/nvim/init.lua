@@ -26,6 +26,7 @@ vim.opt.rtp:prepend(lazypath)
 vim.filetype.add {
   extension = {
     gotmpl = 'gotmpl',
+    templ = 'templ',
     -- zig.zon filetype is not supported by default
     zon = 'zig',
   },

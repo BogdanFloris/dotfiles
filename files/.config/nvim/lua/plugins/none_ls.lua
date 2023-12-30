@@ -30,6 +30,10 @@ return {
         null_ls.builtins.diagnostics.djlint,
         null_ls.builtins.diagnostics.hadolint,
         null_ls.builtins.diagnostics.sqlfluff,
+
+        -- code actions
+        null_ls.builtins.code_actions.gomodifytags,
+        null_ls.builtins.code_actions.impl,
       },
 
       on_attach = function(client, bufnr)
