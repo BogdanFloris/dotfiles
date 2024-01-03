@@ -121,7 +121,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -324,10 +324,8 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Persistence keymaps
-vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]],
-  { desc = 'Restore session for cwd' })
-vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]],
-  { desc = 'Restore the last session' })
+vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]], { desc = 'Restore session for cwd' })
+vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = 'Restore the last session' })
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
 
 -- Todo keymaps
@@ -445,6 +443,7 @@ vim.defer_fn(function()
       'gomod',
       'gowork',
       'gosum',
+      'graphql',
       'java',
       'kotlin',
       'jq',
@@ -657,6 +656,7 @@ local util = require 'lspconfig/util'
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
+  graphql = {},
   gopls = {
     filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
     gopls = {
