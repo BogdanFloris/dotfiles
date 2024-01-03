@@ -1,6 +1,16 @@
 -- none-ls.nvim
 --
 -- Configuration for none-ls.nvim
+
+local lsp_formatting = function(bufnr)
+  vim.lsp.buf.format {
+    filter = function(client)
+      return client.name == 'null-ls'
+    end,
+    bufnr = bufnr,
+  }
+end
+
 return {
   'nvimtools/none-ls.nvim',
   config = function()
@@ -43,7 +53,7 @@ return {
             group = augroup,
             buffer = bufnr,
             callback = function()
-              vim.lsp.buf.format { bufnr = bufnr }
+              lsp_formatting(bufnr)
             end,
           })
         end
