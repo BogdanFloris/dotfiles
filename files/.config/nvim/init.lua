@@ -243,6 +243,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
+      'windwp/nvim-ts-autotag',
     },
     build = ':TSUpdate',
   },
@@ -475,6 +476,7 @@ vim.defer_fn(function()
 
     highlight = { enable = true },
     -- indent = { enable = true },
+    autotag = { enable = true },
     incremental_selection = {
       enable = true,
       keymaps = {
