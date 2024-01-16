@@ -254,6 +254,17 @@ require('lazy').setup({
     event = 'VeryLazy',
   },
 
+  {
+    -- for previewing markdown files
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = 'cd app && yarn install',
+    init = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+    end,
+    ft = { 'markdown' },
+  },
+
   require 'plugins.copilot',
   require 'plugins.none_ls',
   require 'plugins.harpoon',
