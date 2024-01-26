@@ -270,6 +270,7 @@ require('lazy').setup({
   require 'plugins.harpoon',
   require 'plugins.rust-tools',
   require 'plugins.gopher',
+  require 'plugins.debug',
 }, {})
 
 -- [[ Setting options ]]
