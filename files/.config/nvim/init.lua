@@ -45,6 +45,8 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  'ojroques/nvim-bufdel',
+
   {
     -- Gruvbox Theme
     'ellisonleao/gruvbox.nvim',
@@ -325,6 +327,7 @@ vim.o.termguicolors = true
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', '<C-q>', '<cmd> q <CR>', { desc = 'Close all and quit' })
 vim.keymap.set('n', '<C-x>', '<cmd> bd <CR>', { desc = 'Close buffer' })
+vim.keymap.set('n', '<leader>bd', '<cmd> BufDel <CR>', { desc = 'Close buffer and preserve layout' })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
