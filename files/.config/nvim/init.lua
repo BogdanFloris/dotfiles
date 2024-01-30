@@ -45,7 +45,11 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  -- Buf del
   'ojroques/nvim-bufdel',
+
+  -- Copilot
+  'github/copilot.vim',
 
   {
     -- Gruvbox Theme
@@ -267,7 +271,6 @@ require('lazy').setup({
     ft = { 'markdown' },
   },
 
-  require 'plugins.copilot',
   require 'plugins.none_ls',
   require 'plugins.harpoon',
   require 'plugins.rust-tools',
@@ -805,7 +808,7 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
+    ['<C-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_locally_jumpable() then
@@ -814,7 +817,7 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
+    ['<C-S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.locally_jumpable(-1) then
@@ -826,7 +829,6 @@ cmp.setup {
   },
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'copilot' },
     { name = 'luasnip' },
     { name = 'buffer' },
     { name = 'path' },
