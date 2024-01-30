@@ -328,7 +328,7 @@ vim.o.termguicolors = true
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-vim.keymap.set('n', '<C-q>', '<cmd> q <CR>', { desc = 'Close all and quit' })
+vim.keymap.set('n', '<C-q>', '<cmd> qa <CR>', { desc = 'Close all and quit' })
 vim.keymap.set('n', '<C-x>', '<cmd> bd <CR>', { desc = 'Close buffer' })
 vim.keymap.set('n', '<leader>bd', '<cmd> BufDel <CR>', { desc = 'Close buffer and preserve layout' })
 
