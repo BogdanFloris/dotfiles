@@ -271,6 +271,12 @@ require('lazy').setup({
     ft = { 'markdown' },
   },
 
+  {
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
+  },
+
   require 'plugins.none_ls',
   require 'plugins.harpoon',
   require 'plugins.rust-tools',
@@ -346,6 +352,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]], { desc = 'Restore session for cwd' })
 vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = 'Restore the last session' })
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
+
+-- Trouble keymaps
+vim.keymap.set('n', '<leader>t', require('trouble').toggle, { desc = 'Toggle Trouble' })
+vim.keymap.set('n', '<leader>tr', require('trouble').refresh, { desc = 'Toggle Refresh' })
 
 -- Todo keymaps
 vim.keymap.set('n', ']t', function()
