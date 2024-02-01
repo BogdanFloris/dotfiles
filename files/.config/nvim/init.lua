@@ -354,8 +354,9 @@ vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").loa
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
 
 -- Trouble keymaps
-vim.keymap.set('n', '<leader>t', require('trouble').toggle, { desc = 'Toggle Trouble' })
-vim.keymap.set('n', '<leader>tr', require('trouble').refresh, { desc = 'Toggle Refresh' })
+vim.keymap.set('n', '<leader>xx', '<cmd> TroubleToggle <CR>', { desc = 'Toggle Trouble' })
+vim.keymap.set('n', '<leader>xw', '<cmd> TroubleToggle workspace_diagnostics <CR>', { desc = 'Toggle Trouble Workspace' })
+vim.keymap.set('n', '<leader>xd', '<cmd> TroubleToggle document_diagnostics <CR>', { desc = 'Toggle Trouble Document' })
 
 -- Todo keymaps
 vim.keymap.set('n', ']t', function()
