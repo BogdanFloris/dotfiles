@@ -245,6 +245,22 @@ require('lazy').setup({
   },
 
   {
+    'kevinhwang91/nvim-ufo',
+    dependencies = { 'kevinhwang91/promise-async' },
+    config = function()
+      require('ufo').setup {
+        ---@diagnostic disable-next-line: unused-local
+        provider_selector = function(bufnr, filetype, buftype)
+          return { 'treesitter', 'indent' }
+        end,
+      }
+
+      vim.keymap.set('n', 'zR', require('ufo').openAllFolds, { desc = { 'Open all folds' } })
+      vim.keymap.set('n', 'zM', require('ufo').closeAllFolds, { desc = { 'Close all folds' } })
+    end,
+  },
+
+  {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -325,6 +341,12 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
+
+-- Folds
+vim.o.foldcolumn = '1'
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
