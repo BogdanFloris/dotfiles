@@ -45,6 +45,7 @@ brew "reattach-to-user-namespace"
 brew "starship"
 brew "silicon"
 brew "fd"
+brew "fnm"
 
 # Terminal
 cask "kitty"
