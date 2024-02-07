@@ -1,8 +1,12 @@
+local on_attach = require('lsp_tools').on_attach
+
 return {
-  'simrat39/rust-tools.nvim',
-  lazy = true,
+  'mrcjkb/rustaceanvim',
+  version = '^4',
+  ft = { 'rust' },
   opts = {
     server = {
+      on_attach = on_attach,
       standalone = true,
       settings = {
         ['rust-analyzer'] = {
@@ -29,4 +33,7 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    vim.g.rustaceanvim = vim.tbl_deep_extend('force', {}, opts or {})
+  end,
 }
