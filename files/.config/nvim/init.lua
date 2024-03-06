@@ -298,6 +298,7 @@ require('lazy').setup({
   require 'plugins.rustancean',
   require 'plugins.gopher',
   require 'plugins.debug',
+  require 'plugins.sonarlint',
 }, {})
 
 -- [[ Setting options ]]
