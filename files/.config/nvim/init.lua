@@ -621,6 +621,7 @@ require('mason').setup {
     'hadolint',
     'sqlfluff',
     'clang-format',
+    'leptosfmt',
   },
 }
 require('mason-lspconfig').setup()
