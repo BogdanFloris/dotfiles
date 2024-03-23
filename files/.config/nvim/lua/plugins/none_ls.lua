@@ -22,22 +22,17 @@ return {
         -- formatters
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.prettierd,
-        null_ls.builtins.formatting.eslint_d,
         null_ls.builtins.formatting.djlint,
         null_ls.builtins.formatting.rustywind,
-        null_ls.builtins.formatting.ruff,
         null_ls.builtins.formatting.shfmt,
         null_ls.builtins.formatting.gofumpt,
         null_ls.builtins.formatting.goimports,
         null_ls.builtins.formatting.golines,
         null_ls.builtins.formatting.sql_formatter,
-        null_ls.builtins.formatting.rustfmt,
         null_ls.builtins.formatting.clang_format,
 
         -- diagnostics
-        null_ls.builtins.diagnostics.shellcheck,
         null_ls.builtins.diagnostics.vale,
-        null_ls.builtins.diagnostics.jsonlint,
         null_ls.builtins.diagnostics.djlint,
         null_ls.builtins.diagnostics.hadolint,
         null_ls.builtins.diagnostics.sqlfluff,
