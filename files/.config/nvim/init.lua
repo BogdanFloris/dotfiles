@@ -673,6 +673,7 @@ local servers = {
     },
   },
   rust_analyzer = {},
+  wgsl_analyzer = { filetypes = { 'wgsl' } },
   pyright = {},
   ruff_lsp = {},
   tsserver = {},
