@@ -27,6 +27,7 @@ vim.filetype.add {
   extension = {
     gotmpl = 'gotmpl',
     templ = 'templ',
+    wgsl = 'wgsl',
     -- zig.zon filetype is not supported by default
     zon = 'zig',
   },
@@ -673,7 +674,6 @@ local servers = {
     },
   },
   rust_analyzer = {},
-  wgsl_analyzer = { filetypes = { 'wgsl' } },
   pyright = {},
   ruff_lsp = {},
   tsserver = {},
