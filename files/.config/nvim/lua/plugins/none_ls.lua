@@ -34,6 +34,7 @@ return {
         null_ls.builtins.diagnostics.djlint,
         null_ls.builtins.diagnostics.hadolint,
         null_ls.builtins.diagnostics.sqlfluff,
+        null_ls.builtins.diagnostics.mypy,
 
         -- code actions
         null_ls.builtins.code_actions.gomodifytags,
