@@ -17,7 +17,6 @@ return {
           },
         },
         filetypes = {
-          'python',
           'typescript',
           'javascript',
           'typescriptreact',
