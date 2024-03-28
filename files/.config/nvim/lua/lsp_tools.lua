@@ -52,21 +52,13 @@ local on_attach = function(client, bufnr)
     })
   end
 
-  -- Typescript specific commands
+  -- Javascript/Typescript specific commands
   if client.name == 'tsserver' then
-    -- Organize imports
-    local function organize_imports()
-      local params = {
-        command = '_typescript.organizeImports',
-        arguments = { vim.api.nvim_buf_get_name(0) },
-      }
-      vim.lsp.buf.execute_command(params)
-    end
-
-    vim.api.nvim_buf_create_user_command(bufnr, 'OrganizeImports', function(_)
-      organize_imports()
-    end, { desc = 'Organize Imports' })
-    nmap('<leader>co', organize_imports, '[C]ode [O]rganize Imports')
+    -- ESLint Fix All
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      buffer = bufnr,
+      command = 'EslintFixAll',
+    })
   end
 
   -- Python specific commands
