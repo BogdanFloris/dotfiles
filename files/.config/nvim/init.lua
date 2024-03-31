@@ -353,6 +353,9 @@ vim.o.foldenable = true
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Disable Copilot by default
+vim.cmd ':Copilot disable'
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
