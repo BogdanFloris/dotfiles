@@ -38,6 +38,7 @@ return {
         null_ls.builtins.diagnostics.hadolint,
         null_ls.builtins.diagnostics.sqlfluff,
         null_ls.builtins.diagnostics.mypy,
+        null_ls.builtins.diagnostics.rubocop,
 
         -- code actions
         null_ls.builtins.code_actions.gomodifytags,
