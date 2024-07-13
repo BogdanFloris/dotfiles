@@ -52,6 +52,13 @@ local on_attach = function(client, bufnr)
     })
   end
 
+  -- Inlay Hints Toggle
+  if vim.lsp.inlay_hint then
+    vim.keymap.set('n', '<leader>ch', function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {}, {})
+    end, { desc = '[C]ode Inlay Hints' })
+  end
+
   -- Javascript/Typescript specific commands
   if client.name == 'tsserver' then
     -- ESLint Fix All
