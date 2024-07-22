@@ -134,21 +134,21 @@ require('lazy').setup({
     opts = {},
     keys = {
 
-      { '<leader>c', group = '[C]ode' },
+      { '<leader>c',  group = '[C]ode' },
       { '<leader>c_', hidden = true },
-      { '<leader>d', group = '[D]ocument' },
+      { '<leader>d',  group = '[D]ocument' },
       { '<leader>d_', hidden = true },
-      { '<leader>g', group = '[G]it' },
+      { '<leader>g',  group = '[G]it' },
       { '<leader>g_', hidden = true },
-      { '<leader>h', group = '[H]arpoon' },
+      { '<leader>h',  group = '[H]arpoon' },
       { '<leader>h_', hidden = true },
-      { '<leader>p', group = 'More git' },
+      { '<leader>p',  group = 'More git' },
       { '<leader>p_', hidden = true },
-      { '<leader>r', group = '[R]ename' },
+      { '<leader>r',  group = '[R]ename' },
       { '<leader>r_', hidden = true },
-      { '<leader>s', group = '[S]earch' },
+      { '<leader>s',  group = '[S]earch' },
       { '<leader>s_', hidden = true },
-      { '<leader>w', group = '[W]orkspace' },
+      { '<leader>w',  group = '[W]orkspace' },
       { '<leader>w_', hidden = true },
     },
   },
@@ -399,8 +399,10 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Persistence keymaps
-vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]], { desc = 'Restore session for cwd' })
-vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = 'Restore the last session' })
+vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]],
+  { desc = 'Restore session for cwd' })
+vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]],
+  { desc = 'Restore the last session' })
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
 
 -- Trouble keymaps
@@ -693,7 +695,7 @@ local servers = {
       },
       python = {
         analysis = {
-          ignore = { '*' }, -- Using Ruff
+          ignore = { '*' },         -- Using Ruff
           typeCheckingMode = 'off', -- Using mypy
         },
       },
