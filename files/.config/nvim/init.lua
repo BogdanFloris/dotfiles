@@ -704,7 +704,7 @@ local servers = {
   ruff_lsp = {},
   tsserver = {},
   eslint = {},
-  tailwindcss = {},
+  tailwindcss = { filetypes = { 'html', 'htmldjango', 'typescriptreact', 'javascriptreact' } },
   html = { filetypes = { 'html', 'htmldjango' } },
   sqlls = { filetypes = { 'sql', 'psql' } },
 
