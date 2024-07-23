@@ -624,7 +624,6 @@ require('mason').setup {
     'eslint_d',
     'djlint',
     'rustywind',
-    'ruff',
     'shfmt',
     'gofumpt',
     'goimports',
