@@ -319,6 +319,23 @@ require('lazy').setup({
 
   { 'shortcuts/no-neck-pain.nvim', version = '*' },
 
+  {
+    'vhyrro/luarocks.nvim',
+    priority = 1000,
+    config = true,
+    opts = {
+      rocks = { 'lua-curl', 'nvim-nio', 'mimetypes', 'xml2lua' },
+    },
+  },
+  {
+    'rest-nvim/rest.nvim',
+    ft = 'http',
+    dependencies = { 'luarocks.nvim' },
+    config = function()
+      require('rest-nvim').setup()
+    end,
+  },
+
   require 'plugins.none_ls',
   require 'plugins.harpoon',
   require 'plugins.rustancean',
@@ -421,6 +438,10 @@ vim.keymap.set('n', '<leader>st', '<cmd>TodoTelescope<cr>', { desc = 'Search tod
 
 -- NoNeckPain keymaps
 vim.keymap.set('n', '<leader>fb', '<cmd>NoNeckPain<cr>', { desc = 'NoNeckPain' })
+
+-- Rest keymaps
+vim.keymap.set('n', '<leader>rr', '<cmd>Rest run<cr>', { desc = 'Run request under the cursor' })
+vim.keymap.set('n', '<leader>rl', '<cmd>Rest run last<cr>', { desc = 'Re-run latest request' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -553,6 +574,8 @@ vim.defer_fn(function()
       'css',
       'scss',
       'json',
+      'http',
+      'xml',
     },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
