@@ -313,8 +313,40 @@ require('lazy').setup({
 
   {
     'folke/trouble.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {},
+    cmd = 'Trouble',
+    keys = {
+      {
+        '<leader>xx',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xX',
+        '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+        desc = 'Buffer Diagnostics (Trouble)',
+      },
+      {
+        '<leader>cs',
+        '<cmd>Trouble symbols toggle focus=false<cr>',
+        desc = 'Symbols (Trouble)',
+      },
+      {
+        '<leader>cl',
+        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        desc = 'LSP Definitions / references / ... (Trouble)',
+      },
+      {
+        '<leader>xL',
+        '<cmd>Trouble loclist toggle<cr>',
+        desc = 'Location List (Trouble)',
+      },
+      {
+        '<leader>xQ',
+        '<cmd>Trouble qflist toggle<cr>',
+        desc = 'Quickfix List (Trouble)',
+      },
+    },
   },
 
   { 'shortcuts/no-neck-pain.nvim', version = '*' },
@@ -332,7 +364,7 @@ require('lazy').setup({
     ft = 'http',
     dependencies = { 'luarocks.nvim' },
     config = function()
-      require('rest-nvim').setup()
+      require('rest-nvim').setup({})
     end,
   },
 
@@ -421,11 +453,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]], { desc = 'Restore session for cwd' })
 vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = 'Restore the last session' })
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
-
--- Trouble keymaps
-vim.keymap.set('n', '<leader>xx', '<cmd> TroubleToggle <CR>', { desc = 'Toggle Trouble' })
-vim.keymap.set('n', '<leader>xw', '<cmd> TroubleToggle workspace_diagnostics <CR>', { desc = 'Toggle Trouble Workspace' })
-vim.keymap.set('n', '<leader>xd', '<cmd> TroubleToggle document_diagnostics <CR>', { desc = 'Toggle Trouble Document' })
 
 -- Todo keymaps
 vim.keymap.set('n', ']t', function()
