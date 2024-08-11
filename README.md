@@ -10,7 +10,7 @@ These dotfiles contain configurations for the following things:
 - Neovim custom config
 - Kitty terminal config
 - Zshrc profile
-- Window managemenet config using yabai and skhd
+- Window managemenet config using aerospace
 
 ## Install
 
