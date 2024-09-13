@@ -55,7 +55,6 @@ export PATH="$HOME/.poetry/bin:$PATH"
 
 # Zig
 export PATH="$HOME/zig:$PATH"
-export PATH="$HOME/Workspace//code/zls/zig-out/bin:$PATH"
 
 # Yarn
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
