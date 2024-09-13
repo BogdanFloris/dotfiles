@@ -134,21 +134,21 @@ require('lazy').setup({
     opts = {},
     keys = {
 
-      { '<leader>c', group = '[C]ode' },
+      { '<leader>c',  group = '[C]ode' },
       { '<leader>c_', hidden = true },
-      { '<leader>d', group = '[D]ocument' },
+      { '<leader>d',  group = '[D]ocument' },
       { '<leader>d_', hidden = true },
-      { '<leader>g', group = '[G]it' },
+      { '<leader>g',  group = '[G]it' },
       { '<leader>g_', hidden = true },
-      { '<leader>h', group = '[H]arpoon' },
+      { '<leader>h',  group = '[H]arpoon' },
       { '<leader>h_', hidden = true },
-      { '<leader>p', group = 'More git' },
+      { '<leader>p',  group = 'More git' },
       { '<leader>p_', hidden = true },
-      { '<leader>r', group = '[R]ename' },
+      { '<leader>r',  group = '[R]ename' },
       { '<leader>r_', hidden = true },
-      { '<leader>s', group = '[S]earch' },
+      { '<leader>s',  group = '[S]earch' },
       { '<leader>s_', hidden = true },
-      { '<leader>w', group = '[W]orkspace' },
+      { '<leader>w',  group = '[W]orkspace' },
       { '<leader>w_', hidden = true },
     },
   },
@@ -234,7 +234,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',       opts = {} },
 
   {
     'folke/todo-comments.nvim',
@@ -364,7 +364,7 @@ require('lazy').setup({
     ft = 'http',
     dependencies = { 'luarocks.nvim' },
     config = function()
-      require('rest-nvim').setup({})
+      require('rest-nvim').setup {}
     end,
   },
 
@@ -450,8 +450,10 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Persistence keymaps
-vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]], { desc = 'Restore session for cwd' })
-vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = 'Restore the last session' })
+vim.api.nvim_set_keymap('n', '<leader>qs', [[<cmd>lua require("persistence").load()<cr>]],
+  { desc = 'Restore session for cwd' })
+vim.api.nvim_set_keymap('n', '<leader>ql', [[<cmd>lua require("persistence").load({ last = true })<cr>]],
+  { desc = 'Restore the last session' })
 vim.api.nvim_set_keymap('n', '<leader>qd', [[<cmd>lua require("persistence").stop()<cr>]], { desc = 'Stop persistence' })
 
 -- Todo keymaps
@@ -747,7 +749,7 @@ local servers = {
       },
       python = {
         analysis = {
-          ignore = { '*' }, -- Using Ruff
+          ignore = { '*' },         -- Using Ruff
           typeCheckingMode = 'off', -- Using mypy
         },
       },
@@ -758,6 +760,7 @@ local servers = {
   eslint = {},
   tailwindcss = { filetypes = { 'html', 'htmldjango', 'typescriptreact', 'javascriptreact' } },
   html = { filetypes = { 'html', 'htmldjango' } },
+  htmx = {},
   sqlls = { filetypes = { 'sql', 'psql' } },
 
   lua_ls = {
@@ -797,15 +800,8 @@ mason_lspconfig.setup_handlers {
 }
 
 local lspconfig = require 'lspconfig'
--- HTMX specifc lspconfig
--- TODO: remove when this is added to mason-lspconfig
-lspconfig.htmx.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-  filetypes = { 'html', 'htmldjango' },
-}
 
--- Zls needs to be installed manually because Mason installes only the release version (0.11)
+-- Zls needs to be installed manually because Mason installes only the release version
 lspconfig.zls.setup {
   capabilities = capabilities,
   on_attach = on_attach,
