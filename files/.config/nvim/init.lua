@@ -361,11 +361,6 @@ require('lazy').setup({
   },
   {
     'rest-nvim/rest.nvim',
-    ft = 'http',
-    dependencies = { 'luarocks.nvim' },
-    config = function()
-      require('rest-nvim').setup {}
-    end,
   },
 
   require 'plugins.none_ls',
@@ -426,6 +421,9 @@ vim.o.foldenable = true
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+-- Enable Rest NVIM
+vim.g.rest_nvim = {}
 
 -- Disable Copilot by default
 vim.cmd ':Copilot disable'
