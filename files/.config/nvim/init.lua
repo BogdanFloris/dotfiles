@@ -583,6 +583,7 @@ vim.defer_fn(function()
       'regex',
       'ruby',
       'wgsl',
+      'glsl',
       'go',
       'gomod',
       'gosum',
@@ -760,6 +761,7 @@ local servers = {
   html = { filetypes = { 'html', 'htmldjango' } },
   htmx = {},
   sqlls = { filetypes = { 'sql', 'psql' } },
+  glsl_analyzer = { filetypes = { 'glsl' } },
 
   lua_ls = {
     Lua = {
