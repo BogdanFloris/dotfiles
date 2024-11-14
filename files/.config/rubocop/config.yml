@@ -1,0 +1,12 @@
+AllCops:
+  DisabledByDefault: false
+  NewCops: enable
+  TargetRubyVersion: 2.7.7
+  Exclude:
+    - db/schema.rb
+    - node_modules/**/*
+    - vendor/**/*
+Metrics/MethodLength:
+  Max: 1000
+Metrics/AbcSize:
+  Max: 1000
