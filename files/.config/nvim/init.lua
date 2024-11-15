@@ -807,6 +807,11 @@ lspconfig.zls.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   filetypes = { 'zig' },
+  settings = {
+    zls = {
+      enable_build_on_save = true
+    },
+  },
 }
 
 -- Clangd to fix offset encoding issue
