@@ -69,7 +69,7 @@ local on_attach = function(client, bufnr)
   end
 
   -- Python specific commands
-  if client.name == 'ruff_lsp' then
+  if client.name == 'ruff' then
     -- Organize imports
     local function organize_imports()
       vim.lsp.buf.code_action {
