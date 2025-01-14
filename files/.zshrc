@@ -84,3 +84,6 @@ eval "$(starship init zsh)"
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+
+# Created by `pipx` on 2024-12-17 14:20:38
+export PATH="$PATH:/Users/bogdan/.local/bin"
