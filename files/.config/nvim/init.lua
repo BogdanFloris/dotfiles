@@ -369,6 +369,7 @@ require('lazy').setup({
   require 'plugins.gopher',
   require 'plugins.debug',
   require 'plugins.neotest',
+  require 'plugins.avante',
   -- require 'plugins.sonarlint',
 }, {})
 
@@ -659,15 +660,6 @@ vim.defer_fn(function()
           ['[]'] = '@class.outer',
         },
       },
-      swap = {
-        enable = true,
-        swap_next = {
-          ['<leader>a'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<leader>A'] = '@parameter.inner',
-        },
-      },
     },
   }
 end, 0)
@@ -812,7 +804,7 @@ lspconfig.zls.setup {
   filetypes = { 'zig' },
   settings = {
     zls = {
-      enable_build_on_save = true
+      enable_build_on_save = true,
     },
   },
 }
