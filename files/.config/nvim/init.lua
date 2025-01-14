@@ -420,6 +420,9 @@ vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
+
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
