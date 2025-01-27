@@ -362,6 +362,12 @@ require('lazy').setup({
   {
     'rest-nvim/rest.nvim',
   },
+  {
+    'nvzone/typr',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = { 'Typr', 'TyprStats' },
+  },
 
   require 'plugins.none_ls',
   require 'plugins.harpoon',
