@@ -18,3 +18,4 @@ fisher install \
     nickeb96/puffer-fish \             # Adds better expandable aliases
     patrickf1/colored_man_pages.fish \ # Colored man pages
     jomik/fish-gruvbox \               # Gruvbox color scheme for fish
+    budimanjojo/tmux.fish              # Tmux settings and aliases
