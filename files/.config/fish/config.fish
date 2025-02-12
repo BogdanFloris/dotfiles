@@ -19,6 +19,7 @@ alias ld='lazydocker'
 alias cat='bat'
 alias maelstrom='~/maelstrom/maelstrom'
 alias chrome-no-sec='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir="/tmp/james_bonds_browser" --disable-web-security'
+alias cd='z'
 
 # Load environment variables from .env file if it exists
 if test -f ~/.config/fish/conf.d/env.fish
@@ -30,11 +31,11 @@ if not string match -q -- $PNPM_HOME $PATH
     fish_add_path $PNPM_HOME
 end
 pyenv init - | source
-status --is-interactive; and rbenv init - fish | source
 fnm env --use-on-cd | source
 
 starship init fish | source
 atuin init fish | source
+zoxide init fish | source
 
 function fish_user_key_bindings
     # Use Cmd+Space to accept autosuggestion
