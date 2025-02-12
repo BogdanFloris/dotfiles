@@ -10,7 +10,6 @@ fisher install \
     jorgebucaran/autopair.fish \       # Auto-closing pairs
     PatrickF1/fzf.fish \               # Fuzzy finding
     meaningful-ooo/sponge \            # Pattern matching suggestion
-    franciscolourenco/done             # Notification on long-running commands
     danhper/fish-ssh-agent \           # SSH agent integration
     jhillyerd/plugin-git \             # Git abbreviations and utilities
     jethrokuan/z \                     # Directory jumping (like autojump/fasd)
