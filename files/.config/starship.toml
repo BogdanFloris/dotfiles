@@ -14,9 +14,6 @@ $zig\
 $line_break\
 $character"""
 
-add_newline = false
-command_timeout = 1000
-
 [directory]
 style = "blue"
 
