@@ -375,8 +375,6 @@ require('lazy').setup({
   require 'plugins.gopher',
   require 'plugins.debug',
   require 'plugins.neotest',
-  require 'plugins.avante',
-  -- require 'plugins.sonarlint',
 }, {})
 
 -- [[ Setting options ]]
