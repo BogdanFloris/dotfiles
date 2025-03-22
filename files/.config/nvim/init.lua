@@ -714,7 +714,7 @@ local on_attach = require('lsp_tools').on_attach
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  asm_lsp = {},
+  -- asm_lsp = {},
   graphql = {},
   gopls = {
     filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
