@@ -780,7 +780,7 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  solargraph = {},
+  -- solargraph = {},
 }
 
 -- Setup neovim lua configuration
