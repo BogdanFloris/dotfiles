@@ -1,9 +1,23 @@
 -- debug.lua
 --
 -- DAP plugin configuration to debug your code.
-
+--
 return {
   'mfussenegger/nvim-dap',
+  dependencies = {
+    -- Creates a beautiful debugger UI
+    'rcarriga/nvim-dap-ui',
+
+    -- Required dependency for nvim-dap-ui
+    'nvim-neotest/nvim-nio',
+
+    -- Installs the debug adapters for you
+    'williamboman/mason.nvim',
+    'jay-babu/mason-nvim-dap.nvim',
+
+    -- Add your own debuggers here
+    'leoluz/nvim-dap-go',
+  },
   keys = {
     {
       '<leader>dM',
@@ -118,97 +132,89 @@ return {
       desc = 'Dap Widgets',
     },
   },
-  dependencies = {
-    {
-      'rcarriga/nvim-dap-ui',
-      dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
-      keys = {
-        {
-          '<leader>de',
-          function()
-            require('dapui').eval()
-          end,
-          desc = 'Dap Eval',
-          mode = { 'n', 'v' },
-        },
-        {
-          '<leader>du',
-          function()
-            require('dapui').toggle {}
-          end,
-          desc = 'Dap Toggle UI',
-        },
-      },
-      config = function()
-        local dap = require 'dap'
-        local dapui = require 'dapui'
-        dapui.setup()
-        dap.listeners.after.event_initialized['dapui_config'] = function()
-          dapui.open()
-        end
-        dap.listeners.before.event_terminated['dapui_config'] = function()
-          dapui.close()
-        end
-        dap.listeners.before.event_exited['dapui_config'] = function()
-          dapui.close()
-        end
+  config = function()
+    local dap = require 'dap'
+    local dapui = require 'dapui'
 
-        -- Dap UI setup
-        dapui.setup {
-          icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-          controls = {
-            icons = {
-              pause = '⏸',
-              play = '▶',
-              step_into = '⏎',
-              step_over = '⏭',
-              step_out = '⏮',
-              step_back = 'b',
-              run_last = '▶▶',
-              terminate = '⏹',
-              disconnect = '⏏',
-            },
-          },
-        }
-      end,
-    },
-    {
-      'jay-babu/mason-nvim-dap.nvim',
-      dependencies = {
-        'williamboman/mason.nvim',
-        'mfussenegger/nvim-dap',
+    require('mason-nvim-dap').setup {
+      -- Makes a best effort to setup the various debuggers with
+      -- reasonable debug configurations
+      automatic_installation = true,
+
+      -- You can provide additional configuration to the handlers,
+      -- see mason-nvim-dap README for more information
+      handlers = {},
+
+      -- You'll need to check that you have the required things installed
+      -- online, please don't ask me how to install them :)
+      ensure_installed = {
+        -- Update this to ensure that you have the debuggers for the langs you want
+        'delve',
       },
-      config = function()
-        require('mason-nvim-dap').setup {
-          ensure_installed = {
-            'delve',
-            'codelldb',
-          },
-          automatic_setup = true,
-          handlers = {
-            function(config)
-              require('mason-nvim-dap').default_setup(config)
-            end,
-          },
-        }
-        --Change icons
-        local sign = vim.fn.sign_define
-        sign('DapBreakpoint', { text = '●', texthl = 'DapBreakpoint', linehl = '', numhl = '' })
-        sign('DapBreakpointCondition', { text = '●', texthl = 'DapBreakpointCondition', linehl = '', numhl = '' })
-        sign('DapLogPoint', { text = '◆', texthl = 'DapLogPoint', linehl = '', numhl = '' })
-        sign('DapStopped', { text = '󰁕 ', texthl = 'DiagnosticWarn', linehl = 'DapStoppedLine', numhl = '' })
-      end,
-    },
-    {
-      'theHamsta/nvim-dap-virtual-text',
-      opts = {},
-    },
-    {
-      'leoluz/nvim-dap-go',
-      config = function()
-        require('dap-go').setup()
-      end,
-    },
-  },
-  config = function() end,
+    }
+
+    -- Dap UI setup
+    -- For more information, see |:help nvim-dap-ui|
+    dapui.setup {
+      -- Set icons to characters that are more likely to work in every terminal.
+      --    Feel free to remove or use ones that you like more! :)
+      --    Don't feel like these are good choices.
+      icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+      controls = {
+        icons = {
+          pause = '⏸',
+          play = '▶',
+          step_into = '⏎',
+          step_over = '⏭',
+          step_out = '⏮',
+          step_back = 'b',
+          run_last = '▶▶',
+          terminate = '⏹',
+          disconnect = '⏏',
+        },
+      },
+    }
+
+    -- Change breakpoint icons
+    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+    -- local breakpoint_icons = vim.g.have_nerd_font
+    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+    -- for type, icon in pairs(breakpoint_icons) do
+    --   local tp = 'Dap' .. type
+    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+    -- end
+
+    dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+    dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+    -- Language configuration
+    require('dap-go').setup {}
+    dap.configurations.zig = {
+      {
+        name = 'Run Program',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          co = coroutine.running()
+          if co then
+            cb = function(item)
+              coroutine.resume(co, item)
+            end
+          end
+          cb = vim.schedule_wrap(cb)
+          vim.ui.select(vim.fn.glob(vim.fn.getcwd() .. '**/zig-out/**/*', false, true), {
+            prompt = 'Select executable',
+            kind = 'file',
+          }, cb)
+          return coroutine.yield()
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+      },
+    }
+  end,
 }
