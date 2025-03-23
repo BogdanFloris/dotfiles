@@ -199,7 +199,8 @@ return {
         type = 'codelldb',
         request = 'launch',
         program = function()
-          co = coroutine.running()
+          local co = coroutine.running()
+          local cb
           if co then
             cb = function(item)
               coroutine.resume(co, item)
