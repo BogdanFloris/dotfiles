@@ -76,13 +76,13 @@ require('lazy').setup({
   },
 
   {
-    "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
     opts = {
       library = {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       },
     },
   },
@@ -632,6 +632,7 @@ vim.defer_fn(function()
       'json',
       'http',
       'xml',
+      'yaml',
     },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
