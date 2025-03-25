@@ -6,6 +6,7 @@ set -x SSH_KEY_PATH "~/.ssh/rsa_id"
 fish_add_path $HOME/go/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/opt/openjdk/bin
+fish_add_path /opt/homebrew/opt/mysql/bin
 fish_add_path $HOME/.poetry/bin
 fish_add_path $HOME/.zvm/self
 fish_add_path $HOME/.zvm/bin
