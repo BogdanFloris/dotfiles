@@ -78,6 +78,12 @@ require('lazy').setup({
   },
 
   {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = true,
+  },
+
+  {
     'folke/lazydev.nvim',
     ft = 'lua', -- only load on lua files
     opts = {
