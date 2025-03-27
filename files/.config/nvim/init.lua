@@ -362,6 +362,14 @@ require('lazy').setup({
     ---@type render.md.UserConfig
     opts = {},
   },
+  {
+    'folke/zen-mode.nvim',
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
 
   require 'plugins.blink',
   require 'plugins.none_ls',
@@ -473,6 +481,9 @@ vim.keymap.set('n', '<leader>fb', '<cmd>NoNeckPain<cr>', { desc = 'NoNeckPain' }
 -- Rest keymaps
 vim.keymap.set('n', '<leader>rr', '<cmd>Rest run<cr>', { desc = 'Run request under the cursor' })
 vim.keymap.set('n', '<leader>rl', '<cmd>Rest run last<cr>', { desc = 'Re-run latest request' })
+
+-- Zen mode keymap
+vim.keymap.set('n', '<leader>zm', '<cmd>ZenMode<cr>', { desc = 'Toggle Zen mode' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
