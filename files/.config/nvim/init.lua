@@ -485,6 +485,18 @@ vim.keymap.set('n', '<leader>rl', '<cmd>Rest run last<cr>', { desc = 'Re-run lat
 -- Zen mode keymap
 vim.keymap.set('n', '<leader>zm', '<cmd>ZenMode<cr>', { desc = 'Toggle Zen mode' })
 
+vim.g.cpt = false
+vim.keymap.set('n', '<leader>cpt', function()
+  print(vim.g.cpt)
+  if vim.g.cpt then
+    vim.g.cpt = false
+    vim.cmd ':Copilot disable'
+  else
+    vim.g.cpt = true
+    vim.cmd ':Copilot enable'
+  end
+end, { desc = 'Toggle Copilot' })
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
