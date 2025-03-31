@@ -37,6 +37,8 @@ fnm env --use-on-cd | source
 starship init fish | source
 atuin init fish | source
 zoxide init fish | source
+# rbenv
+status --is-interactive; and rbenv init - fish | source
 
 function fish_user_key_bindings
     # Use Cmd+Space to accept autosuggestion
