@@ -31,6 +31,7 @@ return {
         null_ls.builtins.formatting.sql_formatter,
         null_ls.builtins.formatting.clang_format,
         null_ls.builtins.formatting.leptosfmt,
+        null_ls.builtins.formatting.nixfmt,
 
         -- diagnostics
         null_ls.builtins.diagnostics.vale,
