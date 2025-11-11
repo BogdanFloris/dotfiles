@@ -1,0 +1,7 @@
+[user]
+name = "Bogdan Floris"
+email = "bogdan.floris@gmail.com"
+
+[ui]
+editor = "nvim"
+default-command = "log"

@@ -1,0 +1,49 @@
+[user]
+  name = Bogdan Floris
+  email = bogdan.floris@gmail.com
+
+[init]
+  defaultBranch = main
+
+[core]
+  editor = nvim
+
+[column]
+  ui = auto
+
+[branch]
+  date = -commiterdate
+
+[tag]
+  sort = version:refname
+
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+
+[push]
+  default = simple
+  autoSetupRemote = true
+  followTags = true
+
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
+
+[help]
+  autocorrect = prompt
+
+[commit]
+  verbose = true
+
+[rerere]
+  enabled = true
+  autoupdate = true
