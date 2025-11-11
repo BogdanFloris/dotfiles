@@ -6,7 +6,6 @@ end
 
 function fish_user_key_bindings
   bind ctrl-space forward-char
-  bind -M insert ctrl-space forward-char
 end
 
 function today
