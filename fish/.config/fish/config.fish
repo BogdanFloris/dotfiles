@@ -18,3 +18,6 @@ function today
   end
   nvim $today_file
 end
+
+atuin init fish --disable-up-arrow | source
+zoxide init fish | source
