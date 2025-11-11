@@ -10,11 +10,12 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+	lib = pkgs.lib;
       in {
         # install with: nix profile install ~/dotfiles/nix#global
         packages.global = pkgs.buildEnv {
           name = "global-profile";
-          paths = with pkgs; [
+          paths = (with pkgs; [
             # shell + plugins
 	    fish
             fishPlugins.fish-you-should-use
@@ -40,7 +41,11 @@
 	    atuin
             zoxide
             neovim
-          ];
+	    python313
+          ])
+
+          # Linux-only clipboard for tmux copy-mode
+          ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.xclip ];
         };
       });
 }
