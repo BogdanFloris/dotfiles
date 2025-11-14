@@ -42,6 +42,7 @@
             zoxide
             neovim
 	    python313
+            jdk24
           ])
 
           # Linux-only clipboard for tmux copy-mode
