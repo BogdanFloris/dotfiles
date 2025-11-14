@@ -1,0 +1,76 @@
+nnoremap <SPACE> <Nop>
+let mapleader = " "
+
+set commentary
+set which-key
+set timeoutlen=5000
+set relativenumber
+set ideajoin
+set idearefactormode=keep
+set clipboard+=unnamed
+set clipboard+=ideaput
+set nerdtree
+
+nmap <leader>- :NERDTreeToggle<CR>
+nmap <C-c> <Action>(HideAllWindows)
+map <leader>sf <Action>(GotoFile)
+map <leader>sg <Action>(FindInPath)
+map <leader>? <Action>(RecentFiles)
+map <leader>/ <Action>(Find)
+map <leader>e <Action>(ShowErrorDescription)
+map ]d <Action>(GotoNextError)
+map [d <Action>(GotoPreviousError)
+map <leader>ca <Action>(ShowIntentionActions)
+map <leader>rn <Action>(RenameElement)
+map <leader>cf <Action>(ReformatCode)
+map gs <Action>(GotoSymbol)
+map gC <Action>(GotoClass)
+map gi <Action>(GotoImplementation)
+map gr <Action>(FindUsages)
+map <leader>xx <Action>(ActivateProblemsViewToolWindow)
+
+" Folds
+map zc <Action>(CollapseRegion)
+map zo <Action>(ExpandRegion)
+map zM <Action>(CollapseAllRegions)
+map zR <Action>(ExpandAllRegions)
+
+" Git
+map <leader>gb <Action>(Annotate)
+map <leader>gh <Action>(Vcs.ShowHistoryAction)
+
+" Navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+map <leader>sv <Action>(SplitVertically)
+map <leader>sh <Action>(SplitHorizontally)
+map <leader>q <Action>(CloseContent)
+map <leader>qa <Action>(CloseAllEditors)
+map <leader>zd <Action>(ToggleDistractionFreeMode)
+map [[ <Action>(MethodUp)
+map ]] <Action>(MethodDown)
+
+" Runs
+map <leader>R <Action>(Run)
+map <leader>D <Action>(Debug)
+
+" Bookmarks
+map <leader>m <Action>(ToggleBookmark)
+map <leader>b <Action>(ShowBookmarks)
+map <leader>F <Action>(GotoNextBookmark)
+map <leader>Z <Action>(GotoPreviousBookmark)
+
+" Harpoon
+map <leader><leader>1 <Action>(SetHarpoon1)
+map <leader><leader>2 <Action>(SetHarpoon2)
+map <leader><leader>3 <Action>(SetHarpoon3)
+map <leader><leader>4 <Action>(SetHarpoon4)
+map <leader><leader>5 <Action>(SetHarpoon5)
+map <leader>hh <Action>(ShowHarpoon)
+map <leader>1 <Action>(GotoHarpoon1)
+map <leader>2 <Action>(GotoHarpoon2)
+map <leader>3 <Action>(GotoHarpoon3)
+map <leader>4 <Action>(GotoHarpoon4)
+map <leader>5 <Action>(GotoHarpoon5)
