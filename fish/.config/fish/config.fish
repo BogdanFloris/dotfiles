@@ -8,6 +8,8 @@ function fish_user_key_bindings
   bind ctrl-space forward-char
 end
 
+fish_add_path "$HOME/.local/bin"
+
 function today
   set -l dir ~/daily
   mkdir -p $dir
