@@ -43,6 +43,7 @@
             neovim
 	    python313
             jdk24
+            android-tools
           ])
 
           # Linux-only clipboard for tmux copy-mode
