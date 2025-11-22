@@ -44,6 +44,7 @@
 	    python313
             jdk24
             android-tools
+            gradle
           ])
 
           # Linux-only clipboard for tmux copy-mode
