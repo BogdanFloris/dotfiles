@@ -11,6 +11,8 @@ set clipboard+=unnamed
 set clipboard+=ideaput
 set nerdtree
 
+nnoremap <leader>d <Nop>
+
 nmap <leader>- :NERDTreeToggle<CR>
 nmap <leader>0 <Action>(HideAllWindows)
 map <leader>sf <Action>(GotoFile)
@@ -76,3 +78,11 @@ map <leader>2 <Action>(GotoHarpoon2)
 map <leader>3 <Action>(GotoHarpoon3)
 map <leader>4 <Action>(GotoHarpoon4)
 map <leader>5 <Action>(GotoHarpoon5)
+
+" Debugging
+nnoremap <silent> <leader>db :action ToggleLineBreakpoint<CR>
+nnoremap <silent> <leader>dr :action Resume<CR>
+nnoremap <silent> <leader>do :action StepOver<CR>
+nnoremap <silent> <leader>di :action StepInto<CR>
+nnoremap <silent> <leader>dO :action StepOut<CR>
+nnoremap <silent> <leader>ds :action Stop<CR>
