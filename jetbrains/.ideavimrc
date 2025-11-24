@@ -12,7 +12,7 @@ set clipboard+=ideaput
 set nerdtree
 
 nmap <leader>- :NERDTreeToggle<CR>
-nmap <C-c> <Action>(HideAllWindows)
+nmap <leader>0 <Action>(HideAllWindows)
 map <leader>sf <Action>(GotoFile)
 map <leader>sg <Action>(FindInPath)
 map <leader>? <Action>(RecentFiles)
@@ -27,7 +27,9 @@ map gs <Action>(GotoSymbol)
 map gC <Action>(GotoClass)
 map gi <Action>(GotoImplementation)
 map gr <Action>(FindUsages)
-map <leader>xx <Action>(ActivateProblemsViewToolWindow)
+map <leader>tx <Action>(ActivateProblemsViewToolWindow)
+map <leader>tr <Action>(ActivateRunToolWindow)
+map <leader>td <Action>(ActivateDebugToolWindow)
 
 " Folds
 map zc <Action>(CollapseRegion)
