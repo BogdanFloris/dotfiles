@@ -45,6 +45,7 @@
             jdk24
             android-tools
             gradle
+            clang-tools
           ])
 
           # Linux-only clipboard for tmux copy-mode
