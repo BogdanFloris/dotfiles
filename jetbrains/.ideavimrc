@@ -48,9 +48,8 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-map <leader>sv <Action>(SplitVertically)
-map <leader>sh <Action>(SplitHorizontally)
-map <leader>q <Action>(CloseContent)
+map <leader>wq <Action>(Unsplit)
+map <leader>qw <Action>(CloseContent)
 map <leader>qa <Action>(CloseAllEditors)
 map <leader>zd <Action>(ToggleDistractionFreeMode)
 map [[ <Action>(MethodUp)
