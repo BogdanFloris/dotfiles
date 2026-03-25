@@ -6,18 +6,25 @@ set which-key
 set timeoutlen=5000
 set relativenumber
 set ideajoin
+set equalalways
 set idearefactormode=keep
 set clipboard+=unnamed
 set clipboard+=ideaput
 set nerdtree
+set scrolloff=10
+set ignorecase
+set smartcase
+set visualbell
+set showmode
 
 nnoremap <leader>d <Nop>
+nmap <C-w>q <Action>(Unsplit)
 
-nmap <leader>- :NERDTreeToggle<CR>
+nmap <leader>- :NERDTreeFind<CR>
 nmap <leader>0 <Action>(HideAllWindows)
 map <leader>sf <Action>(GotoFile)
 map <leader>sg <Action>(FindInPath)
-map <leader>? <Action>(RecentFiles)
+map <leader><leader> <Action>(RecentFiles)
 map <leader>/ <Action>(Find)
 map <leader>e <Action>(ShowErrorDescription)
 map ]d <Action>(GotoNextError)
@@ -28,6 +35,7 @@ map <leader>cf <Action>(ReformatCode)
 map gs <Action>(GotoSymbol)
 map gC <Action>(GotoClass)
 map gi <Action>(GotoImplementation)
+map gS <Action>(GotoSuperMethod)
 map gr <Action>(FindUsages)
 map <leader>tx <Action>(ActivateProblemsViewToolWindow)
 map <leader>tr <Action>(ActivateRunToolWindow)
@@ -40,16 +48,18 @@ map zM <Action>(CollapseAllRegions)
 map zR <Action>(ExpandAllRegions)
 
 " Git
+map ]c <Action>(VcsShowNextChangeMarker)
+map [c <Action>(VcsShowPrevChangeMarker)
 map <leader>gb <Action>(Annotate)
 map <leader>gh <Action>(Vcs.ShowHistoryAction)
+map <leader>rh <Action>(Vcs.RollbackChangedLines)
 
 " Navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-map <leader>wq <Action>(Unsplit)
-map <leader>qw <Action>(CloseContent)
+map <leader>bd <Action>(CloseContent)
 map <leader>qa <Action>(CloseAllEditors)
 map <leader>zd <Action>(ToggleDistractionFreeMode)
 map [[ <Action>(MethodUp)
@@ -66,11 +76,11 @@ map <leader>F <Action>(GotoNextBookmark)
 map <leader>Z <Action>(GotoPreviousBookmark)
 
 " Harpoon
-map <leader><leader>1 <Action>(SetHarpoon1)
-map <leader><leader>2 <Action>(SetHarpoon2)
-map <leader><leader>3 <Action>(SetHarpoon3)
-map <leader><leader>4 <Action>(SetHarpoon4)
-map <leader><leader>5 <Action>(SetHarpoon5)
+map <leader>h1 <Action>(SetHarpoon1)
+map <leader>h2 <Action>(SetHarpoon2)
+map <leader>h3 <Action>(SetHarpoon3)
+map <leader>h4 <Action>(SetHarpoon4)
+map <leader>h5 <Action>(SetHarpoon5)
 map <leader>hh <Action>(ShowHarpoon)
 map <leader>1 <Action>(GotoHarpoon1)
 map <leader>2 <Action>(GotoHarpoon2)
@@ -85,3 +95,4 @@ nnoremap <silent> <leader>do :action StepOver<CR>
 nnoremap <silent> <leader>di :action StepInto<CR>
 nnoremap <silent> <leader>dO :action StepOut<CR>
 nnoremap <silent> <leader>ds :action Stop<CR>
+
