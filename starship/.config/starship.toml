@@ -1,0 +1,19 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+command_timeout = 30
+
+format = """
+$username\
+$hostname\
+$directory\
+$cmd_duration\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
