@@ -1,91 +1,57 @@
 -- [[ Configure LSP ]]
---  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(client, bufnr)
-	-- In this case, we create a function that lets us more easily define mappings specific
-	-- for LSP related items. It sets the mode, buffer and description for us each time.
-	local nmap = function(keys, func, desc)
-		if desc then
-			desc = "LSP: " .. desc
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
+	callback = function(ev)
+		local bufnr = ev.buf
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if not client then
+			return
 		end
 
-		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
-	end
+		local fzf = require("fzf-lua")
+		local map = function(keys, func, desc, mode)
+			vim.keymap.set(mode or "n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
+		end
 
-	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+		map("gd", fzf.lsp_definitions, "Goto Definition")
+		map("gr", fzf.lsp_references, "Goto References")
+		map("gI", fzf.lsp_implementations, "Goto Implementation")
+		map("<leader>D", fzf.lsp_typedefs, "Type Definition")
+		map("<leader>ds", fzf.lsp_document_symbols, "Document Symbols")
+		map("<leader>ws", fzf.lsp_live_workspace_symbols, "Workspace Symbols")
 
-	nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-	nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-	nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-	nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-	nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-	nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+		-- Actions
+		map("<leader>rn", vim.lsp.buf.rename, "Rename")
+		map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+		map("<leader>k", vim.lsp.buf.signature_help, "Signature Help")
+		map("gD", vim.lsp.buf.declaration, "Goto Declaration")
 
-	-- See `:help K` for why this keymap
-	nmap("<leader>k", vim.lsp.buf.signature_help, "Signature Documentation")
+		-- Inlay hints
+		if vim.lsp.inlay_hint then
+			map("<leader>ch", function()
+				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}), {})
+			end, "Toggle Inlay Hints")
+		end
 
-	-- Lesser used LSP functionality
-	nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-	nmap("<leader>wa", vim.lsp.buf.add_workspace_folder, "[W]orkspace [A]dd Folder")
-	nmap("<leader>wr", vim.lsp.buf.remove_workspace_folder, "[W]orkspace [R]emove Folder")
-	nmap("<leader>wl", function()
-		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, "[W]orkspace [L]ist Folders")
-
-	-- Create a command `:Format` local to the LSP buffer
-	vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-		vim.lsp.buf.format()
-	end, { desc = "Format current buffer with LSP" })
-
-	local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-	if client.supports_method("textDocument/formatting") then
-		vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			group = augroup,
-			buffer = bufnr,
-			callback = function()
-				vim.lsp.buf.format({
-					bufnr = bufnr,
+		-- Ruff-specific
+		if client.name == "ruff" then
+			local function organize_imports()
+				vim.lsp.buf.code_action({
+					apply = true,
+					context = { only = { "source.organizeImports" }, diagnostics = {} },
 				})
-			end,
-		})
-	end
+			end
+			map("<leader>co", organize_imports, "Organize Imports")
+		end
 
-	-- Inlay Hints Toggle
-	if vim.lsp.inlay_hint then
-		vim.keymap.set("n", "<leader>ch", function()
-			vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}), {})
-		end, { desc = "[C]ode Inlay Hints" })
-	end
-
-	-- Javascript/Typescript specific commands
-	if client.name == "eslint" then
-		-- ESLint Fix All
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			buffer = bufnr,
-			command = "EslintFixAll",
-		})
-	end
-
-	-- Python specific commands
-	if client.name == "ruff" then
-		-- Organize imports
-		local function organize_imports()
-			vim.lsp.buf.code_action({
-				apply = true,
-				context = {
-					only = { "source.organizeImports" },
-					diagnostics = {},
-				},
+		-- ESLint fix on save
+		if client.name == "eslint" then
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				buffer = bufnr,
+				command = "EslintFixAll",
 			})
 		end
-		vim.api.nvim_buf_create_user_command(bufnr, "OrganizeImports", function(_)
-			organize_imports()
-		end, { desc = "Organize Imports" })
-		nmap("<leader>co", organize_imports, "[C]ode [O]rganize Imports")
-	end
-end
+	end,
+})
 
-return {
-	on_attach = on_attach,
-}
+return {}
