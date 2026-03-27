@@ -270,29 +270,6 @@ else
 		},
 
 		{
-			"vintharas/fzf-codesearch.nvim",
-			url = "sso://user/vintharas/fzf-codesearch.nvim",
-			opts = {
-				backend = "cs",
-				corpus = "piper",
-				experimental = false, -- when true, passes `--experimental` flag to `cs`
-				max_num_results = 20,
-				find_file = {
-					keymap = "<leader>sc",
-					description = "[s]earch [c]odesearch",
-					opts = {},
-				},
-				find_query = {
-					enable_proximity = true,
-					keymap = "<leader>sq",
-					description = "[s]search [q]uery",
-					opts = {},
-				},
-				-- pass options here or rely on defaults
-			},
-		},
-
-		{
 			"kevinhwang91/nvim-ufo",
 			dependencies = { "kevinhwang91/promise-async" },
 			config = function()
@@ -317,7 +294,7 @@ else
 			build = ":TSUpdate",
 			config = function()
 				---@diagnostic disable-next-line: missing-fields
-				require("nvim-treesitter.config").setup({
+				require("nvim-treesitter.configs").setup({
 					ensure_installed = {
 						"asm",
 						"bp",
