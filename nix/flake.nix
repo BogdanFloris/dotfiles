@@ -12,19 +12,9 @@
         pkgs = import nixpkgs { inherit system; };
 	lib = pkgs.lib;
       in {
-        # install with: nix profile install ~/dotfiles/nix#global
         packages.global = pkgs.buildEnv {
           name = "global-profile";
           paths = (with pkgs; [
-            # shell + plugins
-	    fish
-            fishPlugins.fish-you-should-use
-            fishPlugins.plugin-git
-            fishPlugins.hydro
-            fishPlugins.sponge
-            fishPlugins.colored-man-pages
-
-            # baseline CLIs
             tmux
             direnv
             sesh
@@ -46,6 +36,10 @@
             android-tools
             gradle
             clang-tools
+            starship
+            coreutils
+            zsh-autosuggestions
+            zsh-syntax-highlighting
           ])
 
           # Linux-only clipboard for tmux copy-mode

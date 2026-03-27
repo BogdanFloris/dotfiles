@@ -17,6 +17,11 @@ setopt check_running_jobs
 autoload -Uz compinit
 compinit
 
+# Load Nix if available
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+
 # Load dircolors for colored completion lists
 eval "$(dircolors -b)"
 
@@ -93,15 +98,15 @@ export FZF_DEFAULT_OPTS="
 source <(fzf --zsh)
 
 # Autosuggestions (Ghost Text)
-if [[ -f ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -f "$HOME/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$HOME/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
-    # Bind Accept to Ctrl+Space
     bindkey '^ ' autosuggest-accept
 fi
 
-if [[ -f ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Zsh Syntax Highlighting
+if [[ -f "$HOME/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source "$HOME/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
 eval "$(starship init zsh)"
