@@ -32,6 +32,7 @@ return {
 			sql = { "sql_formatter" },
 			c = { "clang-format" },
 			cpp = { "clang-format" },
+			nix = { "alejandra" },
 			-- Use a sub-list to run only the first available formatter
 			-- Example: tailwind = { "rustywind" }
 		},
