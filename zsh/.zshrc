@@ -111,6 +111,7 @@ fi
 
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
+eval "$(direnv hook zsh)"
 
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
