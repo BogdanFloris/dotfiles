@@ -1,0 +1,12 @@
+theme = "gruvbox"
+
+[editor]
+default-yank-register = "+"
+line-number = "relative"
+cursorline = true
+color-modes = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
