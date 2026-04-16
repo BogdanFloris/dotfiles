@@ -10,3 +10,6 @@ color-modes = true
 insert = "bar"
 normal = "block"
 select = "underline"
+
+[keys.normal.space]
+r = ":reset-diff-change"
