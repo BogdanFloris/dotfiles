@@ -1,5 +1,4 @@
 -- lua/lsp.lua
--- LSP configuration with native completion (Neovim 0.12+)
 
 local fzf = require("fzf-lua")
 

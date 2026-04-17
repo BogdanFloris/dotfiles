@@ -6,8 +6,6 @@ local fzf = require("fzf-lua")
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 vim.keymap.set("n", "<C-q>", "<cmd>qa<CR>", { desc = "Close all and quit" })
 vim.keymap.set("n", "<C-x>", "<cmd>bd<CR>", { desc = "Close buffer" })
-
--- Remap for dealing with word wrap
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
@@ -19,7 +17,6 @@ vim.keymap.set("n", "]d", function()
 	vim.diagnostic.jump({ count = 1, float = true })
 end, { desc = "Go to next diagnostic message" })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
 -- [[ FZF / Search ]]
 vim.keymap.set("n", "<leader>?", fzf.oldfiles, { desc = "Find recently opened files" })
@@ -37,28 +34,6 @@ vim.keymap.set("n", "<leader>st", "<cmd>FzfLua todo_comments<cr>", { desc = "Sea
 
 -- [[ Oil ]]
 vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
--- [[ Trouble ]]
-vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
-vim.keymap.set(
-	"n",
-	"<leader>xX",
-	"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-	{ desc = "Buffer Diagnostics (Trouble)" }
-)
-vim.keymap.set("n", "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>", { desc = "Symbols (Trouble)" })
-vim.keymap.set(
-	"n",
-	"<leader>cl",
-	"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-	{ desc = "LSP Definitions / references (Trouble)" }
-)
-vim.keymap.set("n", "<leader>xL", "<cmd>Trouble loclist toggle<cr>", { desc = "Location List (Trouble)" })
-vim.keymap.set("n", "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix List (Trouble)" })
-
--- [[ Folds ]]
-vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
-vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
 
 -- [[ Persistence ]]
 vim.keymap.set("n", "<leader>qs", function()

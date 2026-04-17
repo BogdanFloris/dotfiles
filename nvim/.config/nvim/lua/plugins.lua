@@ -20,10 +20,7 @@ vim.pack.add({
 	"https://github.com/ibhagwan/fzf-lua",
 	"https://github.com/lewis6991/gitsigns.nvim",
 	"https://github.com/stevearc/conform.nvim",
-	"https://github.com/folke/trouble.nvim",
 	"https://github.com/folke/todo-comments.nvim",
-	"https://github.com/kevinhwang91/nvim-ufo",
-	"https://github.com/kevinhwang91/promise-async",
 	"https://github.com/christoomey/vim-tmux-navigator",
 	"https://github.com/mrcjkb/rustaceanvim",
 	"https://github.com/pmizio/typescript-tools.nvim",
@@ -112,7 +109,6 @@ require("which-key").add({
 	{ "<leader>q", group = "[Q]uit/Session" },
 	{ "<leader>s", group = "[S]earch" },
 	{ "<leader>w", group = "[W]orkspace" },
-	{ "<leader>x", group = "Trouble" },
 })
 
 require("snacks").setup({
@@ -179,7 +175,7 @@ require("gitsigns").setup({
 				return "]c"
 			end
 			vim.schedule(function()
-				gs.nav_hunk('next')
+				gs.nav_hunk("next")
 			end)
 			return "<Ignore>"
 		end, { expr = true, desc = "Jump to next hunk" })
@@ -189,7 +185,7 @@ require("gitsigns").setup({
 				return "[c"
 			end
 			vim.schedule(function()
-				gs.nav_hunk('prev')
+				gs.nav_hunk("prev")
 			end)
 			return "<Ignore>"
 		end, { expr = true, desc = "Jump to previous hunk" })
@@ -223,13 +219,7 @@ require("conform").setup({
 	},
 })
 
-require("trouble").setup({})
 require("todo-comments").setup({})
-require("ufo").setup({
-	provider_selector = function()
-		return { "treesitter", "indent" }
-	end,
-})
 
 local dropbar_api = require("dropbar.api")
 vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })

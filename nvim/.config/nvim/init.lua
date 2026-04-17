@@ -22,9 +22,9 @@ else
 	vim.o.expandtab = true
 	vim.o.termguicolors = true
 	vim.opt.laststatus = 3
-	vim.o.foldcolumn = "1"
+	vim.o.foldmethod = "expr"
+	vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 	vim.o.foldlevel = 99
-	vim.o.foldlevelstart = 99
 	vim.o.foldenable = true
 
 	-- Native completion settings
