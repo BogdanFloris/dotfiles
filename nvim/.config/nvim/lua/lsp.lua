@@ -12,7 +12,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			return
 		end
 
-		vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
 		local map = function(keys, func, desc, mode)
 			vim.keymap.set(mode or "n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
 		end

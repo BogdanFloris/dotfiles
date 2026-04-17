@@ -24,6 +24,7 @@ vim.pack.add({
 	"https://github.com/mrcjkb/rustaceanvim",
 	"https://github.com/pmizio/typescript-tools.nvim",
 	"https://github.com/nvim-lua/plenary.nvim",
+	"https://github.com/nvim-mini/mini.completion",
 })
 
 -- [[ Plugin Configurations ]]
@@ -35,6 +36,7 @@ require("lazydev").setup({
 		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 	},
 })
+require("mini.completion").setup()
 ---@diagnostic disable-next-line: missing-fields
 require("nvim-treesitter.config").setup({
 	ensure_installed = {
@@ -102,9 +104,9 @@ require("snacks").setup({
 		enabled = true,
 		sections = {
 			{ section = "header" },
-			{ section = "keys", gap = 1, padding = 1 },
+			{ section = "keys",         gap = 1,    padding = 1 },
 			{ section = "recent_files", indent = 2, padding = 1 },
-			{ section = "projects", indent = 2, padding = 1 },
+			{ section = "projects",     indent = 2, padding = 1 },
 		},
 	},
 	bigfile = { enabled = true },

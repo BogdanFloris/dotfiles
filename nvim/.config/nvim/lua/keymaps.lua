@@ -37,7 +37,8 @@ vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory
 
 -- [[ Dropbar ]]
 vim.keymap.set("n", "<leader>;", function() require("dropbar.api").pick() end, { desc = "Pick symbols in winbar" })
-vim.keymap.set("n", "[;", function() require("dropbar.api").goto_context_start() end, { desc = "Go to start of current context" })
+vim.keymap.set("n", "[;", function() require("dropbar.api").goto_context_start() end,
+	{ desc = "Go to start of current context" })
 vim.keymap.set("n", "];", function() require("dropbar.api").select_next_context() end, { desc = "Select next context" })
 
 -- [[ Persistence ]]
