@@ -32,7 +32,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- Format with conform
 		map("<leader>cf", function()
 			require("conform").format({ async = true, lsp_fallback = true })
-		end, "Format buffer")
+		end, "Format buffer", { "n", "v" })
 
 		-- Ruff-specific: organize imports
 		if client.name == "ruff" then
