@@ -12,14 +12,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			return
 		end
 
-		-- Enable native completion
 		vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
-
 		local map = function(keys, func, desc, mode)
 			vim.keymap.set(mode or "n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
 		end
 
-		-- FZF overrides for better UI (keep these, they override 0.11 defaults)
 		map("gd", fzf.lsp_definitions, "Goto Definition")
 		map("gr", fzf.lsp_references, "Goto References")
 		map("<leader>D", fzf.lsp_typedefs, "Type Definition")

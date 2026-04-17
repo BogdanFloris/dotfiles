@@ -3,7 +3,6 @@
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
 	"https://github.com/tpope/vim-sleuth",
-	"https://github.com/vimwiki/vimwiki",
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/folke/lazydev.nvim",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
@@ -28,17 +27,14 @@ vim.pack.add({
 })
 
 -- [[ Plugin Configurations ]]
-
 require("gruvbox").setup({
 	inverse = true,
 })
-
 require("lazydev").setup({
 	library = {
 		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 	},
 })
-
 ---@diagnostic disable-next-line: missing-fields
 require("nvim-treesitter.config").setup({
 	ensure_installed = {
@@ -87,15 +83,6 @@ require("nvim-treesitter.config").setup({
 	auto_install = false,
 	highlight = { enable = true },
 	autotag = { enable = true },
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "<c-space>",
-			node_incremental = "<c-space>",
-			scope_incremental = "<c-s>",
-			node_decremental = "<M-space>",
-		},
-	},
 })
 
 require("nvim-autopairs").setup({})
@@ -104,7 +91,6 @@ require("persistence").setup({})
 require("which-key").setup({})
 require("which-key").add({
 	{ "<leader>c", group = "[C]ode" },
-	{ "<leader>d", group = "[D]ocument" },
 	{ "<leader>g", group = "[G]it" },
 	{ "<leader>q", group = "[Q]uit/Session" },
 	{ "<leader>s", group = "[S]earch" },
@@ -127,7 +113,6 @@ require("snacks").setup({
 	notifier = { enabled = true },
 	quickfile = { enabled = true },
 	scope = { enabled = true },
-	scroll = { enabled = true },
 	zen = { enabled = true },
 })
 
@@ -137,29 +122,15 @@ local fzf = require("fzf-lua")
 fzf.setup({
 	"fzf-native",
 	winopts = {
-		height = 0.85,
-		width = 0.80,
+		---@diagnostic disable-next-line: missing-fields
 		preview = {
 			default = "builtin",
-		},
-	},
-	keymap = {
-		builtin = {
-			["<C-d>"] = "preview-page-down",
-			["<C-u>"] = "preview-page-up",
 		},
 	},
 })
 fzf.register_ui_select()
 
 require("gitsigns").setup({
-	signs = {
-		add = { text = "+" },
-		change = { text = "~" },
-		delete = { text = "_" },
-		topdelete = { text = "‾" },
-		changedelete = { text = "~" },
-	},
 	on_attach = function(bufnr)
 		local gs = require("gitsigns")
 
@@ -169,7 +140,6 @@ require("gitsigns").setup({
 			vim.keymap.set(mode, l, r, opts)
 		end
 
-		-- Navigation
 		map({ "n", "v" }, "]c", function()
 			if vim.wo.diff then
 				return "]c"
@@ -190,7 +160,6 @@ require("gitsigns").setup({
 			return "<Ignore>"
 		end, { expr = true, desc = "Jump to previous hunk" })
 
-		-- Git actions under <leader>g
 		map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview git hunk" })
 		map("n", "<leader>gr", gs.reset_hunk, { desc = "Reset git hunk" })
 		map("n", "<leader>gb", gs.blame_line, { desc = "Blame git line" })
@@ -226,6 +195,7 @@ vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in win
 vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
 vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
 
+require("typescript-tools").setup({})
 vim.g.rustaceanvim = {
 	server = {
 		standalone = true,
@@ -253,5 +223,3 @@ vim.g.rustaceanvim = {
 		},
 	},
 }
-
-require("typescript-tools").setup({})
