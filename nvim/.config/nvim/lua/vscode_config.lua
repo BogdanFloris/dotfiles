@@ -1,45 +1,26 @@
 -- lua/vscode_config.lua
 local vscode = require("vscode")
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
-end
-vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-	{
-		"nvim-treesitter/nvim-treesitter",
-		dependencies = {
-			"windwp/nvim-ts-autotag",
+-- Plugins for VSCode-Neovim
+vim.pack.add({
+	"https://github.com/nvim-treesitter/nvim-treesitter",
+	"https://github.com/windwp/nvim-ts-autotag",
+	"https://github.com/ibhagwan/fzf-lua",
+})
+
+require("nvim-treesitter.configs").setup({
+	ensure_installed = { "kotlin", "java", "cpp", "lua", "markdown" },
+	highlight = { enable = true },
+	autotag = { enable = true },
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = "<c-space>",
+			node_incremental = "<c-space>",
+			scope_incremental = "<c-s>",
+			node_decremental = "<M-space>",
 		},
-		build = ":TSUpdate",
-		config = function()
-			---@diagnostic disable-next-line: missing-fields
-			require("nvim-treesitter.config").setup({
-				ensure_installed = { "kotlin", "java", "cpp", "lua", "markdown" },
-				highlight = { enable = true },
-				autotag = { enable = true },
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "<c-space>",
-						node_incremental = "<c-space>",
-						scope_incremental = "<c-s>",
-						node_decremental = "<M-space>",
-					},
-				},
-			})
-		end,
 	},
-	-- You need this for the <leader>cs symbols we talked about
-	{ "ibhagwan/fzf-lua" },
 })
 
 vim.opt.hlsearch = false
@@ -58,9 +39,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -------------------------------------------------------------------------------
 -- Keybindings (Using VSCode Actions)
 -------------------------------------------------------------------------------
--- Format: vim.keymap.set(mode, shortcut, action)
-
--- General
 vim.keymap.set("n", "<C-x>", function()
 	vscode.action("workbench.action.closeActiveEditor")
 end)
@@ -74,11 +52,10 @@ vim.keymap.set("n", "<leader>e", function()
 	vscode.action("editor.action.showHover")
 end)
 vim.keymap.set("n", "<leader>wm", function()
-	require("vscode").action("workbench.action.joinEditorGroupLeft")
+	vscode.action("workbench.action.joinEditorGroupLeft")
 end, { desc = "Merge split left (Unsplit)" })
-
 vim.keymap.set("n", "<leader>w1", function()
-	require("vscode").action("workbench.action.editorLayoutSingle")
+	vscode.action("workbench.action.editorLayoutSingle")
 end, { desc = "Force single layout (Close all splits)" })
 
 -- Search
@@ -102,17 +79,8 @@ end)
 vim.keymap.set("n", "gr", function()
 	vscode.action("editor.action.goToReferences")
 end)
-vim.keymap.set("n", "gI", function()
-	vscode.action("editor.action.goToImplementation")
-end)
 vim.keymap.set("n", "K", function()
 	vscode.action("editor.action.showDefinitionPreviewHover")
-end)
-vim.keymap.set("n", "<leader>rn", function()
-	vscode.action("editor.action.rename")
-end)
-vim.keymap.set("n", "<leader>ca", function()
-	vscode.action("editor.action.quickFix")
 end)
 vim.keymap.set("n", "<leader>cf", function()
 	vscode.action("editor.action.formatDocument")
