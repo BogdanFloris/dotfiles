@@ -51,6 +51,7 @@
             zsh-syntax-highlighting
             stylua
             lua-language-server
+            helix
 
             # ai tools
             claude-code
