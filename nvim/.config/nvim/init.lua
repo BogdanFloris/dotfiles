@@ -26,6 +26,7 @@ else
 	vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 	vim.o.foldlevel = 99
 	vim.o.foldenable = true
+	vim.api.nvim_command('autocmd VimResized * wincmd =')
 
 	-- Native completion settings
 	vim.o.completeopt = "menuone,noselect,fuzzy"
