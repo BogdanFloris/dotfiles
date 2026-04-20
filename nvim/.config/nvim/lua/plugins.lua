@@ -203,7 +203,7 @@ vim.g.rustaceanvim = {
 					loadOutDirsFromCheck = true,
 					runBuildScripts = true,
 				},
-				checkOnSave = {
+				check = {
 					allFeatures = true,
 					command = "clippy",
 					extraArgs = { "--", "-W", "clippy::pedantic" },
