@@ -21,7 +21,7 @@ else
 	vim.o.tabstop = 4
 	vim.o.expandtab = true
 	vim.o.termguicolors = true
-	vim.opt.laststatus = 3
+	vim.opt.laststatus = 2
 	vim.o.foldmethod = "expr"
 	vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 	vim.o.foldlevel = 99
