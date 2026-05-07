@@ -55,6 +55,7 @@
 
             # ai tools
             claude-code
+            codex
           ])
           # Linux-only clipboard for tmux copy-mode
           ++ lib.optionals pkgs.stdenv.isLinux [pkgs.xclip];
