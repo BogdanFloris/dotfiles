@@ -8,7 +8,7 @@ vim.pack.add({
 	"https://github.com/ibhagwan/fzf-lua",
 })
 
-require("nvim-treesitter.configs").setup({
+require("nvim-treesitter.config").setup({
 	ensure_installed = { "kotlin", "java", "cpp", "lua", "markdown" },
 	highlight = { enable = true },
 	autotag = { enable = true },
