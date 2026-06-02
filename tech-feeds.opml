@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>RSS Feeds</title>
+  </head>
+  <body>
+    <outline text="News" title="News">
+      <outline type="rss" text="Hacker News" title="Hacker News" xmlUrl="https://news.ycombinator.com/rss" htmlUrl="https://news.ycombinator.com/"/>
+      <outline type="rss" text="Lobsters" title="Lobsters" xmlUrl="https://lobste.rs/rss" htmlUrl="https://lobste.rs/"/>
+    </outline>
+    <outline text="Blogs" title="Blogs">
+      <outline type="rss" text="matklad" title="matklad" xmlUrl="https://matklad.github.io/feed.xml" htmlUrl="https://matklad.github.io/"/>
+      <outline type="rss" text="Julia Evans (jvns.ca)" title="Julia Evans (jvns.ca)" xmlUrl="https://jvns.ca/atom.xml" htmlUrl="https://jvns.ca/"/>
+      <outline type="rss" text="Isaac Clayton (slightknack)" title="Isaac Clayton (slightknack)" xmlUrl="https://slightknack.dev/atom.xml" htmlUrl="https://slightknack.dev/"/>
+      <outline type="rss" text="Tim Zaman" title="Tim Zaman" xmlUrl="https://timzaman.com/feed.xml" htmlUrl="https://timzaman.com/"/>
+      <outline type="rss" text="LWN.net" title="LWN.net" xmlUrl="https://lwn.net/headlines/rss" htmlUrl="https://lwn.net/"/>
+      <outline type="rss" text="Simon Willison" title="Simon Willison" xmlUrl="https://simonwillison.net/atom/everything/" htmlUrl="https://simonwillison.net/"/>
+      <outline type="rss" text="Daniel Lemire" title="Daniel Lemire" xmlUrl="https://lemire.me/blog/feed/" htmlUrl="https://lemire.me/blog/"/>
+      <outline type="rss" text="Travis Downs (Performance Matters)" title="Travis Downs (Performance Matters)" xmlUrl="https://travisdowns.github.io/feed.xml" htmlUrl="https://travisdowns.github.io/"/>
+      <outline type="rss" text="Easyperf (Denis Bakhvalov)" title="Easyperf (Denis Bakhvalov)" xmlUrl="https://easyperf.net/feed.xml" htmlUrl="https://easyperf.net/"/>
+      <outline type="rss" text="Dan Luu" title="Dan Luu" xmlUrl="https://danluu.com/atom.xml" htmlUrl="https://danluu.com/"/>
+      <outline type="rss" text="Brendan Gregg" title="Brendan Gregg" xmlUrl="https://www.brendangregg.com/blog/rss.xml" htmlUrl="https://www.brendangregg.com/"/>
+      <outline type="rss" text="Russ Cox (research!rsc)" title="Russ Cox (research!rsc)" xmlUrl="https://research.swtch.com/feed.atom" htmlUrl="https://research.swtch.com/"/>
+      <outline type="rss" text="Eli Bendersky" title="Eli Bendersky" xmlUrl="https://eli.thegreenplace.net/feeds/all.atom.xml" htmlUrl="https://eli.thegreenplace.net/"/>
+      <outline type="rss" text="fasterthanlime (Amos)" title="fasterthanlime (Amos)" xmlUrl="https://fasterthanli.me/index.xml" htmlUrl="https://fasterthanli.me/"/>
+      <outline type="rss" text="nullprogram (Chris Wellons)" title="nullprogram (Chris Wellons)" xmlUrl="https://nullprogram.com/feed/" htmlUrl="https://nullprogram.com/"/>
+      <outline type="rss" text="Bartosz Ciechanowski" title="Bartosz Ciechanowski" xmlUrl="https://ciechanow.ski/atom.xml" htmlUrl="https://ciechanow.ski/"/>
+      <outline type="rss" text="rachelbythebay" title="rachelbythebay" xmlUrl="https://rachelbythebay.com/w/atom.xml" htmlUrl="https://rachelbythebay.com/"/>
+    </outline>
+    <outline text="Reddit" title="Reddit">
+      <outline type="rss" text="r/cpp" title="r/cpp" xmlUrl="https://www.reddit.com/r/cpp/.rss" htmlUrl="https://www.reddit.com/r/cpp/"/>
+      <outline type="rss" text="r/rust" title="r/rust" xmlUrl="https://www.reddit.com/r/rust/.rss" htmlUrl="https://www.reddit.com/r/rust/"/>
+      <outline type="rss" text="r/programming" title="r/programming" xmlUrl="https://www.reddit.com/r/programming/.rss" htmlUrl="https://www.reddit.com/r/programming/"/>
+      <outline type="rss" text="r/linux" title="r/linux" xmlUrl="https://www.reddit.com/r/linux/.rss" htmlUrl="https://www.reddit.com/r/linux/"/>
+      <outline type="rss" text="r/NixOS" title="r/NixOS" xmlUrl="https://www.reddit.com/r/NixOS/.rss" htmlUrl="https://www.reddit.com/r/NixOS/"/>
+      <outline type="rss" text="r/androiddev" title="r/androiddev" xmlUrl="https://www.reddit.com/r/androiddev/.rss" htmlUrl="https://www.reddit.com/r/androiddev/"/>
+      <outline type="rss" text="r/FPGA" title="r/FPGA" xmlUrl="https://www.reddit.com/r/FPGA/.rss" htmlUrl="https://www.reddit.com/r/FPGA/"/>
+      <outline type="rss" text="r/homelab" title="r/homelab" xmlUrl="https://www.reddit.com/r/homelab/.rss" htmlUrl="https://www.reddit.com/r/homelab/"/>
+      <outline type="rss" text="r/romania" title="r/romania" xmlUrl="https://www.reddit.com/r/romania/.rss" htmlUrl="https://www.reddit.com/r/romania/"/>
+      <outline type="rss" text="r/soccer" title="r/soccer" xmlUrl="https://www.reddit.com/r/soccer/.rss" htmlUrl="https://www.reddit.com/r/soccer/"/>
+      <outline type="rss" text="r/programare" title="r/programare" xmlUrl="https://www.reddit.com/r/programare/.rss" htmlUrl="https://www.reddit.com/r/progamare/"/>
+      <outline type="rss" text="r/leagueoflegends" title="r/leagueoflegends" xmlUrl="https://www.reddit.com/r/leagueoflegends/.rss" htmlUrl="https://www.reddit.com/r/leagueoflegends/"/>
+      <outline type="rss" text="r/ps5" title="r/ps5" xmlUrl="https://www.reddit.com/r/ps5/.rss" htmlUrl="https://www.reddit.com/r/ps5/"/>
+    </outline>
+    <outline text="Romania" title="Romania">
+      <outline type="rss" text="Hotnews" title="Hotnews" xmlUrl="https://hotnews.ro/feed" htmlUrl="https://hotnews.ro/" />
+    </outline>
+  </body>
+</opml>
