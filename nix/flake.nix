@@ -4,12 +4,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    pwndbg.url = "github:pwndbg/pwndbg";
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    pwndbg,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -57,6 +59,7 @@
             claude-code
             codex
           ])
+          ++ [pwndbg.packages.${system}.pwndbg-lldb]
           # Linux-only clipboard for tmux copy-mode
           ++ lib.optionals pkgs.stdenv.isLinux [pkgs.xclip];
       };
