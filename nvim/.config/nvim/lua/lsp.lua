@@ -1,6 +1,12 @@
 -- lua/lsp.lua
 
 local fzf = require("fzf-lua")
+local ciderlsp_config = require("ciderlsp")
+
+local function is_google3()
+	local cwd = vim.fn.getcwd()
+	return vim.startswith(cwd, "/google/src/cloud/") or vim.startswith(cwd, "/google/gerrit/")
+end
 
 -- [[ LSP Attach Configuration ]]
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -96,10 +102,17 @@ local lsps = {
 }
 
 -- Apply LSP configurations
-for _, lsp in pairs(lsps) do
-	local name, config = lsp[1], lsp[2]
-	if config then
-		vim.lsp.config(name, config)
+if is_google3() then
+	-- Inside google3, only enable CiderLSP
+	vim.lsp.config("ciderlsp", ciderlsp_config)
+	vim.lsp.enable("ciderlsp")
+else
+	-- Outside google3, enable all other LSPs
+	for _, lsp in pairs(lsps) do
+		local name, config = lsp[1], lsp[2]
+		if config then
+			vim.lsp.config(name, config)
+		end
+		vim.lsp.enable(name)
 	end
-	vim.lsp.enable(name)
 end

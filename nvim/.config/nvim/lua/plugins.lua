@@ -1,5 +1,10 @@
 -- lua/plugins.lua
 
+local function is_google3()
+	local cwd = vim.fn.getcwd()
+	return vim.startswith(cwd, "/google/src/cloud/") or vim.startswith(cwd, "/google/gerrit/")
+end
+
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
 	"https://github.com/tpope/vim-sleuth",
@@ -192,7 +197,10 @@ require("conform").setup({
 
 require("todo-comments").setup({})
 
-require("typescript-tools").setup({})
+if not is_google3() then
+	require("typescript-tools").setup({})
+end
+
 vim.g.rustaceanvim = {
 	server = {
 		standalone = true,
