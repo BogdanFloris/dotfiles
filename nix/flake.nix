@@ -60,8 +60,7 @@
             codex
           ])
           ++ [pwndbg.packages.${system}.pwndbg-lldb]
-          # Linux-only clipboard for tmux copy-mode
-          ++ lib.optionals pkgs.stdenv.isLinux [pkgs.xclip];
+          ++ lib.optionals pkgs.stdenv.isLinux [pkgs.xclip pkgs.wl-clipboard];
       };
     });
 }
