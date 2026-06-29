@@ -7,6 +7,7 @@
 
 [core]
   editor = nvim
+  excludesFile = ~/.gitignore
 
 [column]
   ui = auto
