@@ -59,7 +59,7 @@
             claude-code
             codex
           ])
-          ++ [pwndbg.packages.${system}.pwndbg-lldb]
+          ++ [pwndbg.packages.${system}.pwndbg]
           ++ lib.optionals pkgs.stdenv.isLinux [pkgs.xclip pkgs.wl-clipboard];
       };
     });
