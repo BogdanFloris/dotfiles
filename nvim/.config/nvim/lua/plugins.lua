@@ -30,6 +30,7 @@ vim.pack.add({
 	"https://github.com/pmizio/typescript-tools.nvim",
 	"https://github.com/nvim-lua/plenary.nvim",
 	"https://github.com/nvim-mini/mini.completion",
+	"https://github.com/mfussenegger/nvim-jdtls",
 })
 
 -- [[ Plugin Configurations ]]

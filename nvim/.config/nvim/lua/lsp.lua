@@ -99,7 +99,6 @@ local lsps = {
 			},
 		},
 	},
-	{ "jdtls" },
 }
 
 -- Apply LSP configurations
