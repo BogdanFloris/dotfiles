@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  networking.hostName = "erendil";
+  networking.hostName = "erebor";
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Bucharest";
 
