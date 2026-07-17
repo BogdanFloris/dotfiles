@@ -11,7 +11,7 @@
 {
   disko.devices.disk.main = {
     type = "disk";
-    device = "/dev/disk/by-id/CHANGE-ME";
+    device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_2TB_S7HENU0L121474T";
     content = {
       type = "gpt";
       partitions = {
