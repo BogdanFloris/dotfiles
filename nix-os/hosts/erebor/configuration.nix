@@ -84,15 +84,6 @@
     serviceMode = "user";
     userName = "bogdan";
     config = {
-      modmap = [
-        {
-          name = "Cmd position";
-          remap = {
-            leftalt = "leftmeta";
-            leftmeta = "leftalt";
-          };
-        }
-      ];
       keymap = [
         {
           name = "mac-like";
