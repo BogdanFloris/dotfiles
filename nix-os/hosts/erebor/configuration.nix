@@ -63,12 +63,16 @@
   users.users.bogdan = {
     isNormalUser = true;
     extraGroups = ["wheel" "networkmanager" "video" "input"];
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0fES5hYNWz9a6jiqSN1wPEIaVTf4QgdW91z7SEpIxy bogdan.floris@gmail.com"
     ];
   };
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    autosuggestions.enable = true;
+    syntaxHighlighting.enable = true;
+  };
 
   environment.systemPackages =
     (import ../../packages.nix {inherit pkgs;})

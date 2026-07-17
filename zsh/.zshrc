@@ -101,8 +101,8 @@ source <(fzf --zsh)
 if [[ -f "$HOME/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
     source "$HOME/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
-    bindkey '^ ' autosuggest-accept
 fi
+bindkey '^ ' autosuggest-accept
 
 # Zsh Syntax Highlighting
 if [[ -f "$HOME/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
