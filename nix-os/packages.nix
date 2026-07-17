@@ -33,9 +33,12 @@ with pkgs; [
   codex
 
   # Gnome specific
+  gnome-tweaks
+  cider-2
+  discord
+  gnome-extension-manager
   gnomeExtensions.arcmenu
   gnomeExtensions.xremap
   gnomeExtensions.appindicator
-  gnome-extension-manager
-  cider-2
+  gnomeExtensions.auto-pip-manager
 ]
