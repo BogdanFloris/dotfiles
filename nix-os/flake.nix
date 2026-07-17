@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     pwndbg.url = "github:pwndbg/pwndbg";
+    xremap-flake.url = "github:xremap/nix-flake";
 
     disko = {
       url = "github:nix-community/disko";
@@ -22,6 +23,7 @@
     nixpkgs,
     flake-utils,
     pwndbg,
+    xremap-flake,
     disko,
     lanzaboote,
     ...
@@ -47,6 +49,7 @@
         modules = [
           disko.nixosModules.disko
           lanzaboote.nixosModules.lanzaboote
+          xremap-flake.nixosModules.default
           ./hosts/erebor/disko.nix
           ./hosts/erebor/hardware-configuration.nix
           ./hosts/erebor/configuration.nix
