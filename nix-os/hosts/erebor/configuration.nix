@@ -126,6 +126,7 @@
             alt-right = "C-right";
             super-leftbrace = "alt-left";
             super-rightbrace = "alt-right";
+            super-q = "alt-f4";
           };
         }
         {
@@ -135,6 +136,7 @@
             super-c = "C-shift-c";
             super-v = "C-shift-v";
             super-t = "C-shift-t";
+            super-q = "alt-f4";
           };
         }
       ];
