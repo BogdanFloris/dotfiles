@@ -83,7 +83,7 @@ local lsps = {
 		"glsl_analyzer",
 		{ filetypes = { "glsl" } },
 	},
-	{ "nil_ls" },
+	{ "nixd" },
 	{ "lua_ls" },
 	{
 		"zls",

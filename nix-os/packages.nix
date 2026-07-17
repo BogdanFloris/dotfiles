@@ -28,11 +28,12 @@ with pkgs; [
   zsh-syntax-highlighting
   stylua
   lua-language-server
+  nixd
   claude-code
   codex
 
   # Gnome specific
-  gnomeExtensions.arcmenu 
+  gnomeExtensions.arcmenu
   gnomeExtensions.xremap
   gnomeExtensions.appindicator
   gnome-extension-manager
