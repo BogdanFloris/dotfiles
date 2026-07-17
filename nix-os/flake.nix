@@ -42,7 +42,7 @@
       };
     }))
     // {
-      nixosConfigurations.erebot = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.erebor = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
