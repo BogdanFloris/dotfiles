@@ -1,13 +1,3 @@
-# Declarative partitioning for the dedicated Linux NVMe.
-#
-# !! SET `device` BELOW ON INSTALL DAY !!
-# Verify with `lsblk -o NAME,SIZE,MODEL` from the installer — it must be
-# the old Fedora disk, NOT the Windows one. Prefer the stable path:
-#   /dev/disk/by-id/nvme-<model>_<serial>
-#
-# Layout: 1G ESP (NixOS-owned, Windows ESP untouched) + LUKS2 holding
-# btrfs subvolumes. TPM auto-unlock is enrolled in Stage 3, AFTER
-# Secure Boot reaches its final state (PCR 7 depends on it).
 {
   disko.devices.disk.main = {
     type = "disk";

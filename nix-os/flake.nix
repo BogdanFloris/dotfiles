@@ -11,8 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Secure Boot for NixOS — lets SB stay permanently ON for Windows
-    # anti-cheat while NixOS boots with self-enrolled keys.
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,14 +42,14 @@
       };
     }))
     // {
-      nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.erebot = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
           lanzaboote.nixosModules.lanzaboote
-          ./hosts/workstation/disko.nix
-          ./hosts/workstation/hardware-configuration.nix
-          ./hosts/workstation/configuration.nix
+          ./hosts/erebor/disko.nix
+          ./hosts/erebor/hardware-configuration.nix
+          ./hosts/erebor/configuration.nix
         ];
       };
     };
