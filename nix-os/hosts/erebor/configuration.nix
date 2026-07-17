@@ -59,6 +59,8 @@
       PermitRootLogin = "no";
     };
   };
+  programs.ssh.startAgent = true;
+  services.gnome.gcr-ssh-agent.enable = false;
 
   users.users.bogdan = {
     isNormalUser = true;
@@ -80,44 +82,67 @@
     serviceMode = "user";
     userName = "bogdan";
     config = {
-      modmap = [{
-        name = "Cmd position";
-        remap = { leftalt = "leftmeta"; leftmeta = "leftalt"; };
-      }];
+      modmap = [
+        {
+          name = "Cmd position";
+          remap = {
+            leftalt = "leftmeta";
+            leftmeta = "leftalt";
+          };
+        }
+      ];
       keymap = [
         {
           name = "mac-like";
-          application.not = [ "com.mitchellh.ghostty" ];
+          application.not = ["com.mitchellh.ghostty"];
           remap = {
-            super-c = "C-c"; super-v = "C-v"; super-x = "C-x";
-            super-a = "C-a"; super-z = "C-z"; super-s = "C-s";
-            super-t = "C-t"; super-w = "C-w"; super-f = "C-f";
-            super-l = "C-l"; super-r = "C-r";
-            super-left = "home"; super-right = "end";
-            super-1 = "C-1"; super-2 = "C-2"; super-3 = "C-3";
-            super-4 = "C-4"; super-5 = "C-5"; super-6 = "C-6";
-            super-7 = "C-7"; super-8 = "C-8"; super-9 = "C-9";
+            super-c = "C-c";
+            super-v = "C-v";
+            super-x = "C-x";
+            super-a = "C-a";
+            super-z = "C-z";
+            super-s = "C-s";
+            super-t = "C-t";
+            super-w = "C-w";
+            super-f = "C-f";
+            super-l = "C-l";
+            super-r = "C-r";
+            super-left = "home";
+            super-right = "end";
+            super-1 = "C-1";
+            super-2 = "C-2";
+            super-3 = "C-3";
+            super-4 = "C-4";
+            super-5 = "C-5";
+            super-6 = "C-6";
+            super-7 = "C-7";
+            super-8 = "C-8";
+            super-9 = "C-9";
             super-alt-right = "C-tab";
-            super-alt-left  = "C-shift-tab";
-            super-shift-leftbrace  = "C-shift-tab";
+            super-alt-left = "C-shift-tab";
+            super-shift-leftbrace = "C-shift-tab";
             super-shift-rightbrace = "C-tab";
-            alt-left  = "C-left";
+            alt-left = "C-left";
             alt-right = "C-right";
-            super-leftbrace  = "alt-left";
+            super-leftbrace = "alt-left";
             super-rightbrace = "alt-right";
           };
         }
         {
           name = "terminal";
-          application.only = [ "com.mitchellh.ghostty" ];
-          remap = { super-c = "C-shift-c"; super-v = "C-shift-v"; super-t = "C-shift-t"; };
+          application.only = ["com.mitchellh.ghostty"];
+          remap = {
+            super-c = "C-shift-c";
+            super-v = "C-shift-v";
+            super-t = "C-shift-t";
+          };
         }
       ];
     };
   };
   hardware.uinput.enable = true;
-  users.groups.input.members = [ "bogdan" ];
-  users.groups.uinput.members = [ "bogdan" ];
+  users.groups.input.members = ["bogdan"];
+  users.groups.uinput.members = ["bogdan"];
 
   environment.systemPackages =
     (import ../../packages.nix {inherit pkgs;})
