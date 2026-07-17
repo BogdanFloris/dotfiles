@@ -30,4 +30,11 @@ with pkgs; [
   lua-language-server
   claude-code
   codex
+
+  # Gnome specific
+  gnomeExtensions.arcmenu 
+  gnomeExtensions.xremap
+  gnomeExtensions.appindicator
+  gnome-extension-manager
+  ulauncher
 ]
