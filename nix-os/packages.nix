@@ -37,4 +37,5 @@ with pkgs; [
   gnomeExtensions.xremap
   gnomeExtensions.appindicator
   gnome-extension-manager
+  cider-2
 ]
