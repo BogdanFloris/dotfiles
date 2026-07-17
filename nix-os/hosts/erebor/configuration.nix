@@ -11,18 +11,20 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   nixpkgs.config.allowUnfree = true;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 15;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+    configurationLimit = 5;
+  };
+  boot.initrd.systemd.enable = true;
 
-  # STAGE 2 (Secure Boot): after `sbctl create-keys` + firmware in Setup
-  # Mode, flip the two lines below, rebuild, `sbctl verify`, then
-  # re-enable Secure Boot in the BIOS.
-  #   boot.loader.systemd-boot.enable = lib.mkForce false;
-  #   boot.lanzaboote = {
-  #     enable = true;
-  #     pkiBundle = "/var/lib/sbctl";
-  #   };
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [
