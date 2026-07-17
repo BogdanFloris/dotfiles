@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "WebSearch",
+      "WebFetch(domain:gpanders.com)",
+      "WebFetch(domain:dotfiles.substack.com)",
+      "Bash(tree:*)"
+    ]
+  }
+}

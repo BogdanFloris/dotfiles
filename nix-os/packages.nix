@@ -1,0 +1,33 @@
+{pkgs}:
+with pkgs; [
+  alejandra
+  tmux
+  direnv
+  sesh
+  git
+  ripgrep
+  fd
+  fzf
+  curl
+  jq
+  wget
+  stow
+  bat
+  jujutsu
+  atuin
+  zoxide
+  neovim
+  python313
+  jdk25
+  android-tools
+  gradle
+  clang-tools
+  starship
+  coreutils
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  stylua
+  lua-language-server
+  claude-code
+  codex
+]
