@@ -226,17 +226,12 @@ initial-size-file-chooser=(890, 550)
 night-light-enabled=false
 
 [org/gnome/settings-daemon/plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
+custom-keybindings=@as []
 help=@as []
 magnifier=@as []
 magnifier-zoom-in=['<Alt><Super>equal']
 screenreader=@as []
 screensaver=['<Shift><Alt>l']
-
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-binding='<Shift><Control>space'
-command='ulauncher-toggle'
-name='Ulauncher'
 
 [org/gnome/shell]
 disabled-extensions=['dash-to-panel@jderose9.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'ubuntu-appindicators@ubuntu.com', 'gnome-mosaic@jardon.github.com', 'forge@jmmaranan.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'light-style@gnome-shell-extensions.gcampax.github.com', 'appindicatorsupport@rgcjonas.gmail.com']

@@ -31,6 +31,8 @@ with pkgs; [
   nixd
   claude-code
   codex
+  btop
+  asdbctl
 
   # Gnome specific
   gnome-tweaks

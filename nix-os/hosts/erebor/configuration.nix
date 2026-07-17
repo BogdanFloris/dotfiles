@@ -83,7 +83,25 @@
     withGnome = true;
     serviceMode = "user";
     userName = "bogdan";
+    # GNOME reserves the monitor-brightness media keys before custom shortcuts
+    # can handle them. Intercept them here and invoke asdbctl directly instead.
+    extraArgs = ["--allow-launch=true"];
     config = {
+      modmap = [
+        {
+          name = "Studio Display brightness";
+          remap = {
+            brightnessdown = {
+              skip_key_event = true;
+              press.launch = ["${pkgs.asdbctl}/bin/asdbctl" "down"];
+            };
+            brightnessup = {
+              skip_key_event = true;
+              press.launch = ["${pkgs.asdbctl}/bin/asdbctl" "up"];
+            };
+          };
+        }
+      ];
       keymap = [
         {
           name = "mac-like";
@@ -138,6 +156,8 @@
   hardware.uinput.enable = true;
   users.groups.input.members = ["bogdan"];
   users.groups.uinput.members = ["bogdan"];
+  # for studio display brightness
+  services.udev.packages = [pkgs.asdbctl];
 
   environment.systemPackages =
     (import ../../packages.nix {inherit pkgs;})
