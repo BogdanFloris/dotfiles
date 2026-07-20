@@ -138,6 +138,7 @@
             super-leftbrace = "alt-left";
             super-rightbrace = "alt-right";
             super-q = "alt-f4";
+            super-tab = "alt-tab";
           };
         }
         {
