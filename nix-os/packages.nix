@@ -2,6 +2,7 @@
 with pkgs; [
   alejandra
   tmux
+  herdr
   direnv
   sesh
   git
@@ -22,6 +23,9 @@ with pkgs; [
   android-tools
   gradle
   clang-tools
+  gcc
+  rustup
+  bun
   starship
   coreutils
   zsh-autosuggestions
@@ -31,6 +35,7 @@ with pkgs; [
   nixd
   claude-code
   codex
+  antigravity-cli
   btop
   asdbctl
 
