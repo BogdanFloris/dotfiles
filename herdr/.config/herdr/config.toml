@@ -14,6 +14,12 @@ command = "herdr-navigator.open"
 description = "jump to anything"
 
 [[keys.command]]
+key = "prefix+l"
+type = "plugin_action"
+command = "herdr-navigator.jump-back"
+description = "last workspace"
+
+[[keys.command]]
 key = "ctrl+h"
 type = "plugin_action"
 command = "vim-herdr-navigation.left"
@@ -37,7 +43,6 @@ type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
 
-# jj workspaces: create/remove a jj workspace, opened straight into herdr.
 [[keys.command]]
 key = "prefix+a"
 type = "plugin_action"
@@ -65,6 +70,5 @@ delay_seconds = 3
 
 [ui]
 show_agent_labels_on_pane_borders = false
-# Sort the sidebar by what needs you: blocked/attention, then done, then
-# working, then idle - instead of grouping by workspace.
+prompt_new_tab_name = false
 agent_panel_sort = "priority"
