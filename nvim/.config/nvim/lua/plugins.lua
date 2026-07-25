@@ -5,6 +5,10 @@ local function is_google3()
 	return vim.startswith(cwd, "/google/src/cloud/") or vim.startswith(cwd, "/google/gerrit/")
 end
 
+-- vim-herdr-navigation (herdr plugin) owns <C-h/j/k/l> below; must be set
+-- before vim-tmux-navigator's plugin script runs so it skips its own maps.
+vim.g.tmux_navigator_no_mappings = 1
+
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
 	"https://github.com/tpope/vim-sleuth",
@@ -34,6 +38,17 @@ vim.pack.add({
 })
 
 -- [[ Plugin Configurations ]]
+
+-- <C-h/j/k/l> cross seamlessly between vim splits and herdr panes (falls
+-- back to vim-tmux-navigator's tmux/wincmd behavior outside herdr).
+-- Installed via herdr, not vim.pack: scripts/herdr-setup.sh in dotfiles.
+do
+	local herdr_nav = vim.fn.glob("~/.config/herdr/plugins/github/vim-herdr-navigation-*/editor/nvim.lua")
+	if herdr_nav ~= "" then
+		dofile(vim.fn.expand(vim.split(herdr_nav, "\n")[1]))
+	end
+end
+
 require("gruvbox").setup({
 	inverse = true,
 })
