@@ -25,7 +25,6 @@ with pkgs; [
   clang-tools
   gcc
   rustup
-  bun
   starship
   coreutils
   zsh-autosuggestions
