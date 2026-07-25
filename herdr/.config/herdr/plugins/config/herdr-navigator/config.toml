@@ -81,7 +81,8 @@ open_workspaces = true
 
 # Herdr Plus project templates from:
 # ~/.config/herdr/plugins/config/cloudmanic.herdr-plus/projects/*.toml
-herdr_plus_projects = true
+# Off: herdr-plus isn't installed, so this source is a no-op query.
+herdr_plus_projects = false
 
 # zoxide history from `zoxide query -l`.
 zoxide = true
@@ -98,7 +99,8 @@ servers = true
 sessions = true
 
 # Herdr Plus Quick Actions. Selecting opens the Quick Actions picker.
-herdr_plus_quick_actions = true
+# Off: herdr-plus isn't installed, so this source is a no-op query.
+herdr_plus_quick_actions = false
 
 [theme]
 # Reads ~/.config/herdr/config.toml theme name and [theme.custom] tokens when available.

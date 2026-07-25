@@ -4,6 +4,8 @@ name = "gruvbox"
 
 [keys]
 prefix = "ctrl+a"
+next_agent = "prefix+u"
+previous_agent = "prefix+shift+u"
 
 [[keys.command]]
 key = "prefix+o"
@@ -35,6 +37,25 @@ type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
 
+# jj workspaces: create/remove a jj workspace, opened straight into herdr.
+[[keys.command]]
+key = "prefix+a"
+type = "plugin_action"
+command = "nathanflurry.jj-workspace.new-tab"
+description = "new jj workspace (tab)"
+
+[[keys.command]]
+key = "prefix+shift+a"
+type = "plugin_action"
+command = "nathanflurry.jj-workspace.new"
+description = "new jj workspace (herdr workspace)"
+
+[[keys.command]]
+key = "prefix+d"
+type = "plugin_action"
+command = "nathanflurry.jj-workspace.remove"
+description = "remove current jj workspace"
+
 [ui.sound]
 enabled = true
 
@@ -44,3 +65,6 @@ delay_seconds = 3
 
 [ui]
 show_agent_labels_on_pane_borders = false
+# Sort the sidebar by what needs you: blocked/attention, then done, then
+# working, then idle - instead of grouping by workspace.
+agent_panel_sort = "priority"
