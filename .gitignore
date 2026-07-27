@@ -1,2 +1,8 @@
 fish_variables
 jj/.config/jj/repos/
+herdr/.config/herdr/session.json
+herdr/.config/herdr/.plugins.lock
+herdr/.config/herdr/herdr-client.log
+herdr/.config/herdr/herdr-server.log
+herdr/.config/herdr/plugins.json
+
