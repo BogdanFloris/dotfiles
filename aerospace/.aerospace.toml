@@ -14,13 +14,6 @@ after-login-command = []
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = []
 
-# Keep Picture-in-Picture windows visible across all workspace switches
-exec-on-workspace-change = [
-    '/bin/bash',
-    '-c',
-    '''for id in $(aerospace list-windows --all --format '%{window-id}|%{window-title}' | grep -iE '(Picture-in-Picture|Picture in Picture)' | cut -d'|' -f1); do [ -n "$id" ] && aerospace move-node-to-workspace --window-id "$id" "$AEROSPACE_FOCUSED_WORKSPACE"; done'''
-]
-
 # Start AeroSpace at login
 start-at-login = true
 
@@ -38,16 +31,6 @@ accordion-padding = 5
 # See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-
-# See https://nikitabobko.github.io/AeroSpace/guide#on-window-detected-callbacks
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome'
-if.window-title-regex-substring = '(Picture-in-Picture|Picture in Picture|Picture-in-picture|Picture in picture)'
-run = ['layout floating', 'layout sticky']
-
-[[on-window-detected]]
-if.window-title-regex-substring = '(Picture-in-Picture|Picture in Picture|Picture-in-picture|Picture in picture)'
-run = ['layout floating', 'layout sticky']
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
