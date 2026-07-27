@@ -35,6 +35,7 @@ vim.pack.add({
 	"https://github.com/nvim-lua/plenary.nvim",
 	"https://github.com/nvim-mini/mini.completion",
 	"https://github.com/mfussenegger/nvim-jdtls",
+	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
 })
 
 -- [[ Plugin Configurations ]]
