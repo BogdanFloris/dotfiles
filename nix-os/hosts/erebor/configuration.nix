@@ -160,7 +160,9 @@
   # for studio display brightness
   services.udev.packages = [pkgs.asdbctl];
   services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
+    SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
+    SUBSYSTEM=="pci", ATTR{vendor}=="0x1b21", ATTR{device}=="0x2425", ATTR{power/control}="on"
+    SUBSYSTEM=="pci", ATTR{vendor}=="0x1b21", ATTR{device}=="0x2426", ATTR{power/control}="on"
   '';
 
   environment.systemPackages =
