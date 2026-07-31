@@ -65,7 +65,7 @@ description = "remove current jj workspace"
 enabled = true
 
 [ui.toast]
-delivery = "herdr"
+delivery = "terminal"
 delay_seconds = 3
 
 [ui]
