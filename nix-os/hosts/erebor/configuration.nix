@@ -56,6 +56,7 @@
 
   services.openssh = {
     enable = true;
+    ports = [2222];
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = "no";
@@ -64,12 +65,32 @@
   programs.ssh.startAgent = true;
   services.gnome.gcr-ssh-agent.enable = false;
 
+  # Auto-bans IPs after repeated failed SSH attempts. Matters once the
+  # UniFi port-forward to this port is toggled on for remote access.
+  services.fail2ban.enable = true;
+
+  # Keeps ssh.bogdanfloris.com pointed at the current home IP so the
+  # UniFi port-forward target is reachable even if the ISP rotates it.
+  # cloudflare-ddns-token must be created manually on this machine
+  # (root:root, mode 600) with a Cloudflare API token scoped to
+  # Zone:DNS:Edit on bogdanfloris.com — it is intentionally not in git.
+  services.ddclient = {
+    enable = true;
+    protocol = "cloudflare";
+    zone = "bogdanfloris.com";
+    domains = ["ssh.bogdanfloris.com"];
+    username = "token";
+    passwordFile = "/etc/ddclient-cloudflare-token";
+    ssl = true;
+  };
+
   users.users.bogdan = {
     isNormalUser = true;
     extraGroups = ["wheel" "networkmanager" "video" "input"];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0fES5hYNWz9a6jiqSN1wPEIaVTf4QgdW91z7SEpIxy bogdan.floris@gmail.com"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAZJqaoD38LHTktXQdSnCSJiOxixqvA1+Zuu3RBLB8j google-mac"
     ];
   };
   programs.zsh = {
