@@ -159,6 +159,9 @@
   users.groups.uinput.members = ["bogdan"];
   # for studio display brightness
   services.udev.packages = [pkgs.asdbctl];
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
+  '';
 
   environment.systemPackages =
     (import ../../packages.nix {inherit pkgs;})
