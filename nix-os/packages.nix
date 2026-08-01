@@ -37,6 +37,7 @@ with pkgs; [
   antigravity-cli
   btop
   asdbctl
+  git-repo
 
   # Gnome specific
   gnome-tweaks
