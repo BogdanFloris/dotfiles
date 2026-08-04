@@ -1,0 +1,15 @@
+[agent]
+name = "jetski"
+process_names = ["jetski"]
+
+[[rules]]
+state = "blocked"
+screen_contains = ["Approve command?", "Proceed [y/N]?"]
+
+[[rules]]
+state = "working"
+screen_contains = ["Executing tool", "Thinking..."]
+
+[[rules]]
+state = "idle"
+screen_contains = ["jetski> "]
