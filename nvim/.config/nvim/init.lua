@@ -10,7 +10,23 @@ else
 	vim.o.hlsearch = false
 	vim.wo.relativenumber = true
 	vim.o.mouse = "a"
-	vim.o.clipboard = "unnamedplus"
+	local osc52 = require("vim.ui.clipboard.osc52")
+	local function osc52_paste()
+		return { vim.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+	end
+	vim.g.clipboard = {
+		name = "OSC 52",
+		copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+		paste = { ["+"] = osc52_paste, ["*"] = osc52_paste },
+	}
+
+	vim.api.nvim_create_autocmd("TextYankPost", {
+		callback = function()
+			if vim.v.event.operator == "y" then
+				vim.fn.setreg("+", vim.v.event.regcontents, vim.v.event.regtype)
+			end
+		end,
+	})
 	vim.o.breakindent = true
 	vim.o.undofile = true
 	vim.o.ignorecase = true
