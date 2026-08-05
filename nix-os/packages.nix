@@ -18,6 +18,7 @@ with pkgs; [
   atuin
   zoxide
   neovim
+  helix
   python313
   jdk25
   android-tools
