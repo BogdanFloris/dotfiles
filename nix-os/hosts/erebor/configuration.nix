@@ -91,6 +91,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0fES5hYNWz9a6jiqSN1wPEIaVTf4QgdW91z7SEpIxy bogdan.floris@gmail.com"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAZJqaoD38LHTktXQdSnCSJiOxixqvA1+Zuu3RBLB8j google-mac"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGb/Uk4AmJNlf5C3c1ocs7DNfMCSpHlB5ZCd4OWAaqE4 google-workstation"
     ];
   };
   programs.zsh = {
