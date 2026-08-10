@@ -19,6 +19,7 @@ with pkgs; [
   diffnav
   difftastic
   mergiraf
+  glow
   atuin
   zoxide
   neovim
