@@ -39,6 +39,10 @@
             stow
             bat
             jujutsu
+            delta
+            diffnav
+            difftastic
+            mergiraf
             atuin
             zoxide
             neovim

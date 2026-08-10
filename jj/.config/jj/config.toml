@@ -5,3 +5,15 @@ email = "bogdan.floris@gmail.com"
 [ui]
 editor = "nvim"
 default-command = "log"
+
+# structural diff - ignores reindents/reflows, shows what actually changed
+diff-formatter = "difft"
+
+# interactive slots: jj split/diffedit, and conflict resolution
+diff-editor = ":builtin"
+merge-editor = "mergiraf"
+
+[aliases]
+# file-tree TUI over the changeset. --git overrides the difft formatter above,
+# since diffnav parses a git-format diff and renders it via delta itself.
+dn = ["util", "exec", "--", "sh", "-c", "jj diff --git \"$@\" | diffnav", "jj-dn"]
