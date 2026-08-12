@@ -209,6 +209,7 @@ require("conform").setup({
 		c = { "clang-format" },
 		cpp = { "clang-format" },
 		nix = { "alejandra" },
+		proto = { "buf" },
 	},
 })
 

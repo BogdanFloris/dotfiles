@@ -26,6 +26,8 @@
         paths =
           (with pkgs; [
             alejandra
+            buf
+            protols
             tmux
             direnv
             sesh

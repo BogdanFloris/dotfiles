@@ -1,6 +1,8 @@
 {pkgs}:
 with pkgs; [
   alejandra
+  buf
+  protols
   tmux
   herdr
   direnv
