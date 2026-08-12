@@ -32,6 +32,11 @@ vim.keymap.set("n", "<leader>sr", fzf.resume, { desc = "Search Resume" })
 vim.keymap.set("n", "<leader>sm", fzf.marks, { desc = "Search Marks" })
 vim.keymap.set("n", "<leader>st", "<cmd>FzfLua todo_comments<cr>", { desc = "Search todo comments" })
 
+-- [[ Formatting ]]
+vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+	require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format buffer" })
+
 -- [[ Oil ]]
 vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 

@@ -34,11 +34,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			end, "Toggle Inlay Hints")
 		end
 
-		-- Format with conform
-		map("<leader>cf", function()
-			require("conform").format({ async = true, lsp_fallback = true })
-		end, "Format buffer", { "n", "v" })
-
 		-- Ruff-specific: organize imports
 		if client.name == "ruff" then
 			map("<leader>co", function()
