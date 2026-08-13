@@ -46,6 +46,7 @@ with pkgs; [
   btop
   asdbctl
   git-repo
+  (llama-cpp.override {vulkanSupport = true;})
 
   # Gnome specific
   gnome-tweaks
