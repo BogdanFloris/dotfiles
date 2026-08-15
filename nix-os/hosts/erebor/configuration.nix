@@ -101,6 +101,10 @@
     syntaxHighlighting.enable = true;
   };
 
+  programs.steam = {
+    enable = true;
+  };
+
   services.xremap = {
     enable = true;
     withGnome = true;
