@@ -1,0 +1,38 @@
+# Atuin - shell history. Local only, no account, no sync server.
+#
+# Ctrl-R opens scoped to the current git repo, so `aosp` history doesn't drown
+# `dotfiles` history. Ctrl-R again inside the search cycles the scope:
+#   workspace (repo) -> directory -> global -> host -> session
+#
+# Up-arrow is deliberately left to zsh's own prefix search; see zsh/.zshrc.
+
+auto_sync = false
+update_check = false
+
+search_mode = "fuzzy"
+
+# Filter to commands run anywhere inside the current repo tree. Falls through to
+# the next filter automatically when the cwd isn't in a repo.
+workspaces = true
+filter_mode = "workspace"
+
+[search]
+filters = ["workspace", "directory", "global", "host", "session"]
+
+# Enter puts the command on the prompt line instead of running it immediately -
+# recalled commands from another project usually want a look first.
+enter_accept = false
+
+style = "compact"
+inline_height = 20
+show_tabs = false
+
+[ui]
+# Directory earns its column here more than duration does: with several projects
+# in flight it's the fastest way to tell two similar commands apart.
+columns = ["time", "directory", "command"]
+
+# The daemon exists mainly to batch background sync, which is off here. Flip to
+# true if shell startup or command recording ever feels laggy.
+[daemon]
+enabled = false

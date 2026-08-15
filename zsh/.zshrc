@@ -3,7 +3,12 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-setopt histignorealldups sharehistory
+# NixOS's /etc/zshrc turns on SHARE_HISTORY before this file runs, which
+# interleaves every pane's commands into every other pane - painful with several
+# projects open at once. Atuin owns cross-pane recall (ctrl-r); zsh's own
+# history stays per-pane for up-arrow, appended as it goes.
+unsetopt share_history
+setopt histignorealldups inc_append_history
 setopt HIST_IGNORE_SPACE
 
 HISTSIZE=50000
@@ -96,6 +101,12 @@ export FZF_DEFAULT_OPTS="
   --bind 'ctrl-d:preview-page-down'
 "
 source <(fzf --zsh)
+
+# Atuin (ctrl-r). Sourced before the highlighting plugins so its widgets get
+# wrapped. Up-arrow stays on zsh prefix search - see bindkey below.
+if (( $+commands[atuin] )); then
+  eval "$(atuin init zsh --disable-up-arrow)"
+fi
 
 # Autosuggestions (Ghost Text)
 if [[ -f "$HOME/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
