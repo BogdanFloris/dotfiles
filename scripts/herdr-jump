@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
-# herdr-jump - fzf picker over live Herdr state (agents, workspaces) plus zoxide
-# directories. The primary way to move between workspaces; prefix+1..9 stays on
-# tabs within the focused workspace.
+# herdr-jump - fzf picker over live Herdr workspaces plus zoxide directories.
+# The primary way to move between workspaces; prefix+1..9 stays on tabs within
+# the focused workspace, and agents have their own keys (prefix+alt+1..9).
 #
 # Bound to prefix+o as a popup in herdr/.config/herdr/config.toml.
 #
 #   herdr-jump                 interactive picker
-#   herdr-jump --list <src>    print rows for a source (all|agents|workspaces|dirs)
+#   herdr-jump --list <src>    print rows for a source (all|workspaces|dirs)
 #   herdr-jump --preview <act> render the preview pane for an action token
 #
-# Rows are "<display>\t<action>"; actions are ws:<id>, ag:<pane_id>, dir:<path>.
+# Rows are "<display>\t<action>"; actions are ws:<id> and dir:<path>.
+#
+# Workspaces sort most-recently-used first, with the current one pushed to the
+# bottom - so the top row is where you just came from. Herdr's API exposes no
+# focus history, so recency is recorded here on each jump, keyed by directory
+# (workspace ids are session-scoped and get recycled across restarts).
 set -euo pipefail
 
 self=$(realpath "$0")
@@ -18,70 +23,85 @@ self=$(realpath "$0")
 # preview and 40% height, neither of which suits a full-popup picker.
 unset FZF_DEFAULT_OPTS FZF_DEFAULT_COMMAND
 
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/herdr-jump"
+mru_file="$state_dir/recent-workspaces"
+
 snapshot() {
   herdr api snapshot | jq -c '.result.snapshot'
 }
 
-# Status icon, color and sort rank. Order mirrors Herdr's own "priority" agent
-# panel sort: error/blocked, attention/request, done, working, then idle.
+mru_list() {
+  cat "$mru_file" 2>/dev/null || true
+}
+
+# Most recent first, deduped, bounded. Written on jump, not on focus, so
+# switches made outside the picker (prefix+[ / prefix+]) aren't seen.
+mru_record() {
+  local dir=$1 tmp
+  [[ -n $dir ]] || return 0
+  mkdir -p "$state_dir"
+  tmp=$(mktemp "$state_dir/.recent.XXXXXX")
+  {
+    printf '%s\n' "$dir"
+    mru_list | grep -vxF "$dir" || true
+  } | head -50 >"$tmp"
+  mv -f "$tmp" "$mru_file"
+}
+
+# Status icon and color, matching Herdr's own agent state vocabulary. The enum
+# is exactly idle/working/blocked/done/unknown; anything else falls through.
 jq_status_defs='
-def rank: {"error":0,"blocked":0,"request":1,"attention":1,"waiting":1,
-           "done":2,"working":3,"idle":4}[.] // 5;
-def icon: {"error":"✖","blocked":"✖","request":"◆","attention":"◆","waiting":"◆",
-           "done":"✓","working":"◐","idle":"✳"}[.] // "·";
-def color: {"error":"31","blocked":"31","request":"35","attention":"35","waiting":"35",
-            "done":"32","working":"33","idle":"36"}[.] // "90";
+def icon: {"blocked":"✖","done":"✓","working":"◐","idle":"✳"}[.] // "·";
+def color: {"blocked":"31","done":"32","working":"33","idle":"36"}[.] // "90";
 def pad($n): (. + " " * $n)[:$n];
 def home: "'"$HOME"'";
 def tilde: if startswith(home) then "~" + .[(home | length):] else . end;
 '
 
 list_workspaces() {
-  snapshot | jq -r "$jq_status_defs"'
+  local recent
+  recent=$(mru_list | jq -R -s 'split("\n") | map(select(length > 0))')
+  snapshot | jq -r --argjson recent "$recent" "$jq_status_defs"'
     .panes as $panes
-    | .workspaces[]
-    | . as $w
-    | ($panes | map(select(.workspace_id == $w.workspace_id)) | .[0].cwd // "") as $cwd
+    | [ .workspaces[]
+        | . as $w
+        | (($panes | map(select(.workspace_id == $w.workspace_id)) | .[0].cwd) // "") as $cwd
+        | {w: $w, cwd: $cwd,
+           rank: (if $w.focused then 99999
+                  else ($recent | index($cwd)) // 9000
+                  end)} ]
+    | sort_by(.rank)[]
+    | .cwd as $cwd
+    | .w as $w
     | ($w.agent_status // "unknown") as $st
     | "\u001b[" + ($st|color) + "m" + ($st|icon) + "\u001b[0m "
-      + (if $w.focused then "\u001b[1m" else "" end)
+      + (if $w.focused then "\u001b[2m" else "" end)
       + ($w.label | pad(22))
-      + (if $w.focused then "\u001b[0m" else "" end)
-      + "\u001b[90mworkspace  " + ($cwd | tilde | pad(34)) + "\u001b[0m"
+      + "\u001b[90m" + (if $w.focused then "current   " else "workspace " end)
+      + ($cwd | tilde | pad(34)) + "\u001b[0m"
       + "\t" + "ws:" + $w.workspace_id
   '
 }
 
-list_agents() {
-  snapshot | jq -r "$jq_status_defs"'
-    (.workspaces | map({key: .workspace_id, value: .label}) | from_entries) as $labels
-    | .agents
-    | map(. + {r: ((.agent_status // "unknown") | rank)})
-    | sort_by(.r)[]
-    | ((.agent_status // "unknown") as $st
-       | "\u001b[" + ($st|color) + "m" + ($st|icon) + "\u001b[0m "
-         + (($labels[.workspace_id] // .workspace_id) | pad(22))
-         + "\u001b[90m" + ((.agent // "agent") | pad(8)) + ($st | pad(9)) + "\u001b[0m"
-         + ((.terminal_title_stripped // "") | pad(26))
-         + "\t" + "ag:" + .pane_id)
-  '
-}
-
 # zoxide history, minus directories a workspace is already open on (those are
-# reachable as workspace rows) and anything that no longer exists.
+# reachable as workspace rows) and anything that no longer exists. zoxide
+# already returns these in frecency order.
 list_dirs() {
-  local open
-  open=$(snapshot | jq -r '.panes[].cwd // empty' | sort -u)
-  zoxide query -l 2>/dev/null | while IFS= read -r dir; do
-    [[ -d $dir && $dir != "/" ]] || continue
-    grep -qxF "$dir" <<<"$open" && continue
-    printf '\033[90m·\033[0m %-22s\033[90m%-11s%s\033[0m\t%s\n' \
-      "$(basename "$dir")" "dir" "${dir/#$HOME/\~}" "dir:$dir"
-  done
+  local open dir
+  # Newline-delimited set, matched with a builtin substring test. Everything in
+  # this loop is fork-free (no basename, no grep per entry) so the cost stays
+  # flat as zoxide history grows over a long-lived session.
+  open=$'\n'$(snapshot | jq -r '.panes[].cwd // empty')$'\n'
+  while IFS= read -r dir; do
+    [[ $dir == "/" ]] && continue
+    [[ $open == *$'\n'"$dir"$'\n'* ]] && continue
+    [[ -d $dir ]] || continue
+    printf '\033[90m·\033[0m %-22s\033[90m%-10s%s\033[0m\t%s\n' \
+      "${dir##*/}" "dir" "${dir/#$HOME/\~}" "dir:$dir"
+  done < <(zoxide query -l 2>/dev/null)
 }
 
 list_all() {
-  list_agents
   list_workspaces
   list_dirs
 }
@@ -89,7 +109,6 @@ list_all() {
 do_list() {
   case ${1:-all} in
   all) list_all ;;
-  agents) list_agents ;;
   workspaces) list_workspaces ;;
   dirs) list_dirs ;;
   *)
@@ -102,10 +121,6 @@ do_list() {
 do_preview() {
   local action=${1:-}
   case $action in
-  ag:*)
-    herdr agent read "${action#ag:}" --lines 60 --format text 2>/dev/null ||
-      echo "(no output)"
-    ;;
   ws:*)
     local id=${action#ws:}
     snapshot | jq -r "$jq_status_defs"'
@@ -134,10 +149,15 @@ do_preview() {
 do_jump() {
   local action=$1
   case $action in
-  ws:*) herdr workspace focus "${action#ws:}" >/dev/null ;;
-  ag:*) herdr agent focus "${action#ag:}" >/dev/null ;;
+  ws:*)
+    local id=${action#ws:}
+    mru_record "$(snapshot | jq -r --arg id "$id" '
+      [.panes[] | select(.workspace_id == $id) | .cwd] | first // empty')"
+    herdr workspace focus "$id" >/dev/null
+    ;;
   dir:*)
     local dir=${action#dir:} existing
+    mru_record "$dir"
     # Reuse a workspace already rooted at this directory rather than opening a
     # second one; only create when nothing matches.
     existing=$(snapshot | jq -r --arg d "$dir" '
@@ -172,13 +192,12 @@ selection=$(
     --border=none \
     --info=inline \
     --prompt='jump ❯ ' \
-    --header='^a agents  ^w workspaces  ^z dirs  ^g all  ^o preview' \
+    --header='^w workspaces  ^z dirs  ^g all  ^o preview' \
     --preview="$self --preview {2}" \
     --preview-window='right:50%:wrap:nohidden' \
     --bind="ctrl-o:toggle-preview" \
     --bind="ctrl-u:preview-page-up" \
     --bind="ctrl-d:preview-page-down" \
-    --bind="ctrl-a:change-prompt(agents ❯ )+reload($self --list agents)" \
     --bind="ctrl-w:change-prompt(workspaces ❯ )+reload($self --list workspaces)" \
     --bind="ctrl-z:change-prompt(dirs ❯ )+reload($self --list dirs)" \
     --bind="ctrl-g:change-prompt(jump ❯ )+reload($self --list all)" \
