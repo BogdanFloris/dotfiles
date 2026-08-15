@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # herdr-jump - fzf picker over live Herdr state (agents, workspaces) plus zoxide
-# directories, for the long tail that prefix+1..9 doesn't cover.
+# directories. The primary way to move between workspaces; prefix+1..9 stays on
+# tabs within the focused workspace.
 #
 # Bound to prefix+o as a popup in herdr/.config/herdr/config.toml.
 #

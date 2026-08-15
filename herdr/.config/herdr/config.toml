@@ -6,15 +6,17 @@ name = "gruvbox"
 prefix = "ctrl+a"
 
 # --- Direct addressing -------------------------------------------------------
-# Workspaces are the primary axis (one per project), so they get the bare
-# numbers; tabs move to shift+number.
-switch_workspace = "prefix+1..9"
-switch_tab = "prefix+shift+1..9"
+# Bare numbers are tabs, within the focused workspace. This is also herdr's
+# default; pinned explicitly so it can't drift. Workspaces are reached with
+# prefix+o or the brackets, not numbers.
+switch_tab = "prefix+1..9"
+
 # Agent rows in sidebar order (priority sort), so 1 is whatever needs attention.
+# alt keeps these clear of the tab numbers.
 focus_agent = "prefix+alt+1..9"
 
 # No last_pane binding: herdr has no last-*workspace* toggle, and the pane-level
-# one isn't what's wanted here. prefix+[ / prefix+] and the numbers cover it.
+# one isn't what's wanted here.
 previous_workspace = "prefix+["
 next_workspace = "prefix+]"
 
@@ -22,7 +24,8 @@ next_agent = "prefix+u"
 previous_agent = "prefix+shift+u"
 
 # --- Fuzzy picker ------------------------------------------------------------
-# The long tail: agents by title, workspaces, and zoxide dirs not yet open.
+# The primary way across workspaces: agents by title, workspaces, and zoxide
+# dirs not yet open.
 [[keys.command]]
 key = "prefix+o"
 type = "popup"
