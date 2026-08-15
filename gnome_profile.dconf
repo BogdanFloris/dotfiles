@@ -201,7 +201,6 @@ unmaximize=@as []
 [org/gnome/desktop/wm/preferences]
 button-layout='appmenu:minimize,maximize,close'
 focus-mode='mouse'
-focus-new-windows='strict'
 num-workspaces=9
 
 [org/gnome/evolution-data-server]
