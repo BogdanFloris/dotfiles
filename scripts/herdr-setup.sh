@@ -8,7 +8,8 @@
 set -euo pipefail
 
 plugins=(
-  "thanhdat77/herdr-navigator --ref v0.3.3"
+  # Navigation is handled by built-in indexed keybindings plus scripts/herdr-jump,
+  # so no navigator plugin here.
   "paulbkim-dev/vim-herdr-navigation --ref v0.1.0"
   # No tagged releases yet - pinned to the commit installed here.
   "NathanFlurry/herdr-plugin-jj-workspace --ref a9f1d3bcdaa2354e336a5173da85cbe4970c0f2e"

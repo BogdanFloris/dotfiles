@@ -4,21 +4,34 @@ name = "gruvbox"
 
 [keys]
 prefix = "ctrl+a"
+
+# --- Direct addressing -------------------------------------------------------
+# Workspaces are the primary axis (one per project), so they get the bare
+# numbers; tabs move to shift+number.
+switch_workspace = "prefix+1..9"
+switch_tab = "prefix+shift+1..9"
+# Agent rows in sidebar order (priority sort), so 1 is whatever needs attention.
+focus_agent = "prefix+alt+1..9"
+
+# No last_pane binding: herdr has no last-*workspace* toggle, and the pane-level
+# one isn't what's wanted here. prefix+[ / prefix+] and the numbers cover it.
+previous_workspace = "prefix+["
+next_workspace = "prefix+]"
+
 next_agent = "prefix+u"
 previous_agent = "prefix+shift+u"
 
+# --- Fuzzy picker ------------------------------------------------------------
+# The long tail: agents by title, workspaces, and zoxide dirs not yet open.
 [[keys.command]]
 key = "prefix+o"
-type = "plugin_action"
-command = "herdr-navigator.open"
+type = "popup"
+command = "sh -c '$HOME/dotfiles/scripts/herdr-jump'"
+width = "85%"
+height = "75%"
 description = "jump to anything"
 
-[[keys.command]]
-key = "prefix+l"
-type = "plugin_action"
-command = "herdr-navigator.jump-back"
-description = "last workspace"
-
+# --- Pane navigation (shared with vim) ---------------------------------------
 [[keys.command]]
 key = "ctrl+h"
 type = "plugin_action"
@@ -43,6 +56,7 @@ type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
 
+# --- jj workspaces -----------------------------------------------------------
 [[keys.command]]
 key = "prefix+a"
 type = "plugin_action"

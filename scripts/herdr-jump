@@ -1,0 +1,188 @@
+#!/usr/bin/env bash
+# herdr-jump - fzf picker over live Herdr state (agents, workspaces) plus zoxide
+# directories, for the long tail that prefix+1..9 doesn't cover.
+#
+# Bound to prefix+o as a popup in herdr/.config/herdr/config.toml.
+#
+#   herdr-jump                 interactive picker
+#   herdr-jump --list <src>    print rows for a source (all|agents|workspaces|dirs)
+#   herdr-jump --preview <act> render the preview pane for an action token
+#
+# Rows are "<display>\t<action>"; actions are ws:<id>, ag:<pane_id>, dir:<path>.
+set -euo pipefail
+
+self=$(realpath "$0")
+
+# Deterministic fzf: the interactive FZF_DEFAULT_OPTS in .zshrc sets a bat
+# preview and 40% height, neither of which suits a full-popup picker.
+unset FZF_DEFAULT_OPTS FZF_DEFAULT_COMMAND
+
+snapshot() {
+  herdr api snapshot | jq -c '.result.snapshot'
+}
+
+# Status icon, color and sort rank. Order mirrors Herdr's own "priority" agent
+# panel sort: error/blocked, attention/request, done, working, then idle.
+jq_status_defs='
+def rank: {"error":0,"blocked":0,"request":1,"attention":1,"waiting":1,
+           "done":2,"working":3,"idle":4}[.] // 5;
+def icon: {"error":"✖","blocked":"✖","request":"◆","attention":"◆","waiting":"◆",
+           "done":"✓","working":"◐","idle":"✳"}[.] // "·";
+def color: {"error":"31","blocked":"31","request":"35","attention":"35","waiting":"35",
+            "done":"32","working":"33","idle":"36"}[.] // "90";
+def pad($n): (. + " " * $n)[:$n];
+def home: "'"$HOME"'";
+def tilde: if startswith(home) then "~" + .[(home | length):] else . end;
+'
+
+list_workspaces() {
+  snapshot | jq -r "$jq_status_defs"'
+    .panes as $panes
+    | .workspaces[]
+    | . as $w
+    | ($panes | map(select(.workspace_id == $w.workspace_id)) | .[0].cwd // "") as $cwd
+    | ($w.agent_status // "unknown") as $st
+    | "\u001b[" + ($st|color) + "m" + ($st|icon) + "\u001b[0m "
+      + (if $w.focused then "\u001b[1m" else "" end)
+      + ($w.label | pad(22))
+      + (if $w.focused then "\u001b[0m" else "" end)
+      + "\u001b[90mworkspace  " + ($cwd | tilde | pad(34)) + "\u001b[0m"
+      + "\t" + "ws:" + $w.workspace_id
+  '
+}
+
+list_agents() {
+  snapshot | jq -r "$jq_status_defs"'
+    (.workspaces | map({key: .workspace_id, value: .label}) | from_entries) as $labels
+    | .agents
+    | map(. + {r: ((.agent_status // "unknown") | rank)})
+    | sort_by(.r)[]
+    | ((.agent_status // "unknown") as $st
+       | "\u001b[" + ($st|color) + "m" + ($st|icon) + "\u001b[0m "
+         + (($labels[.workspace_id] // .workspace_id) | pad(22))
+         + "\u001b[90m" + ((.agent // "agent") | pad(8)) + ($st | pad(9)) + "\u001b[0m"
+         + ((.terminal_title_stripped // "") | pad(26))
+         + "\t" + "ag:" + .pane_id)
+  '
+}
+
+# zoxide history, minus directories a workspace is already open on (those are
+# reachable as workspace rows) and anything that no longer exists.
+list_dirs() {
+  local open
+  open=$(snapshot | jq -r '.panes[].cwd // empty' | sort -u)
+  zoxide query -l 2>/dev/null | while IFS= read -r dir; do
+    [[ -d $dir && $dir != "/" ]] || continue
+    grep -qxF "$dir" <<<"$open" && continue
+    printf '\033[90m·\033[0m %-22s\033[90m%-11s%s\033[0m\t%s\n' \
+      "$(basename "$dir")" "dir" "${dir/#$HOME/\~}" "dir:$dir"
+  done
+}
+
+list_all() {
+  list_agents
+  list_workspaces
+  list_dirs
+}
+
+do_list() {
+  case ${1:-all} in
+  all) list_all ;;
+  agents) list_agents ;;
+  workspaces) list_workspaces ;;
+  dirs) list_dirs ;;
+  *)
+    echo "unknown source: $1" >&2
+    exit 2
+    ;;
+  esac
+}
+
+do_preview() {
+  local action=${1:-}
+  case $action in
+  ag:*)
+    herdr agent read "${action#ag:}" --lines 60 --format text 2>/dev/null ||
+      echo "(no output)"
+    ;;
+  ws:*)
+    local id=${action#ws:}
+    snapshot | jq -r "$jq_status_defs"'
+      .panes as $panes
+      | .tabs as $tabs
+      | (.workspaces[] | select(.workspace_id == "'"$id"'")) as $w
+      | ($panes | map(select(.workspace_id == $w.workspace_id))) as $wp
+      | "  " + $w.label + "  (" + ($w.tab_count|tostring) + " tabs, "
+        + ($w.pane_count|tostring) + " panes)",
+        "  " + (($wp[0].cwd // "") | tilde),
+        "",
+        ($tabs[] | select(.workspace_id == "'"$id"'")
+          | "  " + ((.agent_status // "unknown") | icon) + " " + .label)
+    '
+    ;;
+  dir:*)
+    local dir=${action#dir:}
+    echo "  $dir"
+    echo
+    ls -A --color=always "$dir" 2>/dev/null | head -40
+    ;;
+  *) echo "(nothing to preview)" ;;
+  esac
+}
+
+do_jump() {
+  local action=$1
+  case $action in
+  ws:*) herdr workspace focus "${action#ws:}" >/dev/null ;;
+  ag:*) herdr agent focus "${action#ag:}" >/dev/null ;;
+  dir:*)
+    local dir=${action#dir:} existing
+    # Reuse a workspace already rooted at this directory rather than opening a
+    # second one; only create when nothing matches.
+    existing=$(snapshot | jq -r --arg d "$dir" '
+      [.panes[] | select(.cwd == $d) | .workspace_id] | first // empty')
+    if [[ -n $existing ]]; then
+      herdr workspace focus "$existing" >/dev/null
+    else
+      herdr workspace create --cwd "$dir" --label "$(basename "$dir")" --focus >/dev/null
+    fi
+    ;;
+  esac
+}
+
+case ${1:-} in
+--list)
+  do_list "${2:-all}"
+  exit 0
+  ;;
+--preview)
+  do_preview "${2:-}"
+  exit 0
+  ;;
+esac
+
+selection=$(
+  do_list all | fzf \
+    --ansi \
+    --delimiter=$'\t' \
+    --with-nth=1 \
+    --height=100% \
+    --layout=reverse \
+    --border=none \
+    --info=inline \
+    --prompt='jump ❯ ' \
+    --header='^a agents  ^w workspaces  ^z dirs  ^g all  ^o preview' \
+    --preview="$self --preview {2}" \
+    --preview-window='right:50%:wrap:nohidden' \
+    --bind="ctrl-o:toggle-preview" \
+    --bind="ctrl-u:preview-page-up" \
+    --bind="ctrl-d:preview-page-down" \
+    --bind="ctrl-a:change-prompt(agents ❯ )+reload($self --list agents)" \
+    --bind="ctrl-w:change-prompt(workspaces ❯ )+reload($self --list workspaces)" \
+    --bind="ctrl-z:change-prompt(dirs ❯ )+reload($self --list dirs)" \
+    --bind="ctrl-g:change-prompt(jump ❯ )+reload($self --list all)" \
+    || true
+)
+
+[[ -n $selection ]] || exit 0
+do_jump "${selection##*$'\t'}"
