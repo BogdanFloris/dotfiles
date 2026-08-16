@@ -90,7 +90,7 @@ automount=false
 autorun-never=true
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-datetime-panel', 'gnome-power-panel', 'org-gnome-tweaks', 'ulauncher', 'org-gnome-settings', 'cider', 'org-gnome-baobab', 'com-mitchellh-ghostty', 'gnome-about-panel', 'org-gnome-extensions', 'google-chrome']
+application-children=['gnome-datetime-panel', 'gnome-power-panel', 'org-gnome-tweaks', 'ulauncher', 'org-gnome-settings', 'cider', 'org-gnome-baobab', 'com-mitchellh-ghostty', 'gnome-about-panel', 'org-gnome-extensions', 'google-chrome', 'steam']
 show-in-lock-screen=false
 
 [org/gnome/desktop/notifications/application/cider]
@@ -122,6 +122,9 @@ application-id='org.gnome.Settings.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-tweaks]
 application-id='org.gnome.tweaks.desktop'
+
+[org/gnome/desktop/notifications/application/steam]
+application-id='steam.desktop'
 
 [org/gnome/desktop/notifications/application/ulauncher]
 application-id='ulauncher.desktop'
@@ -244,7 +247,7 @@ sleep-inactive-ac-type='nothing'
 always-show-log-out=true
 disable-user-extensions=false
 disabled-extensions=['dash-to-panel@jderose9.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'ubuntu-appindicators@ubuntu.com', 'gnome-mosaic@jardon.github.com', 'forge@jmmaranan.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'light-style@gnome-shell-extensions.gcampax.github.com', 'Studi-Brightness-Control@matey-0']
-enabled-extensions=['launch-new-instance@gnome-shell-extensions.gcampax.github.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'logomenu@aryan_k', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'xremap@k0kubun.com', 'tiling-assistant@leleat-on-github', 'arcmenu@arcmenu.com', 'appindicatorsupport@rgcjonas.gmail.com', 'nextpinp@leonid.nasedkin']
+enabled-extensions=['launch-new-instance@gnome-shell-extensions.gcampax.github.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'logomenu@aryan_k', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'xremap@k0kubun.com', 'tiling-assistant@leleat-on-github', 'arcmenu@arcmenu.com', 'appindicatorsupport@rgcjonas.gmail.com', 'nextpinp@leonid.nasedkin', 'session-startup-workspaces@bogdanfloris.com']
 favorite-apps=['google-chrome.desktop', 'com.mitchellh.ghostty.desktop']
 last-selected-power-profile='performance'
 

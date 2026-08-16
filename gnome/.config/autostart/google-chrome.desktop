@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Google Chrome
+Comment=Started at login; the session-startup-workspaces extension pins it to workspace 1.
+Exec=google-chrome-stable
+Icon=google-chrome
+Terminal=false
+X-GNOME-Autostart-enabled=true

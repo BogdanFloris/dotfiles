@@ -1,0 +1,7 @@
+{
+  "uuid": "session-startup-workspaces@bogdanfloris.com",
+  "name": "Session Startup Workspaces",
+  "description": "Pins the apps launched from ~/.config/autostart to fixed workspaces, but only during the first 30 seconds of a session. Windows opened later are left where they are.",
+  "shell-version": ["49", "50", "51"],
+  "version": 1
+}

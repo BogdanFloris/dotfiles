@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Ghostty
+Comment=Started at login; the session-startup-workspaces extension pins it to workspace 2.
+Exec=ghostty --gtk-single-instance=true
+Icon=com.mitchellh.ghostty
+Terminal=false
+X-GNOME-Autostart-enabled=true
