@@ -77,12 +77,15 @@
     };
   };
 
-  # Auto-bans IPs after repeated failed SSH attempts. Matters once the
-  # UniFi port-forward to this port is toggled on for remote access.
+  # Auto-bans IPs after repeated failed SSH attempts. Matters because
+  # sshd is exposed to the internet over IPv6 (see ddclient below).
   services.fail2ban.enable = true;
 
-  # Keeps ssh.bogdanfloris.com pointed at the current home IP so the
-  # UniFi port-forward target is reachable even if the ISP rotates it.
+  # Keeps the AAAA record of ssh.bogdanfloris.com pointed at this
+  # machine's stable global IPv6 address (the Digi prefix is dynamic).
+  # Remote SSH comes in directly over IPv6 — IPv4 is behind CGNAT, so
+  # the A record is not updated (usev4 disabled) and port forwarding
+  # is useless. Requires a UniFi rule allowing inbound v6 TCP 2222.
   # cloudflare-ddns-token must be created manually on this machine
   # (root:root, mode 600) with a Cloudflare API token scoped to
   # Zone:DNS:Edit on bogdanfloris.com — it is intentionally not in git.
@@ -94,6 +97,8 @@
     username = "token";
     passwordFile = "/etc/ddclient-cloudflare-token";
     ssl = true;
+    usev4 = "disabled";
+    usev6 = "ifv6, ifv6=enp10s0";
   };
 
   users.users.bogdan = {
