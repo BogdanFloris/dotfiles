@@ -66,6 +66,17 @@
   programs.ssh.startAgent = true;
   services.gnome.gcr-ssh-agent.enable = false;
 
+  # mDNS so LAN clients can reach this host as erebor.local regardless
+  # of what IP the DHCP lease lands on.
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+  };
+
   # Auto-bans IPs after repeated failed SSH attempts. Matters once the
   # UniFi port-forward to this port is toggled on for remote access.
   services.fail2ban.enable = true;
