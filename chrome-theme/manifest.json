@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Adwaita Dark",
+  "version": "1.0",
+  "description": "Neutral dark grey, matching GTK Adwaita dark. No blue tint.",
+  "theme": {
+    "colors": {
+      "frame": [35, 35, 35],
+      "frame_inactive": [48, 48, 48],
+      "frame_incognito": [26, 26, 26],
+      "frame_incognito_inactive": [38, 38, 38],
+      "toolbar": [48, 48, 48],
+      "tab_text": [243, 243, 241],
+      "tab_background_text": [145, 145, 144],
+      "tab_background_text_inactive": [145, 145, 144],
+      "bookmark_text": [243, 243, 241],
+      "toolbar_button_icon": [243, 243, 241],
+      "omnibox_background": [45, 45, 45],
+      "omnibox_text": [243, 243, 241],
+      "ntp_background": [45, 45, 45],
+      "ntp_text": [243, 243, 241],
+      "ntp_link": [153, 193, 241]
+    },
+    "properties": {
+      "ntp_logo_alternate": 1
+    }
+  }
+}
