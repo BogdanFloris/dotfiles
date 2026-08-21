@@ -90,11 +90,8 @@ automount=false
 autorun-never=true
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-datetime-panel', 'gnome-power-panel', 'org-gnome-tweaks', 'ulauncher', 'org-gnome-settings', 'cider', 'org-gnome-baobab', 'com-mitchellh-ghostty', 'gnome-about-panel', 'org-gnome-extensions', 'google-chrome', 'steam']
+application-children=['gnome-datetime-panel', 'gnome-power-panel', 'org-gnome-tweaks', 'ulauncher', 'org-gnome-settings', 'org-gnome-baobab', 'com-mitchellh-ghostty', 'gnome-about-panel', 'org-gnome-extensions', 'google-chrome', 'steam']
 show-in-lock-screen=false
-
-[org/gnome/desktop/notifications/application/cider]
-application-id='cider.desktop'
 
 [org/gnome/desktop/notifications/application/com-mitchellh-ghostty]
 application-id='com.mitchellh.ghostty.desktop'

@@ -50,7 +50,6 @@ with pkgs; [
 
   # Gnome specific
   gnome-tweaks
-  cider-2
   discord
   gnome-extension-manager
   gnomeExtensions.arcmenu

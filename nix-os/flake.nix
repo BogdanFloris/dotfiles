@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     pwndbg.url = "github:pwndbg/pwndbg";
+    sidra.url = "github:wimpysworld/sidra";
     xremap-flake.url = "github:xremap/nix-flake";
 
     disko = {
@@ -23,6 +24,7 @@
     nixpkgs,
     flake-utils,
     pwndbg,
+    sidra,
     xremap-flake,
     disko,
     lanzaboote,
@@ -40,6 +42,7 @@
         paths =
           (import ./packages.nix {inherit pkgs;})
           ++ [pwndbg.packages.${system}.pwndbg]
+          ++ lib.optionals pkgs.stdenv.isLinux [sidra.packages.${system}.default]
           ++ lib.optionals pkgs.stdenv.isLinux [pkgs.xclip pkgs.wl-clipboard];
       };
     }))
@@ -50,6 +53,7 @@
           disko.nixosModules.disko
           lanzaboote.nixosModules.lanzaboote
           xremap-flake.nixosModules.default
+          {environment.systemPackages = [sidra.packages.x86_64-linux.default];}
           ./hosts/erebor/disko.nix
           ./hosts/erebor/hardware-configuration.nix
           ./hosts/erebor/configuration.nix
