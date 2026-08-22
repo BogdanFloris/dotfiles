@@ -66,6 +66,9 @@
   programs.ssh.startAgent = true;
   services.gnome.gcr-ssh-agent.enable = false;
 
+  # For linking
+  programs.nix-ld.enable = true;
+
   # mDNS so LAN clients can reach this host as erebor.local regardless
   # of what IP the DHCP lease lands on.
   services.avahi = {
