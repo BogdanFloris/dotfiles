@@ -106,7 +106,7 @@
 
   users.users.bogdan = {
     isNormalUser = true;
-    extraGroups = ["wheel" "networkmanager" "video" "input"];
+    extraGroups = ["wheel" "networkmanager" "video" "input" "dialout"];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0fES5hYNWz9a6jiqSN1wPEIaVTf4QgdW91z7SEpIxy bogdan.floris@gmail.com"
@@ -204,7 +204,10 @@
   users.groups.input.members = ["bogdan"];
   users.groups.uinput.members = ["bogdan"];
   # for studio display brightness
-  services.udev.packages = [pkgs.asdbctl];
+  services.udev.packages = [
+    pkgs.asdbctl
+    pkgs.platformio-core.udev
+  ];
   services.udev.extraRules = ''
     SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
     SUBSYSTEM=="pci", ATTR{vendor}=="0x1b21", ATTR{device}=="0x2425", ATTR{power/control}="on"
