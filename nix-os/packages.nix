@@ -42,6 +42,7 @@ with pkgs; [
   nixd
   claude-code
   codex
+  pi-coding-agent
   antigravity-cli
   btop
   asdbctl
