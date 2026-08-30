@@ -59,25 +59,6 @@ type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
 
-# --- jj workspaces -----------------------------------------------------------
-[[keys.command]]
-key = "prefix+a"
-type = "plugin_action"
-command = "nathanflurry.jj-workspace.new-tab"
-description = "new jj workspace (tab)"
-
-[[keys.command]]
-key = "prefix+shift+a"
-type = "plugin_action"
-command = "nathanflurry.jj-workspace.new"
-description = "new jj workspace (herdr workspace)"
-
-[[keys.command]]
-key = "prefix+d"
-type = "plugin_action"
-command = "nathanflurry.jj-workspace.remove"
-description = "remove current jj workspace"
-
 [ui.sound]
 enabled = true
 
