@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     flake-utils.url = "github:numtide/flake-utils";
     pwndbg.url = "github:pwndbg/pwndbg";
     sidra.url = "github:wimpysworld/sidra";
@@ -22,6 +23,7 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-master,
     flake-utils,
     pwndbg,
     sidra,
@@ -54,6 +56,19 @@
           lanzaboote.nixosModules.lanzaboote
           xremap-flake.nixosModules.default
           {environment.systemPackages = [sidra.packages.x86_64-linux.default];}
+          {
+            # track claude-code from nixpkgs master
+            nixpkgs.overlays = [
+              (final: prev: {
+                claude-code =
+                  (import nixpkgs-master {
+                    inherit (prev.stdenv.hostPlatform) system;
+                    config.allowUnfree = true;
+                  })
+                  .claude-code;
+              })
+            ];
+          }
           ./hosts/erebor/disko.nix
           ./hosts/erebor/hardware-configuration.nix
           ./hosts/erebor/configuration.nix
