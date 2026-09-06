@@ -57,15 +57,14 @@
           xremap-flake.nixosModules.default
           {environment.systemPackages = [sidra.packages.x86_64-linux.default];}
           {
-            # track claude-code from nixpkgs master
             nixpkgs.overlays = [
-              (final: prev: {
-                claude-code =
-                  (import nixpkgs-master {
-                    inherit (prev.stdenv.hostPlatform) system;
-                    config.allowUnfree = true;
-                  })
-                  .claude-code;
+              (final: prev: let
+                master = import nixpkgs-master {
+                  inherit (prev.stdenv.hostPlatform) system;
+                  config.allowUnfree = true;
+                };
+              in {
+                inherit (master) claude-code codex;
               })
             ];
           }
