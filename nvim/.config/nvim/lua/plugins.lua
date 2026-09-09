@@ -38,6 +38,16 @@ vim.pack.add({
 	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
 })
 
+require("render-markdown").setup({
+	enabled = false,
+	overrides = {
+		preview = {
+			enabled = true,
+			render_modes = true,
+		},
+	},
+})
+
 -- [[ Plugin Configurations ]]
 
 -- <C-h/j/k/l> cross seamlessly between vim splits and herdr panes (falls
@@ -116,6 +126,7 @@ require("which-key").setup({})
 require("which-key").add({
 	{ "<leader>c", group = "[C]ode" },
 	{ "<leader>g", group = "[G]it" },
+	{ "<leader>m", group = "[M]arkdown" },
 	{ "<leader>q", group = "[Q]uit/Session" },
 	{ "<leader>s", group = "[S]earch" },
 	{ "<leader>w", group = "[W]orkspace" },

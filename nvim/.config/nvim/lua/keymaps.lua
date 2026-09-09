@@ -40,6 +40,14 @@ end, { desc = "Format buffer" })
 -- [[ Oil ]]
 vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+-- [[ Markdown ]]
+vim.keymap.set("n", "<leader>mp", function()
+	require("render-markdown").preview()
+end, { desc = "Open Markdown preview" })
+vim.keymap.set("n", "<leader>mr", function()
+	require("render-markdown").buf_toggle()
+end, { desc = "Toggle Markdown rendering" })
+
 -- [[ Dropbar ]]
 vim.keymap.set("n", "<leader>;", function() require("dropbar.api").pick() end, { desc = "Pick symbols in winbar" })
 vim.keymap.set("n", "[;", function() require("dropbar.api").goto_context_start() end,
