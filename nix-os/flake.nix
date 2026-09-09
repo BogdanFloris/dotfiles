@@ -64,7 +64,7 @@
                   config.allowUnfree = true;
                 };
               in {
-                inherit (master) claude-code codex;
+                inherit (master) claude-code codex herdr;
               })
             ];
           }
