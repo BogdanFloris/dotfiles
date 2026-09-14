@@ -72,3 +72,8 @@ end, { desc = "Notification History" })
 vim.keymap.set({ "n", "t" }, "<leader>zm", function()
 	Snacks.zen()
 end, { desc = "Zen mode" })
+
+-- [[ Diff ]]
+vim.keymap.set("n", "ghp", function()
+	require("mini.diff").toggle_overlay()
+end, { desc = "Toggle diff overlay" })

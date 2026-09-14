@@ -26,7 +26,7 @@ vim.pack.add({
 	"https://github.com/echasnovski/mini.icons",
 	"https://github.com/stevearc/oil.nvim",
 	"https://github.com/ibhagwan/fzf-lua",
-	"https://github.com/lewis6991/gitsigns.nvim",
+	"https://github.com/nvim-mini/mini.diff",
 	"https://github.com/stevearc/conform.nvim",
 	"https://github.com/folke/todo-comments.nvim",
 	"https://github.com/christoomey/vim-tmux-navigator",
@@ -165,40 +165,14 @@ fzf.setup({
 })
 fzf.register_ui_select()
 
-require("gitsigns").setup({
-	on_attach = function(bufnr)
-		local gs = require("gitsigns")
-
-		local function map(mode, l, r, opts)
-			opts = opts or {}
-			opts.buffer = bufnr
-			vim.keymap.set(mode, l, r, opts)
-		end
-
-		map({ "n", "v" }, "]c", function()
-			if vim.wo.diff then
-				return "]c"
-			end
-			vim.schedule(function()
-				gs.nav_hunk("next")
-			end)
-			return "<Ignore>"
-		end, { expr = true, desc = "Jump to next hunk" })
-
-		map({ "n", "v" }, "[c", function()
-			if vim.wo.diff then
-				return "[c"
-			end
-			vim.schedule(function()
-				gs.nav_hunk("prev")
-			end)
-			return "<Ignore>"
-		end, { expr = true, desc = "Jump to previous hunk" })
-
-		map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview git hunk" })
-		map("n", "<leader>gr", gs.reset_hunk, { desc = "Reset git hunk" })
-		map("n", "<leader>gb", gs.blame_line, { desc = "Blame git line" })
-	end,
+local diff_source = require("diff_source")
+require("mini.diff").setup({
+	source = {
+		diff_source.jj(),
+		diff_source.hg(),
+		diff_source.p4(),
+		require("mini.diff").gen_source.git(),
+	},
 })
 
 require("conform").setup({
