@@ -3,11 +3,6 @@
 local fzf = require("fzf-lua")
 local ciderlsp_config = require("ciderlsp")
 
-local function is_google3()
-	local cwd = vim.fn.getcwd()
-	return vim.startswith(cwd, "/google/src/cloud/") or vim.startswith(cwd, "/google/gerrit/")
-end
-
 -- [[ LSP Attach Configuration ]]
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
@@ -96,18 +91,34 @@ local lsps = {
 	},
 }
 
--- Apply LSP configurations
-if is_google3() then
-	-- Inside google3, only enable CiderLSP
+-- Register CiderLSP if binary exists
+if vim.fn.executable("/google/bin/releases/cider/ciderlsp/ciderlsp") == 1 then
 	vim.lsp.config("ciderlsp", ciderlsp_config)
 	vim.lsp.enable("ciderlsp")
-else
-	-- Outside google3, enable all other LSPs
-	for _, lsp in pairs(lsps) do
-		local name, config = lsp[1], lsp[2]
-		if config then
-			vim.lsp.config(name, config)
+end
+
+-- Register personal LSPs (ignore files under /google)
+for _, lsp in pairs(lsps) do
+	local name, config = lsp[1], lsp[2] or {}
+	local original_root = config.root_dir
+	config.root_dir = function(bufnr, on_dir)
+		local fname = vim.api.nvim_buf_get_name(bufnr)
+		if vim.startswith(fname, "/google") then
+			return nil
 		end
-		vim.lsp.enable(name)
+		local root
+		if original_root then
+			root = original_root(bufnr, on_dir)
+		else
+			local default_cfg = vim.lsp.config[name]
+			local markers = default_cfg and default_cfg.root_markers or { ".git" }
+			root = vim.fs.root(bufnr, markers)
+		end
+		if on_dir and root then
+			on_dir(root)
+		end
+		return root
 	end
+	vim.lsp.config(name, config)
+	vim.lsp.enable(name)
 end

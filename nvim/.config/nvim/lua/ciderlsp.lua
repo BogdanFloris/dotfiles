@@ -14,7 +14,7 @@ return {
     "--request_options=" .. table.concat(ciderlsp_settings, ",")
   },
   -- Languages supported by CiderLSP, see go/ciderlsp.
-  filetypes = { "borg", "bzl", "c", "cpp", "cs", "dart", "gcl", "go", "googlesql", "graphql", "java", "kotlin", "markdown", "mlir", "ncl", "objc", "patchpanel", "proto", "python", "qflow", "soy", "swift", "textpb", "typescript" },
+  filetypes = { "borg", "bzl", "c", "cpp", "cs", "dart", "gcl", "go", "googlesql", "graphql", "java", "kotlin", "markdown", "mlir", "ncl", "objc", "patchpanel", "pbtxt", "proto", "python", "qflow", "soy", "swift", "textpb", "typescript" },
   -- Optimistically assume any file under /google is a CiderLSP project. This
   -- avoids the overhead of walking up the tree searching for .citc markers.
   --
