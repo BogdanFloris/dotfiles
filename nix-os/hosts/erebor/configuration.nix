@@ -80,23 +80,14 @@
     };
   };
 
-  # Auto-bans IPs after repeated failed SSH attempts. Matters because
-  # sshd is exposed to the internet over IPv6 (see ddclient below).
   services.fail2ban.enable = true;
 
-  # Keeps the AAAA record of ssh.bogdanfloris.com pointed at this
-  # machine's stable global IPv6 address (the Digi prefix is dynamic).
-  # Remote SSH comes in directly over IPv6 — IPv4 is behind CGNAT, so
-  # the A record is not updated (usev4 disabled) and port forwarding
-  # is useless. Requires a UniFi rule allowing inbound v6 TCP 2222.
-  # cloudflare-ddns-token must be created manually on this machine
-  # (root:root, mode 600) with a Cloudflare API token scoped to
-  # Zone:DNS:Edit on bogdanfloris.com — it is intentionally not in git.
+  # Digi updates the IPv4 CNAME target; ddclient maintains the IPv6 fallback.
   services.ddclient = {
     enable = true;
     protocol = "cloudflare";
     zone = "bogdanfloris.com";
-    domains = ["ssh.bogdanfloris.com"];
+    domains = ["ssh-v6.bogdanfloris.com"];
     username = "token";
     passwordFile = "/etc/ddclient-cloudflare-token";
     ssl = true;
