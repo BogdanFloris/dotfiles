@@ -90,7 +90,7 @@ automount=false
 autorun-never=true
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-datetime-panel', 'gnome-power-panel', 'org-gnome-tweaks', 'ulauncher', 'org-gnome-settings', 'org-gnome-baobab', 'com-mitchellh-ghostty', 'gnome-about-panel', 'org-gnome-extensions', 'google-chrome', 'steam']
+application-children=['gnome-datetime-panel', 'gnome-power-panel', 'org-gnome-tweaks', 'org-gnome-settings', 'org-gnome-baobab', 'com-mitchellh-ghostty', 'gnome-about-panel', 'org-gnome-extensions', 'google-chrome', 'steam']
 show-in-lock-screen=false
 
 [org/gnome/desktop/notifications/application/com-mitchellh-ghostty]
@@ -122,9 +122,6 @@ application-id='org.gnome.tweaks.desktop'
 
 [org/gnome/desktop/notifications/application/steam]
 application-id='steam.desktop'
-
-[org/gnome/desktop/notifications/application/ulauncher]
-application-id='ulauncher.desktop'
 
 [org/gnome/desktop/peripherals/keyboard]
 delay=uint32 200
