@@ -7,6 +7,10 @@
     <outline text="News" title="News">
       <outline type="rss" text="Hacker News" title="Hacker News" xmlUrl="https://news.ycombinator.com/rss" htmlUrl="https://news.ycombinator.com/"/>
       <outline type="rss" text="Lobsters" title="Lobsters" xmlUrl="https://lobste.rs/rss" htmlUrl="https://lobste.rs/"/>
+      <outline type="rss" text="The Guardian: World" title="The Guardian: World" xmlUrl="https://www.theguardian.com/world/rss" htmlUrl="https://www.theguardian.com/world"/>
+    </outline>
+    <outline text="Robotics" title="Robotics">
+      <outline type="rss" text="Hackaday: Robots Hacks" title="Hackaday: Robots Hacks" xmlUrl="https://hackaday.com/category/robots-hacks/feed/" htmlUrl="https://hackaday.com/category/robots-hacks/"/>
     </outline>
     <outline text="Blogs" title="Blogs">
       <outline type="rss" text="matklad" title="matklad" xmlUrl="https://matklad.github.io/feed.xml" htmlUrl="https://matklad.github.io/"/>
@@ -26,11 +30,14 @@
       <outline type="rss" text="nullprogram (Chris Wellons)" title="nullprogram (Chris Wellons)" xmlUrl="https://nullprogram.com/feed/" htmlUrl="https://nullprogram.com/"/>
       <outline type="rss" text="Bartosz Ciechanowski" title="Bartosz Ciechanowski" xmlUrl="https://ciechanow.ski/atom.xml" htmlUrl="https://ciechanow.ski/"/>
       <outline type="rss" text="rachelbythebay" title="rachelbythebay" xmlUrl="https://rachelbythebay.com/w/atom.xml" htmlUrl="https://rachelbythebay.com/"/>
+      <outline type="rss" text="Planet Igalia" title="Planet Igalia" xmlUrl="https://planet.igalia.com/atom.xml" htmlUrl="https://planet.igalia.com/"/>
+      <outline type="rss" text="Chips and Cheese" title="Chips and Cheese" xmlUrl="https://chipsandcheese.com/feed" htmlUrl="https://chipsandcheese.com/"/>
+      <outline type="rss" text="Interrupt (Memfault)" title="Interrupt (Memfault)" xmlUrl="https://interrupt.memfault.com/feed.xml" htmlUrl="https://interrupt.memfault.com/"/>
+      <outline type="rss" text="Quanta Magazine" title="Quanta Magazine" xmlUrl="https://www.quantamagazine.org/feed/" htmlUrl="https://www.quantamagazine.org/"/>
     </outline>
     <outline text="Reddit" title="Reddit">
       <outline type="rss" text="r/cpp" title="r/cpp" xmlUrl="https://www.reddit.com/r/cpp/.rss" htmlUrl="https://www.reddit.com/r/cpp/"/>
       <outline type="rss" text="r/rust" title="r/rust" xmlUrl="https://www.reddit.com/r/rust/.rss" htmlUrl="https://www.reddit.com/r/rust/"/>
-      <outline type="rss" text="r/programming" title="r/programming" xmlUrl="https://www.reddit.com/r/programming/.rss" htmlUrl="https://www.reddit.com/r/programming/"/>
       <outline type="rss" text="r/linux" title="r/linux" xmlUrl="https://www.reddit.com/r/linux/.rss" htmlUrl="https://www.reddit.com/r/linux/"/>
       <outline type="rss" text="r/NixOS" title="r/NixOS" xmlUrl="https://www.reddit.com/r/NixOS/.rss" htmlUrl="https://www.reddit.com/r/NixOS/"/>
       <outline type="rss" text="r/androiddev" title="r/androiddev" xmlUrl="https://www.reddit.com/r/androiddev/.rss" htmlUrl="https://www.reddit.com/r/androiddev/"/>
