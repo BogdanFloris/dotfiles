@@ -1,4 +1,8 @@
-# Adwaita Dark for Chrome
+# Chrome themes
+
+- `adwaita-dark/` — neutral grey matching GTK Adwaita dark (details below).
+- `gruvbox-dark/` — gruvbox palette: `bg0_h` frame, `bg0` toolbar, `bg1`
+  omnibox, `fg1` text, aqua links.
 
 Chrome on Linux takes its colours from GTK and Chrome on macOS takes its own, so
 the two machines were never actually the same — and either default can be
@@ -8,9 +12,13 @@ Google changes next.
 
 ## Install
 
-`chrome://extensions` → Developer mode → Load unpacked → pick this folder.
+`chrome://extensions` → Developer mode → Load unpacked → pick one theme folder.
 Same on macOS and Linux. Nothing applies it automatically; if an upgrade ever
 drops it, load it again.
+
+On the Mac, copy it over first (the repo lives on the workstation):
+
+    rsync -av workstation:dotfiles/chrome-theme ~/Documents/
 
 Then Settings → Appearance → Dark, which controls the `chrome://` pages
 separately from the theme and syncs across devices on its own.
