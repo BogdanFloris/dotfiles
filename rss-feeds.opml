@@ -34,6 +34,7 @@
       <outline type="rss" text="Chips and Cheese" title="Chips and Cheese" xmlUrl="https://chipsandcheese.com/feed" htmlUrl="https://chipsandcheese.com/"/>
       <outline type="rss" text="Interrupt (Memfault)" title="Interrupt (Memfault)" xmlUrl="https://interrupt.memfault.com/feed.xml" htmlUrl="https://interrupt.memfault.com/"/>
       <outline type="rss" text="Quanta Magazine" title="Quanta Magazine" xmlUrl="https://www.quantamagazine.org/feed/" htmlUrl="https://www.quantamagazine.org/"/>
+      <outline type="rss" text="Terence Tao (What's new)" title="Terence Tao (What's new)" xmlUrl="https://terrytao.wordpress.com/feed/" htmlUrl="https://terrytao.wordpress.com/"/>
     </outline>
     <outline text="Reddit" title="Reddit">
       <outline type="rss" text="r/cpp" title="r/cpp" xmlUrl="https://www.reddit.com/r/cpp/.rss" htmlUrl="https://www.reddit.com/r/cpp/"/>
