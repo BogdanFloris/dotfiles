@@ -47,6 +47,8 @@ with pkgs; [
   btop
   asdbctl
   git-repo
+  freecad
+  discord
   (llama-cpp.override {vulkanSupport = true;})
 
   # Gnome specific
