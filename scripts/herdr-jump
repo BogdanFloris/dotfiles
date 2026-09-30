@@ -78,7 +78,7 @@ list_workspaces() {
       + (if $w.focused then "\u001b[2m" else "" end)
       + ($w.label | pad(22))
       + "\u001b[90m" + (if $w.focused then "current   " else "workspace " end)
-      + ($cwd | tilde | pad(34)) + "\u001b[0m"
+      + ($cwd | tilde) + "\u001b[0m"
       + "\t" + "ws:" + $w.workspace_id
   '
 }
@@ -88,17 +88,15 @@ list_workspaces() {
 # already returns these in frecency order.
 list_dirs() {
   local open dir
-  # Newline-delimited set, matched with a builtin substring test. Everything in
-  # this loop is fork-free (no basename, no grep per entry) so the cost stays
-  # flat as zoxide history grows over a long-lived session.
-  open=$'\n'$(snapshot | jq -r '.panes[].cwd // empty')$'\n'
+  # Batch realpath so symlinked paths (e.g. ~/superproject) match open workspace cwds.
+  open=$'\n'$(snapshot | jq -r '.panes[].cwd // empty' | xargs -d '\n' -r realpath -e 2>/dev/null)$'\n'
   while IFS= read -r dir; do
     [[ $dir == "/" ]] && continue
     [[ $open == *$'\n'"$dir"$'\n'* ]] && continue
-    [[ -d $dir ]] || continue
+    open+="$dir"$'\n'
     printf '\033[90m·\033[0m %-22s\033[90m%-10s%s\033[0m\t%s\n' \
       "${dir##*/}" "dir" "${dir/#$HOME/\~}" "dir:$dir"
-  done < <(zoxide query -l 2>/dev/null)
+  done < <(zoxide query -l 2>/dev/null | xargs -d '\n' -r realpath -e 2>/dev/null)
 }
 
 list_all() {
@@ -187,6 +185,7 @@ selection=$(
     --ansi \
     --delimiter=$'\t' \
     --with-nth=1 \
+    --tiebreak=index \
     --height=100% \
     --layout=reverse \
     --border=none \
