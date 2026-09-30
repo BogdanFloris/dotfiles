@@ -56,3 +56,9 @@ delay_seconds = 3
 show_agent_labels_on_pane_borders = false
 prompt_new_tab_name = false
 agent_panel_sort = "priority"
+
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", "machine", "workspace", "tab"],
+  ["agent", "terminal_title_stripped"],
+]
