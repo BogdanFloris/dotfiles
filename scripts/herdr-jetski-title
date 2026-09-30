@@ -32,22 +32,10 @@ def get_herdr_path():
     return "herdr"
 
 
-def report_via_socket(socket_path, pane_id, state, message, session_id):
-    request_id = f"custom:jetski:{int(time.time() * 1000)}:{random.randrange(1_000_000):06d}"
-    params = {
-        "pane_id": pane_id,
-        "source": "custom:jetski",
-        "agent": "jetski",
-        "state": state,
-        "message": message,
-        "seq": time.time_ns(),
-    }
-    if session_id:
-        params["agent_session_id"] = session_id
-
+def socket_request(socket_path, method, params):
     request = {
-        "id": request_id,
-        "method": "pane.report_agent",
+        "id": f"custom:jetski:{int(time.time() * 1000)}:{random.randrange(1_000_000):06d}",
+        "method": method,
         "params": params,
     }
     client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -59,6 +47,31 @@ def report_via_socket(socket_path, pane_id, state, message, session_id):
     except Exception:
         pass
     client.close()
+
+
+def report_via_socket(socket_path, pane_id, state, message, session_id):
+    params = {
+        "pane_id": pane_id,
+        "source": "custom:jetski",
+        "agent": "jetski",
+        "state": state,
+        "message": message,
+        "seq": time.time_ns(),
+    }
+    if session_id:
+        params["agent_session_id"] = session_id
+    socket_request(socket_path, "pane.report_agent", params)
+
+
+# OSC titles from jetski don't reach the herdr sidebar; metadata title does
+def report_title_via_socket(socket_path, pane_id, title):
+    socket_request(socket_path, "pane.report_metadata", {
+        "pane_id": pane_id,
+        "source": "custom:jetski-title",
+        "agent": "jetski",
+        "title": title,
+        "seq": time.time_ns(),
+    })
 
 
 def report_via_cli(pane_id, state, message, session_id):
@@ -139,6 +152,12 @@ def main():
     if not reported:
         try:
             report_via_cli(pane_id, state, message, session_id)
+        except Exception:
+            pass
+
+    if title and socket_path and os.path.exists(socket_path):
+        try:
+            report_title_via_socket(socket_path, pane_id, title)
         except Exception:
             pass
 

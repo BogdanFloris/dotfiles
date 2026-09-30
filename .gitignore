@@ -11,3 +11,4 @@ herdr/.config/herdr/plugins/github/
 herdr/.config/herdr/plugins/config/**/jump-back-workspace
 herdr/.config/herdr/plugins/config/**/update-check
 +.claude/
+__pycache__/
