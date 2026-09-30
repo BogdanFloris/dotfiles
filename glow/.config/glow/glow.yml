@@ -1,0 +1,4 @@
+style: "~/.config/glow/gruvbox-dark.json"
+mouse: false
+width: 120
+all: false
