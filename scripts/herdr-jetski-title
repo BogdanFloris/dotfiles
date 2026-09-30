@@ -110,8 +110,8 @@ def main():
     except Exception:
         return
 
-    title = " ".join(str(data.get("conversation_title") or "").split())
-    print(title or "jetski", flush=True)
+    title = " ".join(str(data.get("conversation_title") or "").split()) or "jetski"
+    print(title, flush=True)
 
     pane_id = os.environ.get("HERDR_PANE_ID")
     if not pane_id:
@@ -155,7 +155,7 @@ def main():
         except Exception:
             pass
 
-    if title and socket_path and os.path.exists(socket_path):
+    if socket_path and os.path.exists(socket_path):
         try:
             report_title_via_socket(socket_path, pane_id, title)
         except Exception:
