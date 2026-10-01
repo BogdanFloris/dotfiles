@@ -100,24 +100,21 @@ end
 -- Register personal LSPs (ignore files under /google)
 for _, lsp in pairs(lsps) do
 	local name, config = lsp[1], lsp[2] or {}
-	local original_root = config.root_dir
+	-- Capture before vim.lsp.config() below, which would make this return our wrapper.
+	local default_cfg = vim.lsp.config[name] or {}
+	local original_root = config.root_dir or default_cfg.root_dir
+	local markers = default_cfg.root_markers or { ".git" }
 	config.root_dir = function(bufnr, on_dir)
-		local fname = vim.api.nvim_buf_get_name(bufnr)
-		if vim.startswith(fname, "/google") then
-			return nil
+		if vim.startswith(vim.api.nvim_buf_get_name(bufnr), "/google") then
+			return
 		end
-		local root
-		if original_root then
-			root = original_root(bufnr, on_dir)
-		else
-			local default_cfg = vim.lsp.config[name]
-			local markers = default_cfg and default_cfg.root_markers or { ".git" }
-			root = vim.fs.root(bufnr, markers)
+		if type(original_root) == "function" then
+			return original_root(bufnr, on_dir)
 		end
-		if on_dir and root then
+		local root = original_root or vim.fs.root(bufnr, markers)
+		if root then
 			on_dir(root)
 		end
-		return root
 	end
 	vim.lsp.config(name, config)
 	vim.lsp.enable(name)
