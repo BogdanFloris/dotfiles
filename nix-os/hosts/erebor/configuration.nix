@@ -205,6 +205,11 @@
     SUBSYSTEM=="pci", ATTR{vendor}=="0x1b21", ATTR{device}=="0x2426", ATTR{power/control}="on"
   '';
 
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+  };
+
   environment.systemPackages =
     (import ../../packages.nix {inherit pkgs;})
     ++ (with pkgs; [
