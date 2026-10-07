@@ -16,6 +16,7 @@ with pkgs; [
   wget
   stow
   bat
+  glow
   jujutsu
   delta
   diffnav

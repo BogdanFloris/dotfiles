@@ -18,6 +18,11 @@
       url = "github:nix-community/lanzaboote/v1.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    glow-gruvbox = {
+      url = "github:BogdanFloris/glow";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -30,6 +35,7 @@
     xremap-flake,
     disko,
     lanzaboote,
+    glow-gruvbox,
     ...
   }:
     (flake-utils.lib.eachDefaultSystem (system: let
@@ -65,6 +71,11 @@
                 };
               in {
                 inherit (master) claude-code codex herdr;
+                glow = prev.glow.overrideAttrs {
+                  version = "3.0.0-gruvbox";
+                  src = glow-gruvbox;
+                  vendorHash = "sha256-hBD8wd8dOHP+BHmpTLVZMHnKHGmBK6xhUuBoEv+BD2U=";
+                };
               })
             ];
           }

@@ -124,6 +124,22 @@
         "type": "github"
       }
     },
+    "glow-gruvbox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790756673,
+        "narHash": "sha256-EZmNRnnjv+qnj1URdfx4ahosx6aFX+zOpFq0XGTgh8Q=",
+        "owner": "BogdanFloris",
+        "repo": "glow",
+        "rev": "a5be96113e95272435043e7e75775713851536be",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BogdanFloris",
+        "repo": "glow",
+        "type": "github"
+      }
+    },
     "lanzaboote": {
       "inputs": {
         "crane": "crane",
@@ -341,6 +357,7 @@
       "inputs": {
         "disko": "disko",
         "flake-utils": "flake-utils",
+        "glow-gruvbox": "glow-gruvbox",
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
