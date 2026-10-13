@@ -4,6 +4,7 @@ command_timeout = 30
 format = """
 $username\
 $hostname\
+${env_var.STARSHIP_G3_CLIENT}\
 $directory\
 $cmd_duration\
 $line_break\
@@ -17,6 +18,15 @@ vimcmd_symbol = "[❮](green)"
 [cmd_duration]
 format = "[$duration]($style) "
 style = "yellow"
+
+[directory]
+# Repo-root lookup costs ~1.5s per prompt on CitC
+truncate_to_repo = false
+
+# Set by a chpwd hook in ~/.zshrc when inside a CitC client
+[env_var.STARSHIP_G3_CLIENT]
+format = "[$env_value]($style) "
+style = "bold blue"
 
 [username]
 disabled = true
