@@ -49,9 +49,12 @@ vim.o.breakindentopt = "list:-1"
 vim.o.smoothscroll = true
 vim.opt.fillchars:append({ eob = " ", lastline = " " })
 
--- Undo steps back a sentence or clause at a time instead of a whole insert.
+-- Undo steps back a sentence or clause at a time instead of a whole insert; a ga change (ink.alt)
+-- stays one undo step.
 for _, ch in ipairs({ ".", ",", "!", "?" }) do
-	vim.keymap.set("i", ch, ch .. "<C-g>u")
+	vim.keymap.set("i", ch, function()
+		return require("ink.alt").editing() and ch or ch .. "<C-g>u"
+	end, { expr = true })
 end
 
 require("ink.links")

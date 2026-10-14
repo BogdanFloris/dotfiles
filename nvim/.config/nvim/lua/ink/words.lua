@@ -17,10 +17,9 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 function M.ruler()
 	local words = vim.fn.wordcount().words
 	local start = vim.b.ink_words or words
-	if words == start then
-		return words .. " words"
-	end
-	return ("%d words · %+d"):format(words, words - start)
+	local count = words == start and (words .. " words") or ("%d words · %+d"):format(words, words - start)
+	local ok, alt = pcall(require, "ink.alt")
+	return (ok and alt.status() or "") .. count -- "2/3 · " while the cursor is in alternatives
 end
 
 return M
