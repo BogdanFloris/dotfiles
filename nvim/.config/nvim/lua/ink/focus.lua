@@ -3,12 +3,13 @@
 
 local util = require("ink.util")
 
+local M = {}
 local ns = vim.api.nvim_create_namespace("ink_focus")
 
 local function focus()
 	local buf = vim.api.nvim_get_current_buf()
 	vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
-	if not util.is_text(buf) then
+	if not util.focus or not util.is_text(buf) then
 		return
 	end
 	local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
@@ -45,3 +46,7 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "CursorMoved", "CursorMovedI", "Tex
 	group = util.group,
 	callback = focus,
 })
+
+M.update = focus
+
+return M

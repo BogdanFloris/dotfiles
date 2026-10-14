@@ -10,7 +10,7 @@ local M = {}
 vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 	group = util.group,
 	callback = function(ev)
-		if util.is_text(ev.buf) then
+		if util.focus and util.is_text(ev.buf) then
 			-- :normal steps the cursor back off the end of the line in insert mode, so restore it.
 			local cursor = vim.api.nvim_win_get_cursor(0)
 			vim.cmd("normal! zz")
@@ -64,6 +64,14 @@ vim.keymap.set("n", "<leader>mw", function()
 		tables.render(true)
 	end
 end, { desc = "Toggle full-width layout (wide tables)" })
+
+vim.keymap.set("n", "<leader>mf", function()
+	util.focus = not util.focus
+	require("ink.focus").update()
+	if util.focus then
+		vim.cmd("normal! zz")
+	end
+end, { desc = "Toggle focus (dimming, typewriter scrolling)" })
 
 vim.api.nvim_create_autocmd("VimEnter", {
 	group = util.group,
