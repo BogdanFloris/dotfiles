@@ -9,6 +9,8 @@ local M = {}
 local ns = vim.api.nvim_create_namespace("ink_alt")
 local spans = {} -- spans[buf][extmark id] = { variants = { ... }, active = index, editing = bool }
 local popup -- { win = ..., buf = ..., id = span }
+local lost, extra = {}, {} -- per buffer: saved alternatives that no longer match, other footer keys
+local FOOTER = "<!-- ink_buffer"
 
 local function of(buf)
 	spans[buf] = spans[buf] or {}
@@ -182,6 +184,126 @@ local function edit(buf, id)
 	})
 end
 
+-- Saved as a trailing HTML comment (the format from the Ink Buffer idea doc); the buffer never holds it.
+local function footer(buf)
+	local list = vim.deepcopy(lost[buf] or {})
+	for id, span in pairs(spans[buf] or {}) do
+		local sr, sc, er, ec = range(buf, id)
+		if sr and not span.editing and #span.variants > 1 then
+			list[#list + 1] =
+				{ row = sr, start_col = sc, end_row = er, end_col = ec, active = span.active - 1, variants = span.variants }
+		end
+	end
+	if #list == 0 and vim.tbl_isempty(extra[buf] or {}) then
+		return nil
+	end
+	table.sort(list, function(a, b)
+		return a.row < b.row or (a.row == b.row and a.start_col < b.start_col)
+	end)
+	local data = vim.tbl_extend("force", extra[buf] or {}, { alternatives = list })
+	return { "", FOOTER, (vim.json.encode(data):gsub("%-%->", "--\\u003e")), "-->" }
+end
+
+-- Writes the buffer plus the footer, so :w works as usual.
+local function writer(buf)
+	if vim.b[buf].ink_alt_writer then
+		return
+	end
+	vim.b[buf].ink_alt_writer = true
+	vim.api.nvim_create_autocmd("BufWriteCmd", {
+		group = util.group,
+		buffer = buf,
+		callback = function(ev)
+			sync(buf)
+			local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+			vim.list_extend(lines, footer(buf) or {})
+			local path = vim.fn.fnamemodify(ev.match, ":p")
+			if vim.fn.writefile(lines, path) ~= 0 then
+				return vim.api.nvim_echo({ { "Ink: could not write " .. path, "ErrorMsg" } }, true, {})
+			end
+			if path == vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":p") then
+				vim.bo[buf].modified = false
+			end
+			echo(('"%s" %dL written'):format(vim.fn.fnamemodify(path, ":~:."), #lines))
+		end,
+	})
+end
+
+-- Where a saved alternative's active text is now: its saved place, else the nearest copy of the text.
+local function locate(buf, a)
+	local want = type(a.variants) == "table" and a.variants[(a.active or 0) + 1]
+	if type(want) ~= "string" or want == "" then
+		return nil
+	end
+	local ok, got = pcall(vim.api.nvim_buf_get_text, buf, a.row, a.start_col, a.end_row, a.end_col, {})
+	if ok and table.concat(got, "\n") == want then
+		return a.row, a.start_col, a.end_row, a.end_col
+	end
+	local lines, starts, offset = vim.api.nvim_buf_get_lines(buf, 0, -1, false), {}, 1
+	for i, l in ipairs(lines) do
+		starts[i], offset = offset, offset + #l + 1
+	end
+	local function pos(byte) -- byte in the joined text to 0-based row, col
+		local row = 1
+		while starts[row + 1] and starts[row + 1] <= byte do
+			row = row + 1
+		end
+		return row - 1, byte - starts[row]
+	end
+	local whole, best, dist = table.concat(lines, "\n"), nil, nil
+	local s = whole:find(want, 1, true)
+	while s do
+		local row, col = pos(s)
+		if not dist or math.abs(row - (a.row or 0)) < dist then
+			local er, ec = pos(s + #want)
+			best, dist = { row, col, er, ec }, math.abs(row - (a.row or 0))
+		end
+		s = whole:find(want, s + 1, true)
+	end
+	if best then
+		return unpack(best)
+	end
+end
+
+-- Strips the footer on load, without an undo step, and puts the alternatives back.
+local function read(buf)
+	spans[buf], lost[buf], extra[buf] = {}, {}, {}
+	vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+	local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+	local n = #lines
+	while n > 0 and lines[n] == "" do
+		n = n - 1
+	end
+	if n < 3 or lines[n] ~= "-->" or lines[n - 2] ~= FOOTER then
+		return
+	end
+	local ok, data = pcall(vim.json.decode, lines[n - 1])
+	if not ok or type(data) ~= "table" then
+		return
+	end
+	local first = (n > 3 and lines[n - 3] == "") and n - 3 or n - 2
+	local undolevels = vim.bo[buf].undolevels
+	vim.bo[buf].undolevels = -1
+	vim.api.nvim_buf_set_lines(buf, first - 1, -1, false, {})
+	vim.bo[buf].undolevels = undolevels
+	vim.bo[buf].modified = false
+	local alts = type(data.alternatives) == "table" and data.alternatives or {}
+	data.alternatives = nil
+	extra[buf] = data
+	for _, a in ipairs(alts) do
+		local sr, sc, er, ec = locate(buf, a)
+		if sr then
+			of(buf)[mark(buf, sr, sc, er, ec)] = { variants = a.variants, active = (a.active or 0) + 1 }
+		else
+			table.insert(lost[buf], a)
+		end
+	end
+	if #lost[buf] > 0 then
+		echo(("%d set(s) of alternatives no longer match the text; they stay in the file"):format(#lost[buf]))
+	end
+	writer(buf)
+end
+
 -- <leader>va on a selection makes it a span; inside a span it adds a variant.
 local function add()
 	local buf = vim.api.nvim_get_current_buf()
@@ -218,6 +340,7 @@ local function add()
 	end
 	local id = mark(buf, sr, sc, er, ec)
 	of(buf)[id] = { variants = { original }, active = 1 }
+	writer(buf)
 	edit(buf, id)
 end
 
@@ -268,10 +391,18 @@ vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave", "WinScro
 	end,
 })
 
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = util.group,
+	pattern = { "*.md", "*.markdown" },
+	callback = function(ev)
+		read(ev.buf)
+	end,
+})
+
 vim.api.nvim_create_autocmd("BufWipeout", {
 	group = util.group,
 	callback = function(ev)
-		spans[ev.buf] = nil
+		spans[ev.buf], lost[ev.buf], extra[ev.buf] = nil, nil, nil
 	end,
 })
 
