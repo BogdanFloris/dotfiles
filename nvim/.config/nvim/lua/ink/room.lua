@@ -69,8 +69,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 				end
 			end,
 		})
-		vim.cmd("normal! G$")
+		vim.cmd("normal! G$zz")
 		tables.render(true)
-		vim.cmd("startinsert!")
 	end,
 })
