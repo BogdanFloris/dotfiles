@@ -42,7 +42,7 @@ vim.o.showcmd = false
 vim.o.ruler = true
 vim.o.rulerformat = "%30(%=%#InkFaint#%{v:lua.require'ink.words'.ruler()}%)"
 vim.o.number = false
-vim.o.relativenumber = false
+vim.o.relativenumber = true
 vim.o.signcolumn = "no"
 vim.o.linebreak = true
 vim.o.breakindentopt = "list:-1"

@@ -1,5 +1,6 @@
 -- lua/ink/margin.lua
--- Heading markers hang in a 4-column left margin, iA Writer style (the window's statuscolumn).
+-- The left margin (the window's statuscolumn): relative line numbers, and heading markers hanging
+-- next to the text, iA Writer style.
 
 local util = require("ink.util")
 
@@ -20,13 +21,19 @@ local function scan(buf)
 	marks_by_buf[buf] = marks
 end
 
+M.width = 8 -- number (3), space, heading marker (3), space
+
 function M.column()
-	local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-	local marks = vim.v.virtnum == 0 and (marks_by_buf[buf] or {})[vim.v.lnum]
-	if not marks then
-		return "%#InkMargin#    "
+	if vim.v.virtnum ~= 0 then
+		return "%#InkMargin#" .. string.rep(" ", M.width)
 	end
-	return "%#InkMargin#" .. (#marks <= 3 and string.format("%3s ", marks) or ("#" .. #marks .. "  "))
+	local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+	local marks = (marks_by_buf[buf] or {})[vim.v.lnum] or ""
+	if #marks > 3 then
+		marks = "#" .. #marks
+	end
+	local nr = vim.v.relnum == 0 and "%#InkCursorNr#" or "%#InkMargin#"
+	return ("%s%3d %%#InkMargin#%3s "):format(nr, vim.v.relnum, marks)
 end
 
 vim.api.nvim_create_autocmd({ "BufWinEnter", "TextChanged", "TextChangedI" }, {

@@ -13,6 +13,7 @@ local function apply()
 	vim.api.nvim_set_hl(0, "InkDim", { fg = comment.fg })
 	vim.api.nvim_set_hl(0, "InkFaint", { fg = linenr.fg })
 	vim.api.nvim_set_hl(0, "InkMargin", { fg = linenr.fg, bg = normal.bg })
+	vim.api.nvim_set_hl(0, "InkCursorNr", { fg = get("CursorLineNr").fg, bg = normal.bg })
 	-- Hides smoothscroll's "<<<" inside the room only (applied through winhighlight in ink.room).
 	vim.api.nvim_set_hl(0, "InkHidden", { fg = normal.bg })
 	vim.api.nvim_set_hl(0, "InkText", { link = "Normal" })

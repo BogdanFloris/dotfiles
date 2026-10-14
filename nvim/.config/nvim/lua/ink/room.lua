@@ -35,7 +35,7 @@ end
 
 local room -- the zen window holding the text
 local parent -- the normal window hidden behind the room
-local margin = 4
+local margin = require("ink.margin").width
 local text_width = 70
 local ready = false -- render-markdown has drawn the room
 
