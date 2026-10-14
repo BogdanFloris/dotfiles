@@ -40,7 +40,7 @@ vim.o.showtabline = 0
 vim.o.showmode = false
 vim.o.showcmd = false
 vim.o.ruler = true
-vim.o.rulerformat = "%=%#InkFaint#%{wordcount().words} words"
+vim.o.rulerformat = "%30(%=%#InkFaint#%{v:lua.require'ink.words'.ruler()}%)"
 vim.o.number = false
 vim.o.relativenumber = false
 vim.o.signcolumn = "no"
@@ -55,6 +55,7 @@ for _, ch in ipairs({ ".", ",", "!", "?" }) do
 end
 
 require("ink.links")
+require("ink.words")
 
 -- Order matters: these redraw on CursorMoved before ink.room's typewriter scrolling recenters.
 require("ink.focus")
