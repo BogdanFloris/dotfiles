@@ -6,6 +6,9 @@ vim.env.INK_WRITING = nil
 
 require("ink.colors")
 
+-- quickfile redraws the raw file before the room opens, which flickers.
+Snacks.config.quickfile.enabled = false
+
 -- setup() replaces the config from plugins.lua, so its base options are repeated here.
 -- Heading markers are concealed in the text and drawn in the left margin instead (ink.margin).
 -- Tables are drawn by Ink itself (ink.tables), so render-markdown's renderer is off.
@@ -17,6 +20,11 @@ require("render-markdown").setup({
 	link = { enabled = false },
 	pipe_table = { enabled = false },
 	code = { sign = false },
+	on = {
+		render = function(ctx)
+			require("ink.room").rendered(ctx)
+		end,
+	},
 })
 
 vim.g.loaded_dropbar = true

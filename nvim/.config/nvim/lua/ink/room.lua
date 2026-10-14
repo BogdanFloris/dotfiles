@@ -4,6 +4,8 @@
 local tables = require("ink.tables")
 local util = require("ink.util")
 
+local M = {}
+
 -- Typewriter scrolling: the line being written stays mid-screen.
 vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 	group = util.group,
@@ -34,6 +36,14 @@ end
 local room -- the zen window holding the text
 local margin = 4
 local text_width = 70
+local ready = false -- render-markdown has drawn the room
+
+-- Called by render-markdown after each render (see `on` in ink/init.lua).
+function M.rendered(ctx)
+	if room and ctx.win == room.win then
+		ready = true
+	end
+end
 
 vim.keymap.set("n", "<leader>mw", function()
 	if room and room:valid() then
@@ -71,5 +81,17 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		})
 		vim.cmd("normal! G$zz")
 		tables.render(true)
+		-- render-markdown renders after the first frame (vim.schedule plus a debounce that drops
+		-- requests), so render the room now through its updater and wait for any async parse.
+		if vim.bo.filetype == "markdown" then
+			pcall(function()
+				require("render-markdown.core.ui").updater.new(vim.api.nvim_get_current_buf(), room.win, true):run()
+			end)
+			vim.wait(200, function()
+				return ready
+			end, 1)
+		end
 	end,
 })
+
+return M
