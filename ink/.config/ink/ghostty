@@ -1,0 +1,13 @@
+# The Ink window, loaded by `ink` with --config-file.
+# Font family and size come from ink's command line, so they're not set here.
+title = Ink
+adjust-cell-height = 40%
+background = #32302f
+foreground = #ebdbb2
+cursor-color = #fe8019
+cursor-text = #32302f
+window-padding-x = 0
+window-padding-y = 24
+window-padding-balance = true
+gtk-titlebar = false
+clipboard-read = allow

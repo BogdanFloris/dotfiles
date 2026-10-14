@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Opens a draft in the writing room: its own Ghostty window running Neovim in writing mode.
+# Usage: ink [file]   (no file: the most recently edited draft in $INK_DIR, default ~/writing)
+set -euo pipefail
+
+drafts="${INK_DIR:-$HOME/writing}"
+fonts="${XDG_DATA_HOME:-$HOME/.local/share}/fonts/ia-writer-mono"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/ink/ghostty"
+export PATH="$HOME/.local/bin:$PATH"
+
+if [[ $# -gt 0 ]]; then
+	file="$(realpath -m -- "$1")"
+else
+	mkdir -p "$drafts"
+	file="$(ls -t "$drafts"/*.md 2>/dev/null | head -n 1 || true)"
+	file="${file:-$drafts/$(date +%F).md}"
+fi
+
+font_family() {
+	fc-list : family | tr ',' '\n' | grep -m 1 -x -E 'iA Writer Mono (S|V)' || true
+}
+
+font="$(font_family)"
+if [[ -z "$font" ]]; then
+	# Machines without a packaged copy (erebor gets it from Nix) fetch the static TTFs once.
+	mkdir -p "$fonts"
+	base="https://raw.githubusercontent.com/iaolo/iA-Fonts/master/iA%20Writer%20Mono/Static"
+	for style in Regular Italic Bold BoldItalic; do
+		curl -fsSL -o "$fonts/iAWriterMonoS-$style.ttf" "$base/iAWriterMonoS-$style.ttf"
+	done
+	fc-cache -f "$fonts" >/dev/null
+	font="$(font_family)"
+fi
+
+args=(
+	--class=com.bogdan.ink
+	--gtk-single-instance=false
+	--font-size="${INK_FONT_SIZE:-14}"
+	--config-file="$config"
+)
+if [[ -n "$font" ]]; then
+	args+=(--font-family="$font")
+fi
+
+cd "$(dirname -- "$file")"
+export INK_WRITING=1
+exec ghostty "${args[@]}" -e nvim -- "$file"

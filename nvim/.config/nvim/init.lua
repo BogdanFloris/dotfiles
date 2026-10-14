@@ -89,6 +89,9 @@ else
 	require("plugins")
 	require("keymaps")
 	require("lsp")
+	if vim.env.INK_WRITING then
+		require("writing")
+	end
 
 	vim.cmd("colorscheme gruvbox")
 end
