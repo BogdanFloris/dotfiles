@@ -220,7 +220,7 @@
       sbctl
     ]);
 
-  fonts.packages = [pkgs.nerd-fonts.jetbrains-mono pkgs.ia-writer-mono];
+  fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
 
   system.stateVersion = "25.05";
 }

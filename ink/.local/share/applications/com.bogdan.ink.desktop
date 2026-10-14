@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Ink
-Comment=Write in Neovim, in its own window
-Exec=sh -c "\\$HOME/.local/bin/ink"
-Icon=com.bogdan.ink
-Terminal=false
-Categories=Utility;TextEditor;
-StartupWMClass=com.bogdan.ink

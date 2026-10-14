@@ -1,5 +1,6 @@
 -- lua/ink/init.lua
--- Ink, the writing room. Loaded only when Neovim is started by `ink` (see ink/.local/bin/ink).
+-- Ink, the writing room: Neovim in writing mode, in the current terminal. Loaded when INK_WRITING
+-- is set (the `ink` script, or INK_WRITING=1 nvim file.md).
 
 vim.env.INK_WRITING = nil
 
@@ -17,15 +18,6 @@ require("render-markdown").setup({
 	pipe_table = { enabled = false },
 	code = { sign = false },
 })
-
--- Ink runs outside herdr, so the clipboard can be read straight from Ghostty (clipboard-read = allow).
-local osc52 = require("vim.ui.clipboard.osc52")
-vim.g.clipboard = {
-	name = "OSC 52",
-	copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
-	paste = { ["+"] = osc52.paste("+"), ["*"] = osc52.paste("*") },
-}
-vim.keymap.set("i", "<C-v>", "<C-r><C-o>+")
 
 vim.g.loaded_dropbar = true
 vim.g.snacks_indent = false

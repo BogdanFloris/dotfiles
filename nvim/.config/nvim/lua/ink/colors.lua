@@ -1,40 +1,26 @@
 -- lua/ink/colors.lua
--- The room's palette (gruvbox soft) and the highlight groups Ink draws with.
+-- Ink draws with your current colorscheme. Its own groups are derived from it, so nothing gets
+-- overridden and a colorscheme change carries over.
 
-local c = {
-	bg = "#32302f",
-	fg = "#ebdbb2",
-	bright = "#fbf1c7",
-	dim = "#7c6f64",
-	faint = "#665c54",
-	yellow = "#fabd2f",
-	blue = "#83a598",
-	aqua = "#8ec07c",
-}
+local util = require("ink.util")
 
-require("gruvbox").setup({
-	inverse = true,
-	contrast = "soft",
-	overrides = {
-		InkDim = { fg = c.dim },
-		InkFaint = { fg = c.faint },
-		InkMargin = { fg = c.dim, bg = c.bg },
-		InkText = { fg = c.fg },
-		InkTableHead = { fg = c.bright, bold = true },
-		InkBold = { fg = c.bright, bold = true },
-		InkCode = { fg = c.aqua },
-		InkLink = { fg = c.blue, underline = true },
-		-- Hides smoothscroll's "<<<" on a partly scrolled first line.
-		NonText = { fg = c.bg },
-		["@markup.heading"] = { fg = c.yellow, bold = true },
-		["@markup.strong"] = { fg = c.bright, bold = true },
-		["@markup.link.label"] = { fg = c.blue, underline = true },
-		["@punctuation.special.markdown"] = { fg = c.faint },
-		-- Inline code as plain colored text, without render-markdown's background patches.
-		["@markup.raw.markdown_inline"] = { fg = c.aqua },
-		RenderMarkdownCodeInline = { fg = c.aqua },
-		RenderMarkdownBullet = { fg = c.dim },
-	},
-})
+local function get(name)
+	return vim.api.nvim_get_hl(0, { name = name, link = false })
+end
 
-return c
+local function apply()
+	local normal, comment, linenr = get("Normal"), get("Comment"), get("LineNr")
+	vim.api.nvim_set_hl(0, "InkDim", { fg = comment.fg })
+	vim.api.nvim_set_hl(0, "InkFaint", { fg = linenr.fg })
+	vim.api.nvim_set_hl(0, "InkMargin", { fg = linenr.fg, bg = normal.bg })
+	-- Hides smoothscroll's "<<<" inside the room only (applied through winhighlight in ink.room).
+	vim.api.nvim_set_hl(0, "InkHidden", { fg = normal.bg })
+	vim.api.nvim_set_hl(0, "InkText", { link = "Normal" })
+	vim.api.nvim_set_hl(0, "InkTableHead", { fg = normal.fg, bold = true })
+	vim.api.nvim_set_hl(0, "InkBold", { link = "@markup.strong" })
+	vim.api.nvim_set_hl(0, "InkCode", { link = "@markup.raw.markdown_inline" })
+	vim.api.nvim_set_hl(0, "InkLink", { link = "@markup.link.label" })
+end
+
+apply()
+vim.api.nvim_create_autocmd("ColorScheme", { group = util.group, callback = apply })

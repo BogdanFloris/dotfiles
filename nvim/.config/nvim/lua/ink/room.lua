@@ -1,7 +1,6 @@
 -- lua/ink/room.lua
--- The room itself: a centered zen window sized to the text, typewriter scrolling and autosave.
+-- The room itself: a centered zen window sized to the text, with typewriter scrolling.
 
-local c = require("ink.colors")
 local tables = require("ink.tables")
 local util = require("ink.util")
 
@@ -14,17 +13,6 @@ vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 			local cursor = vim.api.nvim_win_get_cursor(0)
 			vim.cmd("normal! zz")
 			vim.api.nvim_win_set_cursor(0, cursor)
-		end
-	end,
-})
-
-vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged", "FocusLost" }, {
-	group = util.group,
-	callback = function(ev)
-		if util.is_text(ev.buf) and vim.bo[ev.buf].modified and vim.api.nvim_buf_get_name(ev.buf) ~= "" then
-			vim.api.nvim_buf_call(ev.buf, function()
-				vim.cmd("silent! update")
-			end)
 		end
 	end,
 })
@@ -60,12 +48,17 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	once = true,
 	callback = function()
 		text_width = measure(vim.api.nvim_get_current_buf())
+		-- An opaque backdrop in the colorscheme's own background hides the window behind the room.
+		local bg = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg
 		room = Snacks.zen({
 			toggles = { dim = false, git_signs = false, mini_diff_signs = false },
 			win = {
 				width = text_width + margin,
-				wo = { statuscolumn = "%!v:lua.require'ink.margin'.column()" },
-				backdrop = { transparent = false, blend = 99, bg = c.bg },
+				wo = {
+					statuscolumn = "%!v:lua.require'ink.margin'.column()",
+					winhighlight = "NormalFloat:Normal,NonText:InkHidden",
+				},
+				backdrop = { transparent = false, blend = 99, bg = bg and string.format("#%06x", bg) or nil },
 			},
 			on_close = function()
 				-- Closing the text window means leaving the room.
