@@ -49,6 +49,11 @@ vim.o.breakindentopt = "list:-1"
 vim.o.smoothscroll = true
 vim.opt.fillchars:append({ eob = " ", lastline = " " })
 
+-- Undo steps back a sentence or clause at a time instead of a whole insert.
+for _, ch in ipairs({ ".", ",", "!", "?" }) do
+	vim.keymap.set("i", ch, ch .. "<C-g>u")
+end
+
 -- Order matters: these redraw on CursorMoved before ink.room's typewriter scrolling recenters.
 require("ink.focus")
 require("ink.margin")
