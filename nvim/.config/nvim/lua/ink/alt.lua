@@ -359,7 +359,46 @@ local function cycle(step)
 	show_popup(buf, id)
 end
 
+local function keep()
+	local buf = vim.api.nvim_get_current_buf()
+	local id = at_cursor(buf)
+	if not id then
+		return
+	end
+	sync(buf)
+	local span = of(buf)[id]
+	close_popup()
+	remove(buf, id)
+	echo(("Kept variant %d of %d"):format(span.active, #span.variants))
+end
+
+local function drop()
+	local buf = vim.api.nvim_get_current_buf()
+	local id = at_cursor(buf)
+	if not id then
+		return
+	end
+	sync(buf)
+	local span = of(buf)[id]
+	table.remove(span.variants, span.active)
+	span.active = math.min(span.active, #span.variants)
+	put(buf, id, span.variants[span.active])
+	local sr, sc = range(buf, id)
+	vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
+	if #span.variants > 1 then
+		return show_popup(buf, id)
+	end
+	close_popup()
+	remove(buf, id)
+	echo("Dropped; only one variant was left, so the alternatives are gone")
+end
+
+pcall(function()
+	require("which-key").add({ { "<leader>v", group = "Alternati[v]es" } })
+end)
 vim.keymap.set({ "n", "x" }, "<leader>va", add, { desc = "Alternative: type a new variant in place" })
+vim.keymap.set("n", "<leader>vk", keep, { desc = "Alternatives: keep this variant" })
+vim.keymap.set("n", "<leader>vd", drop, { desc = "Alternatives: drop this variant" })
 vim.keymap.set("n", "]v", function() cycle(1) end, { desc = "Next alternative" })
 vim.keymap.set("n", "[v", function() cycle(-1) end, { desc = "Previous alternative" })
 
