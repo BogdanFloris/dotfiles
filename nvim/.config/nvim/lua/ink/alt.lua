@@ -329,9 +329,19 @@ local function add()
 		return echo("Alternatives need a character or line selection")
 	end
 	vim.cmd("normal! " .. vim.keycode("<Esc>"))
+	-- A selection inside existing alternatives adds a variant to them.
+	local function before(r1, c1, r2, c2)
+		return r1 < r2 or (r1 == r2 and c1 < c2)
+	end
 	for _, m in ipairs(vim.api.nvim_buf_get_extmarks(buf, ns, { sr, sc }, { er, ec }, { details = true, overlap = true })) do
-		if not m[4].invalid and of(buf)[m[1]] then
-			return echo("That overlaps text that already has alternatives")
+		local id, msr, msc, d = m[1], m[2], m[3], m[4]
+		local overlaps = before(msr, msc, er, ec) and before(sr, sc, d.end_row, d.end_col)
+		if overlaps and not d.invalid and of(buf)[id] then
+			if before(sr, sc, msr, msc) or before(d.end_row, d.end_col, er, ec) then
+				return echo("Select inside the alternatives to add a variant, or outside them to start new ones")
+			end
+			sync(buf)
+			return edit(buf, id)
 		end
 	end
 	local original = table.concat(vim.api.nvim_buf_get_text(buf, sr, sc, er, ec, {}), "\n")
