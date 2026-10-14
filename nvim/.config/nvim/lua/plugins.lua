@@ -38,14 +38,11 @@ vim.pack.add({
 	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
 })
 
+-- Render in every mode and keep the cursor line rendered, so nothing reflows while writing.
 require("render-markdown").setup({
-	enabled = false,
-	overrides = {
-		preview = {
-			enabled = true,
-			render_modes = true,
-		},
-	},
+	render_modes = true,
+	anti_conceal = { enabled = false },
+	win_options = { concealcursor = { rendered = "nvic" } },
 })
 
 -- [[ Plugin Configurations ]]
