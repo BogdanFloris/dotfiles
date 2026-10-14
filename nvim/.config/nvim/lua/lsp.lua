@@ -91,11 +91,9 @@ local lsps = {
 	},
 }
 
--- Register CiderLSP if binary exists
-if vim.fn.executable("/google/bin/releases/cider/ciderlsp/ciderlsp") == 1 then
-	vim.lsp.config("ciderlsp", ciderlsp_config)
-	vim.lsp.enable("ciderlsp")
-end
+-- No executable() check: root_dir already limits CiderLSP to /google, and a cold stat of /google/bin takes ~200 ms
+vim.lsp.config("ciderlsp", ciderlsp_config)
+vim.lsp.enable("ciderlsp")
 
 -- Register personal LSPs (ignore files under /google)
 for _, lsp in pairs(lsps) do
