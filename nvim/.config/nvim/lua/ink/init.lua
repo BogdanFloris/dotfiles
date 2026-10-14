@@ -54,6 +54,8 @@ for _, ch in ipairs({ ".", ",", "!", "?" }) do
 	vim.keymap.set("i", ch, ch .. "<C-g>u")
 end
 
+require("ink.links")
+
 -- Order matters: these redraw on CursorMoved before ink.room's typewriter scrolling recenters.
 require("ink.focus")
 require("ink.margin")
