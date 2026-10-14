@@ -34,9 +34,21 @@ local function measure(buf)
 end
 
 local room -- the zen window holding the text
+local parent -- the normal window hidden behind the room
 local margin = 4
 local text_width = 70
 local ready = false -- render-markdown has drawn the room
+
+-- Motions that land in the hidden window (e.g. <C-l> via vim-herdr-navigation) bounce back, so they
+-- cross into herdr panes instead of closing the room. Runs before zen's own WinEnter handler.
+vim.api.nvim_create_autocmd("WinEnter", {
+	group = util.group,
+	callback = function()
+		if room and room:win_valid() and vim.api.nvim_get_current_win() == parent then
+			vim.api.nvim_set_current_win(room.win)
+		end
+	end,
+})
 
 -- Called by render-markdown after each render (see `on` in ink/init.lua).
 function M.rendered(ctx)
@@ -60,6 +72,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		text_width = measure(vim.api.nvim_get_current_buf())
 		-- An opaque backdrop in the colorscheme's own background hides the window behind the room.
 		local bg = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg
+		parent = vim.api.nvim_get_current_win()
 		room = Snacks.zen({
 			toggles = { dim = false, git_signs = false, mini_diff_signs = false },
 			win = {
