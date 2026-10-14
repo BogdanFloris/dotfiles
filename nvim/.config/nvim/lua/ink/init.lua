@@ -56,6 +56,7 @@ end
 
 require("ink.links")
 require("ink.words")
+require("ink.alt")
 
 -- Order matters: these redraw on CursorMoved before ink.room's typewriter scrolling recenters.
 require("ink.focus")
