@@ -20,6 +20,10 @@ local function apply()
 	vim.api.nvim_set_hl(0, "InkBold", { link = "@markup.strong" })
 	vim.api.nvim_set_hl(0, "InkCode", { link = "@markup.raw.markdown_inline" })
 	vim.api.nvim_set_hl(0, "InkLink", { link = "@markup.link.label" })
+	-- Raw syntax revealed in the element under the cursor (ink.inline) stays faint.
+	vim.api.nvim_set_hl(0, "@conceal.markdown_inline", { link = "InkFaint" })
+	vim.api.nvim_set_hl(0, "@markup.link.markdown_inline", { link = "InkFaint" })
+	vim.api.nvim_set_hl(0, "@markup.link.url.markdown_inline", { link = "InkFaint" })
 end
 
 apply()
