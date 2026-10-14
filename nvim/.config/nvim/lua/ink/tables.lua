@@ -1,177 +1,15 @@
--- lua/writing.lua
--- The writing room. Loaded only when Neovim is started by `ink` (see ink/.local/bin/ink).
-
-vim.env.INK_WRITING = nil
-
-local c = {
-	bg = "#32302f",
-	fg = "#ebdbb2",
-	bright = "#fbf1c7",
-	dim = "#7c6f64",
-	faint = "#665c54",
-	yellow = "#fabd2f",
-	blue = "#83a598",
-	aqua = "#8ec07c",
-}
-
-require("gruvbox").setup({
-	inverse = true,
-	contrast = "soft",
-	overrides = {
-		InkDim = { fg = c.dim },
-		InkFaint = { fg = c.faint },
-		InkMargin = { fg = c.dim, bg = c.bg },
-		InkText = { fg = c.fg },
-		InkTableHead = { fg = c.bright, bold = true },
-		InkBold = { fg = c.bright, bold = true },
-		InkCode = { fg = c.aqua },
-		InkLink = { fg = c.blue, underline = true },
-		-- Hides smoothscroll's "<<<" on a partly scrolled first line.
-		NonText = { fg = c.bg },
-		["@markup.heading"] = { fg = c.yellow, bold = true },
-		["@markup.strong"] = { fg = c.bright, bold = true },
-		["@markup.link.label"] = { fg = c.blue, underline = true },
-		["@punctuation.special.markdown"] = { fg = c.faint },
-		-- Inline code as plain colored text, without render-markdown's background patches.
-		["@markup.raw.markdown_inline"] = { fg = c.aqua },
-		RenderMarkdownCodeInline = { fg = c.aqua },
-		RenderMarkdownBullet = { fg = c.dim },
-	},
-})
-
--- setup() replaces the config from plugins.lua, so its base options are repeated here.
--- Heading markers are concealed in the text and drawn in the left margin instead (ink_margin).
--- Tables are drawn by Ink itself (see fitted tables below), so render-markdown's renderer is off.
-require("render-markdown").setup({
-	render_modes = true,
-	anti_conceal = { enabled = false },
-	win_options = { concealcursor = { rendered = "nvic" } },
-	heading = { sign = false, icons = { "" }, position = "inline", backgrounds = {} },
-	link = { enabled = false },
-	pipe_table = { enabled = false },
-	code = { sign = false },
-})
-
--- Ink runs outside herdr, so the clipboard can be read straight from Ghostty (clipboard-read = allow).
-local osc52 = require("vim.ui.clipboard.osc52")
-vim.g.clipboard = {
-	name = "OSC 52",
-	copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
-	paste = { ["+"] = osc52.paste("+"), ["*"] = osc52.paste("*") },
-}
-vim.keymap.set("i", "<C-v>", "<C-r><C-o>+")
-
-vim.g.loaded_dropbar = true
-vim.g.snacks_indent = false
-vim.g.snacks_scope = false
-vim.g.minicompletion_disable = true
-vim.diagnostic.enable(false)
--- Zen is the room itself; toggling it off would quit (see on_close below).
-vim.keymap.set({ "n", "t" }, "<leader>zm", "<Nop>")
-
-vim.o.laststatus = 0
-vim.o.showtabline = 0
-vim.o.showmode = false
-vim.o.showcmd = false
-vim.o.ruler = true
-vim.o.rulerformat = "%=%#InkFaint#%{wordcount().words} words"
-vim.o.number = false
-vim.o.relativenumber = false
-vim.o.signcolumn = "no"
-vim.o.linebreak = true
-vim.o.breakindentopt = "list:-1"
-vim.o.smoothscroll = true
-vim.opt.fillchars:append({ eob = " ", lastline = " " })
-
-local group = vim.api.nvim_create_augroup("ink", { clear = true })
-local focus_ns = vim.api.nvim_create_namespace("ink_focus")
-
-local function is_text(buf)
-	return vim.bo[buf].buftype == "" and vim.api.nvim_buf_is_loaded(buf)
-end
-
--- Dims everything outside the paragraph under the cursor.
-local function focus()
-	local buf = vim.api.nvim_get_current_buf()
-	vim.api.nvim_buf_clear_namespace(buf, focus_ns, 0, -1)
-	if not is_text(buf) then
-		return
-	end
-	local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-	local function blank(i)
-		return lines[i]:match("^%s*$") ~= nil
-	end
-	local first = vim.api.nvim_win_get_cursor(0)[1]
-	local last = first
-	if not blank(first) then
-		while first > 1 and not blank(first - 1) do
-			first = first - 1
-		end
-		while last < #lines and not blank(last + 1) do
-			last = last + 1
-		end
-	end
-	local function dim(from, to)
-		vim.api.nvim_buf_set_extmark(buf, focus_ns, from - 1, 0, {
-			end_row = to - 1,
-			end_col = #lines[to],
-			hl_group = "InkDim",
-			priority = 10000,
-		})
-	end
-	if first > 1 then
-		dim(1, first - 1)
-	end
-	if last < #lines then
-		dim(last + 1, #lines)
-	end
-end
-
-vim.api.nvim_create_autocmd({ "BufWinEnter", "CursorMoved", "CursorMovedI", "TextChanged", "TextChangedI" }, {
-	group = group,
-	callback = focus,
-})
-
--- Heading markers hang in a 4-column left margin, iA Writer style.
-local heading_marks = {}
-local heading_query = vim.treesitter.query.parse("markdown", "(atx_heading) @heading")
-
-local function scan_headings(buf)
-	local marks = {}
-	local ok, parser = pcall(vim.treesitter.get_parser, buf, "markdown")
-	if ok and parser then
-		for _, node in heading_query:iter_captures(parser:parse()[1]:root(), buf) do
-			local row = node:start()
-			marks[row + 1] = vim.api.nvim_buf_get_lines(buf, row, row + 1, false)[1]:match("^#+")
-		end
-	end
-	heading_marks[buf] = marks
-end
-
-function _G.ink_margin()
-	local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-	local marks = vim.v.virtnum == 0 and (heading_marks[buf] or {})[vim.v.lnum]
-	if not marks then
-		return "%#InkMargin#    "
-	end
-	return "%#InkMargin#" .. (#marks <= 3 and string.format("%3s ", marks) or ("#" .. #marks .. "  "))
-end
-
-vim.api.nvim_create_autocmd({ "BufWinEnter", "TextChanged", "TextChangedI" }, {
-	group = group,
-	callback = function(ev)
-		if is_text(ev.buf) and vim.bo[ev.buf].filetype == "markdown" then
-			scan_headings(ev.buf)
-		end
-	end,
-})
-
+-- lua/ink/tables.lua
 -- Fitted tables: each pipe table is drawn as virtual lines (no vertical bars, a faint rule under
 -- the header, long cells wrapped inside their column so the table fits the text column), and its
 -- raw rows are hidden with conceal_lines. The raw markdown comes back while the cursor is inside.
-local table_ns = vim.api.nvim_create_namespace("ink_tables")
-local table_query = vim.treesitter.query.parse("markdown", "(pipe_table) @table")
-local table_state = {}
+
+local util = require("ink.util")
+
+local M = {}
+
+local ns = vim.api.nvim_create_namespace("ink_tables")
+local query = vim.treesitter.query.parse("markdown", "(pipe_table) @table")
+local state_by_buf = {}
 local layouts = {} -- "width|table source" -> virtual lines, so typing elsewhere doesn't re-layout
 local gap = 2
 
@@ -411,14 +249,14 @@ local function layout(t, width)
 	return out
 end
 
-local function parse_tables(buf)
+local function parse(buf)
 	local tables = {}
 	local ok, parser = pcall(vim.treesitter.get_parser, buf, "markdown")
 	if not ok or not parser then
 		return tables
 	end
 	local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-	for _, node in table_query:iter_captures(parser:parse()[1]:root(), buf) do
+	for _, node in query:iter_captures(parser:parse()[1]:root(), buf) do
 		local first, _, last, last_col = node:range()
 		if last_col == 0 then
 			last = last - 1
@@ -439,16 +277,16 @@ local function parse_tables(buf)
 	return tables
 end
 
-local function render_tables(force)
+function M.render(force)
 	local win, buf = vim.api.nvim_get_current_win(), vim.api.nvim_get_current_buf()
-	if not is_text(buf) or vim.bo[buf].filetype ~= "markdown" then
+	if not util.is_text(buf) or vim.bo[buf].filetype ~= "markdown" then
 		return
 	end
-	local state = table_state[buf] or {}
-	table_state[buf] = state
+	local state = state_by_buf[buf] or {}
+	state_by_buf[buf] = state
 	local tick = vim.api.nvim_buf_get_changedtick(buf)
 	if state.tick ~= tick then
-		state.tables, state.tick, force = parse_tables(buf), tick, true
+		state.tables, state.tick, force = parse(buf), tick, true
 	end
 	local width = vim.api.nvim_win_get_width(win) - vim.fn.getwininfo(win)[1].textoff
 	local row, inside = vim.api.nvim_win_get_cursor(win)[1] - 1, nil
@@ -461,7 +299,7 @@ local function render_tables(force)
 		return
 	end
 	state.inside, state.width = inside, width
-	vim.api.nvim_buf_clear_namespace(buf, table_ns, 0, -1)
+	vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
 	local count = vim.api.nvim_buf_line_count(buf)
 	for i, t in ipairs(state.tables) do
 		local anchor, above = t.first - 1, false
@@ -477,12 +315,12 @@ local function render_tables(force)
 				layouts[key] = layout(t, width)
 			end
 			local last_line = vim.api.nvim_buf_get_lines(buf, t.last, t.last + 1, false)[1]
-			vim.api.nvim_buf_set_extmark(buf, table_ns, t.first, 0, {
+			vim.api.nvim_buf_set_extmark(buf, ns, t.first, 0, {
 				end_row = t.last,
 				end_col = #last_line,
 				conceal_lines = "",
 			})
-			vim.api.nvim_buf_set_extmark(buf, table_ns, anchor, 0, {
+			vim.api.nvim_buf_set_extmark(buf, ns, anchor, 0, {
 				virt_lines = layouts[key],
 				virt_lines_above = above,
 			})
@@ -493,86 +331,11 @@ end
 vim.api.nvim_create_autocmd(
 	{ "BufWinEnter", "CursorMoved", "CursorMovedI", "TextChanged", "TextChangedI", "WinResized", "VimResized" },
 	{
-		group = group,
+		group = util.group,
 		callback = function()
-			render_tables(false)
+			M.render(false)
 		end,
 	}
 )
 
--- Typewriter scrolling: the line being written stays mid-screen.
-vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-	group = group,
-	callback = function(ev)
-		if is_text(ev.buf) then
-			-- :normal steps the cursor back off the end of the line in insert mode, so restore it.
-			local cursor = vim.api.nvim_win_get_cursor(0)
-			vim.cmd("normal! zz")
-			vim.api.nvim_win_set_cursor(0, cursor)
-		end
-	end,
-})
-
-vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged", "FocusLost" }, {
-	group = group,
-	callback = function(ev)
-		if is_text(ev.buf) and vim.bo[ev.buf].modified and vim.api.nvim_buf_get_name(ev.buf) ~= "" then
-			vim.api.nvim_buf_call(ev.buf, function()
-				vim.cmd("silent! update")
-			end)
-		end
-	end,
-})
-
--- Soft-wrapped drafts get a 70-column measure. Hard-wrapped docs (20+ prose lines, 95% of them
--- under 100 columns) get one that fits their lines, so each line doesn't spill into a stub.
-local function measure(buf)
-	local widths = {}
-	for _, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
-		if line:find("%S") and not line:find("^%s*[|#]") and not line:find("^%s*```") then
-			widths[#widths + 1] = vim.fn.strdisplaywidth(line)
-		end
-	end
-	table.sort(widths)
-	local p95 = #widths >= 20 and widths[math.ceil(#widths * 0.95)] or 0
-	return (p95 > 70 and p95 <= 100) and p95 or 70
-end
-
-local room -- the zen window holding the text
-local margin = 4
-local text_width = 70
-
-vim.keymap.set("n", "<leader>mw", function()
-	if room and room:valid() then
-		room.opts.width = room.opts.width < vim.o.columns and vim.o.columns or text_width + margin
-		room:update()
-		render_tables(true)
-	end
-end, { desc = "Toggle full-width layout (wide tables)" })
-
-vim.api.nvim_create_autocmd("VimEnter", {
-	group = group,
-	once = true,
-	callback = function()
-		text_width = measure(vim.api.nvim_get_current_buf())
-		room = Snacks.zen({
-			toggles = { dim = false, git_signs = false, mini_diff_signs = false },
-			win = {
-				width = text_width + margin,
-				wo = { statuscolumn = "%!v:lua.ink_margin()" },
-				backdrop = { transparent = false, blend = 99, bg = c.bg },
-			},
-			on_close = function()
-				-- Closing the text window means leaving the room.
-				if vim.v.exiting == vim.NIL then
-					vim.schedule(function()
-						vim.cmd("confirm qa")
-					end)
-				end
-			end,
-		})
-		vim.cmd("normal! G$")
-		render_tables(true)
-		vim.cmd("startinsert!")
-	end,
-})
+return M
