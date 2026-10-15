@@ -18,8 +18,12 @@ function M.ruler()
 	local words = vim.fn.wordcount().words
 	local start = vim.b.ink_words or words
 	local count = words == start and (words .. " words") or ("%d words · %+d"):format(words, words - start)
-	local ok, alt = pcall(require, "ink.alt")
-	return (ok and alt.status() or "") .. count -- "2/3 · " while the cursor is in alternatives
+	local prefix = "" -- "2/3 · " in alternatives, "3 stashed · " while the stash holds something
+	for _, name in ipairs({ "ink.alt", "ink.stash" }) do
+		local ok, mod = pcall(require, name)
+		prefix = prefix .. (ok and mod.status() or "")
+	end
+	return prefix .. count
 end
 
 return M
