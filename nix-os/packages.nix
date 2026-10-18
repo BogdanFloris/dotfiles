@@ -40,6 +40,8 @@ with pkgs; [
   stylua
   lua-language-server
   nixd
+  basedpyright
+  ruff
   claude-code
   codex
   pi-coding-agent
@@ -49,6 +51,7 @@ with pkgs; [
   git-repo
   freecad
   discord
+  uv
   (llama-cpp.override {vulkanSupport = true;})
 
   # Gnome specific
