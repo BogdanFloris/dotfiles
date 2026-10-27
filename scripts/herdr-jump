@@ -5,9 +5,11 @@
 #
 # Bound to prefix+o as a popup in herdr/.config/herdr/config.toml.
 #
-#   herdr-jump                 interactive picker
-#   herdr-jump --list <src>    print rows for a source (all|workspaces|dirs)
-#   herdr-jump --preview <act> render the preview pane for an action token
+#   herdr-jump                        interactive picker
+#   herdr-jump --list <src>           print rows for a source (all|workspaces|dirs)
+#   herdr-jump --refresh-list <src>   refresh cached snapshot, then print rows
+#   herdr-jump --preview <act>        render the preview pane for an action token
+#   herdr-jump --close <act>          close a ws:<id> workspace (no-op for dir:*)
 #
 # Rows are "<display>\t<action>"; actions are ws:<id> and dir:<path>.
 #
@@ -16,6 +18,10 @@
 # focus history, so recency is recorded here on each jump, keyed by directory
 # (workspace ids are session-scoped and get recycled across restarts).
 set -euo pipefail
+
+# Ensure ~/.local/bin is in PATH when spawned by a remote herdr server started
+# over non-interactive SSH (e.g. Herdr's remote-client-bridge on Cloudtop).
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 self=$(realpath "$0")
 
@@ -27,7 +33,58 @@ state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/herdr-jump"
 mru_file="$state_dir/recent-workspaces"
 
 snapshot() {
-  herdr api snapshot | jq -c '.result.snapshot'
+  if [[ -n ${HERDR_JUMP_CACHE:-} && -s ${HERDR_JUMP_CACHE} ]]; then
+    cat "$HERDR_JUMP_CACHE"
+  elif [[ -n ${HERDR_JUMP_CACHE:-} ]]; then
+    herdr api snapshot | jq -c '.result.snapshot' | tee "$HERDR_JUMP_CACHE"
+  else
+    herdr api snapshot | jq -c '.result.snapshot'
+  fi
+}
+
+refresh_snapshot() {
+  [[ -n ${HERDR_JUMP_CACHE:-} ]] && rm -f "$HERDR_JUMP_CACHE" || true
+}
+
+# Normalize paths so symlinked directories (e.g. ~/superproject -> /mnt/data/superproject
+# or /cloud/... -> /google/src/cloud/...) match across workspaces, MRU, and zoxide,
+# without statting inside CitC FUSE trees (/google/src/cloud/<user>/<ws>/...), while
+# preserving input order.
+canonicalize_paths() {
+  local p rest after_user ws_name citc_clients="" idx=0
+  local -a items=() non_citc=() resolved=()
+  while IFS= read -r p; do
+    [[ -n $p ]] || continue
+    [[ $p == /cloud/* ]] && p="/google/src$p"
+    if [[ $p == /google/src/cloud/*/* ]]; then
+      if [[ -z $citc_clients ]]; then
+        citc_clients=$'\n'$(ls -1 "/google/src/cloud/${USER:-$(id -un)}" 2>/dev/null || true)$'\n'
+      fi
+      rest=${p#/google/src/cloud/}
+      after_user=${rest#*/}
+      ws_name=${after_user%%/*}
+      [[ $citc_clients == *$'\n'"$ws_name"$'\n'* ]] && items+=("citc:${p%/}")
+    elif [[ -d $p ]]; then
+      items+=("idx:${#non_citc[@]}")
+      non_citc+=("$p")
+    fi
+  done
+  if ((${#non_citc[@]} > 0)); then
+    mapfile -t resolved < <(realpath -- "${non_citc[@]}" 2>/dev/null || true)
+  fi
+  for p in "${items[@]}"; do
+    if [[ $p == citc:* ]]; then
+      printf '%s\n' "${p#citc:}"
+    else
+      idx=${p#idx:}
+      [[ -n ${resolved[$idx]:-} ]] && printf '%s\n' "${resolved[$idx]}"
+    fi
+  done
+}
+
+canonicalize_one() {
+  [[ -n ${1:-} ]] || return 0
+  printf '%s\n' "$1" | canonicalize_paths | head -n 1
 }
 
 mru_list() {
@@ -37,7 +94,9 @@ mru_list() {
 # Most recent first, deduped, bounded. Written on jump, not on focus, so
 # switches made outside the picker (prefix+[ / prefix+]) aren't seen.
 mru_record() {
-  local dir=$1 tmp
+  local dir tmp
+  dir=$(canonicalize_one "${1:-}")
+  [[ -n $dir ]] || dir=${1:-}
   [[ -n $dir ]] || return 0
   mkdir -p "$state_dir"
   tmp=$(mktemp "$state_dir/.recent.XXXXXX")
@@ -50,22 +109,43 @@ mru_record() {
 
 # Status icon and color, matching Herdr's own agent state vocabulary. The enum
 # is exactly idle/working/blocked/done/unknown; anything else falls through.
-jq_status_defs='
+# Active workspace cwd prefers the focused pane in the workspace's active tab,
+# then any focused pane in the workspace, then the first pane.
+jq_defs='
 def icon: {"blocked":"✖","done":"✓","working":"◐","idle":"✳"}[.] // "·";
 def color: {"blocked":"31","done":"32","working":"33","idle":"36"}[.] // "90";
 def pad($n): (. + " " * $n)[:$n];
-def home: "'"$HOME"'";
-def tilde: if startswith(home) then "~" + .[(home | length):] else . end;
+def home: $HOME;
+def tilde: if startswith(home + "/") then "~" + .[(home | length):] elif . == home then "~" else . end;
+def ws_cwd($w; $panes):
+  (
+    [ $panes[] | select(.workspace_id == $w.workspace_id and .tab_id == $w.active_tab_id and .focused) | .cwd ]
+    + [ $panes[] | select(.workspace_id == $w.workspace_id and .focused) | .cwd ]
+    + [ $panes[] | select(.workspace_id == $w.workspace_id) | .cwd ]
+  ) | map(select(. != null and . != "")) | first // "";
 '
 
 list_workspaces() {
-  local recent
-  recent=$(mru_list | jq -R -s 'split("\n") | map(select(length > 0))')
-  snapshot | jq -r --argjson recent "$recent" "$jq_status_defs"'
+  local snap recent raw_cwds canon_cwds canon_map
+  snap=$(snapshot)
+  recent=$(mru_list | canonicalize_paths | jq -R -s 'split("\n") | map(select(length > 0))')
+  raw_cwds=$(printf '%s\n' "$snap" | jq -r --arg HOME "$HOME" "$jq_defs"'
+    .panes as $panes | .workspaces[] | ws_cwd(.; $panes)
+  ' | sort -u)
+  canon_cwds=$(printf '%s\n' "$raw_cwds" | canonicalize_paths)
+  canon_map=$(paste <(printf '%s\n' "$raw_cwds") <(printf '%s\n' "$canon_cwds") | jq -R -s '
+    split("\n") | map(select(length > 0) | split("\t") | {(.[0]): (.[1] // .[0])}) | add // {}
+  ')
+  printf '%s\n' "$snap" | jq -r \
+    --arg HOME "$HOME" \
+    --argjson recent "$recent" \
+    --argjson canon "$canon_map" \
+    "$jq_defs"'
     .panes as $panes
     | [ .workspaces[]
         | . as $w
-        | (($panes | map(select(.workspace_id == $w.workspace_id)) | .[0].cwd) // "") as $cwd
+        | ws_cwd($w; $panes) as $raw_cwd
+        | ($canon[$raw_cwd] // $raw_cwd) as $cwd
         | {w: $w, cwd: $cwd,
            rank: (if $w.focused then 99999
                   else ($recent | index($cwd)) // 9000
@@ -88,15 +168,16 @@ list_workspaces() {
 # already returns these in frecency order.
 list_dirs() {
   local open dir
-  # Batch realpath so symlinked paths (e.g. ~/superproject) match open workspace cwds.
-  open=$'\n'$(snapshot | jq -r '.panes[].cwd // empty' | xargs -d '\n' -r realpath -e 2>/dev/null)$'\n'
+  open=$'\n'$(snapshot | jq -r --arg HOME "$HOME" "$jq_defs"'
+    .panes as $panes | .workspaces[] | ws_cwd(.; $panes)
+  ' | canonicalize_paths)$'\n'
   while IFS= read -r dir; do
-    [[ $dir == "/" ]] && continue
+    [[ -z $dir || $dir == "/" ]] && continue
     [[ $open == *$'\n'"$dir"$'\n'* ]] && continue
     open+="$dir"$'\n'
     printf '\033[90m·\033[0m %-22s\033[90m%-10s%s\033[0m\t%s\n' \
       "${dir##*/}" "dir" "${dir/#$HOME/\~}" "dir:$dir"
-  done < <(zoxide query -l 2>/dev/null | xargs -d '\n' -r realpath -e 2>/dev/null)
+  done < <(zoxide query -l -a 2>/dev/null | canonicalize_paths)
 }
 
 list_all() {
@@ -121,26 +202,47 @@ do_preview() {
   case $action in
   ws:*)
     local id=${action#ws:}
-    snapshot | jq -r "$jq_status_defs"'
+    snapshot | jq -r --arg HOME "$HOME" --arg id "$id" "$jq_defs"'
       .panes as $panes
       | .tabs as $tabs
-      | (.workspaces[] | select(.workspace_id == "'"$id"'")) as $w
-      | ($panes | map(select(.workspace_id == $w.workspace_id))) as $wp
+      | (.agents // []) as $agents
+      | (.workspaces[] | select(.workspace_id == $id)) as $w
+      | ws_cwd($w; $panes) as $cwd
       | "  " + $w.label + "  (" + ($w.tab_count|tostring) + " tabs, "
         + ($w.pane_count|tostring) + " panes)",
-        "  " + (($wp[0].cwd // "") | tilde),
+        "  " + ($cwd | tilde),
         "",
-        ($tabs[] | select(.workspace_id == "'"$id"'")
-          | "  " + ((.agent_status // "unknown") | icon) + " " + .label)
+        ($tabs[] | select(.workspace_id == $id) as $t
+          | ($agents | map(select(.tab_id == $t.tab_id))) as $ta
+          | ($panes | map(select(.tab_id == $t.tab_id))) as $tp
+          | (($ta[0].terminal_title_stripped // $ta[0].title // "") | if . != "" then " — " + . else "" end) as $title
+          | (($tp | map(select(.focused))[0].cwd // $tp[0].cwd // "") | tilde) as $tcwd
+          | "  " + (($t.agent_status // "unknown") | icon)
+            + (if $t.tab_id == $w.active_tab_id then " *" else "  " end)
+            + "tab " + ($t.number|tostring)
+            + (if $t.label != ($t.number|tostring) then " (" + $t.label + ")" else "" end)
+            + $title
+            + "\n      \u001b[90m" + $tcwd + "\u001b[0m")
     '
     ;;
   dir:*)
     local dir=${action#dir:}
-    echo "  $dir"
+    echo "  ${dir/#$HOME/\~}"
     echo
     ls -A --color=always "$dir" 2>/dev/null | head -40
     ;;
   *) echo "(nothing to preview)" ;;
+  esac
+}
+
+do_close() {
+  local action=${1:-}
+  case $action in
+  ws:*)
+    local id=${action#ws:}
+    herdr workspace close "$id" >/dev/null 2>&1 || true
+    refresh_snapshot
+    ;;
   esac
 }
 
@@ -149,21 +251,36 @@ do_jump() {
   case $action in
   ws:*)
     local id=${action#ws:}
-    mru_record "$(snapshot | jq -r --arg id "$id" '
-      [.panes[] | select(.workspace_id == $id) | .cwd] | first // empty')"
+    mru_record "$(snapshot | jq -r --arg HOME "$HOME" --arg id "$id" "$jq_defs"'
+      .panes as $panes
+      | (.workspaces[] | select(.workspace_id == $id)) as $w
+      | ws_cwd($w; $panes)')"
     herdr workspace focus "$id" >/dev/null
     ;;
   dir:*)
-    local dir=${action#dir:} existing
-    mru_record "$dir"
-    # Reuse a workspace already rooted at this directory rather than opening a
-    # second one; only create when nothing matches.
-    existing=$(snapshot | jq -r --arg d "$dir" '
-      [.panes[] | select(.cwd == $d) | .workspace_id] | first // empty')
+    local dir=${action#dir:} target existing snap
+    target=$(canonicalize_one "$dir")
+    [[ -n $target ]] || target=$dir
+    mru_record "$target"
+    snap=$(snapshot)
+    # Reuse a workspace whose primary/active pane is rooted at this directory.
+    existing=$(
+      printf '%s\n' "$snap" | jq -r --arg HOME "$HOME" "$jq_defs"'
+        .panes as $panes
+        | .workspaces[]
+        | "\(.workspace_id)\t\(ws_cwd(.; $panes))"
+      ' | while IFS=$'\t' read -r wid wcwd; do
+        [[ -n $wid && -n $wcwd ]] || continue
+        if [[ $(canonicalize_one "$wcwd") == "$target" ]]; then
+          printf '%s\n' "$wid"
+          break
+        fi
+      done
+    )
     if [[ -n $existing ]]; then
       herdr workspace focus "$existing" >/dev/null
     else
-      herdr workspace create --cwd "$dir" --label "$(basename "$dir")" --focus >/dev/null
+      herdr workspace create --cwd "$target" --label "$(basename "$target")" --focus >/dev/null
     fi
     ;;
   esac
@@ -174,11 +291,30 @@ case ${1:-} in
   do_list "${2:-all}"
   exit 0
   ;;
+--refresh-list)
+  refresh_snapshot
+  do_list "${2:-all}"
+  exit 0
+  ;;
 --preview)
   do_preview "${2:-}"
   exit 0
   ;;
+--close)
+  do_close "${2:-}"
+  exit 0
+  ;;
 esac
+
+mkdir -p "$state_dir"
+HERDR_JUMP_CACHE=$(mktemp "$state_dir/.snap.XXXXXX")
+export HERDR_JUMP_CACHE
+trap 'rm -f "$HERDR_JUMP_CACHE"' EXIT
+
+host_tag=${HOSTNAME:-$(hostname -s 2>/dev/null || echo local)}
+host_tag=${host_tag%%.*}
+prompt_prefix="jump"
+[[ $host_tag == *-ctop* ]] && prompt_prefix="ctop"
 
 selection=$(
   do_list all | fzf \
@@ -190,16 +326,17 @@ selection=$(
     --layout=reverse \
     --border=none \
     --info=inline \
-    --prompt='jump ❯ ' \
-    --header='^w workspaces  ^z dirs  ^g all  ^o preview' \
+    --prompt="${prompt_prefix} ❯ " \
+    --header='^w workspaces  ^z dirs  ^g all  ^x close ws  ^o preview' \
     --preview="$self --preview {2}" \
     --preview-window='right:50%:wrap:nohidden' \
     --bind="ctrl-o:toggle-preview" \
     --bind="ctrl-u:preview-page-up" \
     --bind="ctrl-d:preview-page-down" \
-    --bind="ctrl-w:change-prompt(workspaces ❯ )+reload($self --list workspaces)" \
-    --bind="ctrl-z:change-prompt(dirs ❯ )+reload($self --list dirs)" \
-    --bind="ctrl-g:change-prompt(jump ❯ )+reload($self --list all)" \
+    --bind="ctrl-x:execute-silent($self --close {2})+reload($self --refresh-list all)" \
+    --bind="ctrl-w:change-prompt(workspaces ❯ )+reload($self --refresh-list workspaces)" \
+    --bind="ctrl-z:change-prompt(dirs ❯ )+reload($self --refresh-list dirs)" \
+    --bind="ctrl-g:change-prompt(${prompt_prefix} ❯ )+reload($self --refresh-list all)" \
     || true
 )
 
