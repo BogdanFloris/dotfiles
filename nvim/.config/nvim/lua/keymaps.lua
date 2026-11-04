@@ -40,6 +40,9 @@ end, { desc = "Format buffer" })
 -- [[ Oil ]]
 vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+-- [[ Ink ]]
+vim.keymap.set("n", "<leader>mp", "<cmd>Ink<cr>", { desc = "Start Ink and show its URL" })
+
 -- [[ Dropbar ]]
 vim.keymap.set("n", "<leader>;", function() require("dropbar.api").pick() end, { desc = "Pick symbols in winbar" })
 vim.keymap.set("n", "[;", function() require("dropbar.api").goto_context_start() end,

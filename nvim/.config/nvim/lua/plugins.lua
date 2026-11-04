@@ -37,6 +37,11 @@ vim.pack.add({
 	"https://github.com/mfussenegger/nvim-jdtls",
 })
 
+local ink = vim.fn.expand("~/ink")
+if vim.uv.fs_stat(ink) then
+	vim.opt.runtimepath:append(ink)
+end
+
 -- [[ Plugin Configurations ]]
 
 -- <C-h/j/k/l> cross seamlessly between vim splits and herdr panes (falls
