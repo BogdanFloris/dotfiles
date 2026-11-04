@@ -52,6 +52,7 @@ with pkgs; [
   freecad
   discord
   uv
+  gh
   (llama-cpp.override {vulkanSupport = true;})
 
   # Gnome specific
