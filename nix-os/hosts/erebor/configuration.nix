@@ -54,6 +54,12 @@
   services.displayManager.gdm.autoSuspend = false;
   services.desktopManager.gnome.enable = true;
 
+  programs.dconf.profiles.gdm.databases = lib.mkBefore [
+    {
+      settings."org/gnome/desktop/session".idle-delay = lib.gvariant.mkUint32 30;
+    }
+  ];
+
   services.openssh = {
     enable = true;
     ports = [2222];
