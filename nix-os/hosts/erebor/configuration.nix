@@ -18,7 +18,6 @@
     pkiBundle = "/var/lib/sbctl";
     configurationLimit = 5;
   };
-  boot.initrd.systemd.enable = true;
 
   nix.gc = {
     automatic = true;
