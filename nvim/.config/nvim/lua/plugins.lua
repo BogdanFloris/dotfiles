@@ -44,10 +44,31 @@ end
 
 -- [[ Plugin Configurations ]]
 
--- <C-h/j/k/l> cross seamlessly between vim splits and herdr panes (falls
--- back to vim-tmux-navigator's tmux/wincmd behavior outside herdr).
--- Installed via herdr, not vim.pack: scripts/herdr-setup.sh in dotfiles.
-do
+-- <C-h/j/k/l> cross seamlessly between vim splits and Rex/Herdr panes
+-- (falls back to vim-tmux-navigator's tmux/wincmd behavior outside both).
+-- Herdr plugin is installed via scripts/herdr-setup.sh in dotfiles.
+if vim.env.REX_BLOCK then
+	local rex_bin = vim.fn.executable("rex") == 1 and "rex"
+		or (vim.env.REX_BIN_DIR and (vim.env.REX_BIN_DIR .. "/rex"))
+		or vim.fn.expand("~/.local/bin/rex")
+	local function rex_navigate(vim_dir, rex_dir)
+		local prev = vim.api.nvim_get_current_win()
+		vim.cmd("wincmd " .. vim_dir)
+		if vim.api.nvim_get_current_win() == prev then
+			vim.system({ rex_bin, "focus", rex_dir }, {}, function() end)
+		end
+	end
+	for _, map in ipairs({
+		{ "<C-h>", "h", "left" },
+		{ "<C-j>", "j", "down" },
+		{ "<C-k>", "k", "up" },
+		{ "<C-l>", "l", "right" },
+	}) do
+		vim.keymap.set("n", map[1], function()
+			rex_navigate(map[2], map[3])
+		end, { silent = true, desc = "Navigate " .. map[3] .. " (vim/rex)" })
+	end
+else
 	local herdr_nav = vim.fn.glob("~/.config/herdr/plugins/github/vim-herdr-navigation-*/editor/nvim.lua")
 	if herdr_nav ~= "" then
 		dofile(vim.fn.expand(vim.split(herdr_nav, "\n")[1]))
